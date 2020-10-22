@@ -30,6 +30,13 @@ namespace Aspekt.Hex
             new Vector3(-InnerRadius, 0f, 0.5f * OuterRadius),
             new Vector3(0f, 0f, OuterRadius), 
         };
+        
+        protected readonly List<ICellEventObserver> Observers = new List<ICellEventObserver>();
+
+        public void RegisterObserver(ICellEventObserver observer)
+        {
+            Observers.Add(observer);
+        }
 
         public void Place(HexCoordinates coords, Color colour, int playerId)
         {

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Aspekt.Hex.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Aspekt.Hex
 {
@@ -9,9 +11,14 @@ namespace Aspekt.Hex
         void BoardClickedSecondary(Vector3 position);
     }
     
-    internal class PlayerInput
+    internal class PlayerInput : UIBackplate.IMouseEventObserver
     {
         private readonly List<IInputObserver> observers = new List<IInputObserver>();
+
+        public PlayerInput()
+        {
+            Object.FindObjectOfType<UIBackplate>().RegisterNotify(this);
+        }
         
         public void RegisterNotify(IInputObserver observer)
         {
@@ -20,11 +27,16 @@ namespace Aspekt.Hex
         
         public void HandleInput()
         {
-            if (Input.GetMouseButtonDown(0))
+            
+        }
+
+        public void OnMouseClick(PointerEventData.InputButton buttonId)
+        {
+            if (buttonId == PointerEventData.InputButton.Left)
             {
                 HandleClickPrimary();
             }
-            else if (Input.GetMouseButtonDown(1))
+            else if (buttonId == PointerEventData.InputButton.Right)
             {
                 HandleClickSecondary();
             }

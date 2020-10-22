@@ -12,6 +12,8 @@ namespace Aspekt.Hex.UI
 
         private Action onClickCallback;
 
+        private bool hasContent = false;
+        
         public struct Details
         {
             public Sprite Sprite;
@@ -22,11 +24,25 @@ namespace Aspekt.Hex.UI
         {
             spriteRenderer.sprite = details.Sprite;
             onClickCallback = details.Callback;
+            hasContent = true;
         }
 
         public void CellItemClicked()
         {
             onClickCallback?.Invoke();
+        }
+
+        public override void Show()
+        {
+            if (!hasContent) return;
+            base.Show();
+        }
+
+        public override void Hide()
+        {
+            onClickCallback = null;
+            hasContent = false;
+            base.Hide();
         }
     }
 }

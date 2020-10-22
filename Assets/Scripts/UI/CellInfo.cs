@@ -1,5 +1,6 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Aspekt.Hex.UI
     {
 #pragma warning disable 649
         [SerializeField] private TextMeshProUGUI cellName;
+        [SerializeField] private TextMeshProUGUI cellLevel;
 #pragma warning restore 649
 
         private Camera mainCam;
@@ -18,28 +20,45 @@ namespace Aspekt.Hex.UI
         
         private List<CellUIItem> items;
 
-        public void Setup(HexCell cell, List<CellUIItem> items)
+        private Coroutine hideRoutine;
+
+        public void Setup(HexCell cell, bool isOwnedByPlayer)
         {
             this.cell = cell;
-            this.items = items;
             cellName.text = cell.DisplayName;
+
+            if (isOwnedByPlayer)
+            {
+                SetupButtons(cell);
+            }
         }
 
         public override void Show()
         {
+            if (hideRoutine != null) StopCoroutine(hideRoutine);
+            
+            gameObject.SetActive(true);
             base.Show();
-            SetupItems(items);
+            foreach (var item in items)
+            {
+                item.Show();
+            }
         }
 
         public override void Hide()
         {
-            RemoveItems();
+            if (IsHiding) return;
+            if (hideRoutine != null) StopCoroutine(hideRoutine);
+            hideRoutine = StartCoroutine(HideRoutine());
         }
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
+            
             tf = transform;
             mainCam = FindObjectOfType<HexCamera>().Camera;
+            items = GetComponentsInChildren<CellUIItem>().ToList();
         }
 
         private void Update()
@@ -50,24 +69,37 @@ namespace Aspekt.Hex.UI
             pos.z = tf.position.z;
             tf.position = pos;
         }
-
-        private void SetupItems(List<CellUIItem> items)
+        
+        private void SetupButtons(HexCell cell)
         {
-            const float startPos = 0f;
-            const float spread = 45f;
+            if (cell.ItemDetails.Count > items.Count)
+            {
+                Debug.LogWarning("too many items for cell " + cell.DisplayName);
+            }
+            
             for (int i = 0; i < items.Count; i++)
             {
-                
+                if (i < cell.ItemDetails.Count)
+                {
+                    items[i].Setup(cell.ItemDetails[i]);
+                }
+                else
+                {
+                    items[i].Hide();
+                }
             }
         }
 
-        private void RemoveItems()
+        private IEnumerator HideRoutine()
         {
             foreach (var item in items)
             {
                 item.Hide();
             }
             base.Hide();
+            
+            yield return new WaitForSeconds(FadeDuration);
+            gameObject.SetActive(false);
         }
     }
 }

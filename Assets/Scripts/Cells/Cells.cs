@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,6 +35,13 @@ namespace Aspekt.Hex
         
         private readonly List<HexCell> cells = new List<HexCell>();
 
+        private readonly List<ICellEventObserver> cellEventObservers = new List<ICellEventObserver>();
+        
+        public void RegisterCellEventObserver(ICellEventObserver cellEventObserver)
+        {
+            cellEventObservers.Add(cellEventObserver);
+        }
+
         public HexCell Create(CellTypes type)
         {
             HexCell cell = null;
@@ -62,6 +68,10 @@ namespace Aspekt.Hex
 
             if (cell != null)
             {
+                foreach (var observer in cellEventObservers)
+                {
+                    cell.RegisterObserver(observer);
+                }
                 cells.Add(cell);
             }
 

@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class NetworkGamePlayerHex : NetworkBehaviour, IInputObserver
+    public class NetworkGamePlayerHex : NetworkBehaviour, IInputObserver, ICellEventObserver
     {
-        [SyncVar(hook = nameof(HandleReadyStateChanged))]
-        public bool IsReady = false;
+        public bool IsReady { get; private set; }
         
         [SyncVar(hook = nameof(HandleDisplayNameChanged))]
         private string displayName;
@@ -23,8 +22,6 @@ namespace Aspekt.Hex
 
         private CellIndicator indicator;
 
-        private bool isPlacingCell;
-
         public string DisplayName => displayName;
         
         public override void OnStartClient()
@@ -33,17 +30,17 @@ namespace Aspekt.Hex
 
             room = FindObjectOfType<NetworkManagerHex>();
             game = room.Game;
-            game.SetGamePlayer(this);
+
             room.AddGamePlayer(this);
             
-            input = new PlayerInput();
-            input.RegisterNotify(this);
-
-            indicator = new CellIndicator(FindObjectOfType<Cells>());
-
             if (hasAuthority)
             {
-                IsReady = true;
+                game.SetGamePlayer(this);
+            
+                input = new PlayerInput();
+                input.RegisterNotify(this);
+
+                indicator = new CellIndicator(FindObjectOfType<Cells>());
             }
         }
         
@@ -75,9 +72,9 @@ namespace Aspekt.Hex
         public void BoardClickedPrimary(Vector3 position)
         {
             var coords = HexCoordinates.FromPosition(position);
-            if (isPlacingCell)
+            if (indicator.IsPlacingCell)
             {
-                CmdClickBoardPrimary((Int16)coords.X, (Int16)coords.Z);
+                CmdPlaceCell((Int16)coords.X, (Int16)coords.Z, (Int16)indicator.CellType);
             }
             else
             {
@@ -100,9 +97,13 @@ namespace Aspekt.Hex
         }
         
         [Command]
-        private void CmdClickBoardPrimary(Int16 x, Int16 z)
+        private void CmdPlaceCell(Int16 x, Int16 z, Int16 cellTypeIndex)
         {
-            game.TryPlace(this, x, z);
+            if (Enum.IsDefined(typeof(Cells.CellTypes), (Int32)cellTypeIndex))
+            {
+                var cellType = (Cells.CellTypes) cellTypeIndex;
+                game.TryPlace(this, x, z, cellType);
+            }
         }
         
         [Command]
@@ -111,12 +112,11 @@ namespace Aspekt.Hex
             game.TryRemove(this, x, z);
         }
 
-        private void HandleReadyStateChanged(bool oldStatus, bool newStatus)
+        [Command]
+        public void CmdSetReady()
         {
-            if (isServer && IsReady)
-            {
-                room.UpdatePlayerReady();
-            }
+            IsReady = true;
+            room.UpdatePlayerReady();
         }
 
         private void HandleDisplayNameChanged(string oldName, string newName)
@@ -138,5 +138,15 @@ namespace Aspekt.Hex
             }
         }
 
+        public void BuildCell(Cells.CellTypes type, HexCell originator)
+        {
+            indicator.Show(type, ID);
+        }
+
+        public void UpgradeCell(HexCell originator)
+        {
+            // TODO upgrade
+            Debug.Log("upgrade cell " + originator.DisplayName);
+        }
     }
 }

@@ -111,6 +111,9 @@ MonoBehaviour:
   Coordinates:
     x: 0
     z: 0
+  PlayerId: 0
+  incomeImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  trainingImage: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1001 &4914454015221706653
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ namespace Aspekt.Hex.UI
     public abstract class UIElement : MonoBehaviour
     {
         public bool IsVisible => state != States.Hidden;
+        public bool IsHiding => state == States.Hidden || state == States.TransitionToHidden;
 
         private enum States
         {
@@ -18,13 +19,13 @@ namespace Aspekt.Hex.UI
 
         private States state;
 
-        private const float FadeDuration = 0.6f; 
+        protected const float FadeDuration = 0.6f; 
         
         private CanvasGroup group;
         private Coroutine showRoutine;
         private Coroutine hideRoutine;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             group = GetComponent<CanvasGroup>();
             SetHidden();

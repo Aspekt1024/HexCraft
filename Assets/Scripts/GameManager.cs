@@ -82,11 +82,11 @@ namespace Aspekt.Hex
         /// <summary>
         /// Called by the server to validate placement
         /// </summary>
-        public void TryPlace(NetworkGamePlayerHex player, Int16 x, Int16 z)
+        public void TryPlace(NetworkGamePlayerHex player, Int16 x, Int16 z, Cells.CellTypes type)
         {
             if (!IsActionAllowed(player)) return;
 
-            if (grid.TryPlace(x, z, (Int16)player.ID))
+            if (grid.TryPlace(x, z, player.ID, type))
             {
                 Data.SetNextPlayer();
             }
@@ -114,7 +114,8 @@ namespace Aspekt.Hex
                 yield return null;
             }
             UI.UpdatePlayerInfo(room.GamePlayers);
-            gamePlayer.IsReady = true;
+            gamePlayer.CmdSetReady();
+            room.Game.Cells.RegisterCellEventObserver(gamePlayer);
         }
     }
 }

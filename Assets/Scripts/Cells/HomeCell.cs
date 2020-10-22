@@ -27,12 +27,18 @@ namespace Aspekt.Hex
 
         private void TrainingItemClicked()
         {
-            Debug.Log("training cell");
+            foreach (var observer in Observers)
+            {
+                observer.BuildCell(Cells.CellTypes.Training, this);
+            }
         }
 
         private void IncomeItemClicked()
         {
-            Debug.Log("income cell");
+            foreach (var observer in Observers)
+            {
+                observer.BuildCell(Cells.CellTypes.Income, this);
+            }
         }
     }
 }

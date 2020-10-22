@@ -7,11 +7,9 @@ namespace Aspekt.Hex.UI
     {
 #pragma warning disable 649
         [SerializeField] private CellInfo cellInfoPrefab;
-        [SerializeField] private CellUIItem itemPrefab;
 #pragma warning restore 649
 
         private readonly List<CellInfo> cellInfos = new List<CellInfo>();
-        private readonly List<CellUIItem> cellItems = new List<CellUIItem>();
 
         private HexCell currentCell;
 
@@ -30,24 +28,14 @@ namespace Aspekt.Hex.UI
             currentCell = cell;
 
             var info = GetCellInfoPlate();
-            var items = new List<CellUIItem>();
             
-            if (player.ID == cell.PlayerId)
-            {
-                foreach (var details in cell.ItemDetails)
-                {
-                    var item = GetCellUIItem();
-                    item.Setup(details);
-                    items.Add(item);
-                }
-            }
-            
-            info.Setup(cell, items);
+            info.Setup(cell, player.ID == cell.PlayerId);
             info.Show();
         }
 
         public void HideAll()
         {
+            currentCell = null;
             foreach (var info in cellInfos)
             {
                 info.Hide();
@@ -58,25 +46,17 @@ namespace Aspekt.Hex.UI
         {
             foreach (var cellInfo in cellInfos)
             {
-                if (!cellInfo.IsVisible) return cellInfo;
+                if (!cellInfo.gameObject.activeSelf)
+                {
+                    cellInfo.gameObject.SetActive(true);
+                    return cellInfo;
+                }
             }
 
             var info = Instantiate(cellInfoPrefab, transform);
             cellInfos.Add(info);
             
             return info;
-        }
-
-        private CellUIItem GetCellUIItem()
-        {
-            foreach (var item in cellItems)
-            {
-                if (!item.IsVisible) return item;
-            }
-
-            var newItem = Instantiate(itemPrefab);
-            cellItems.Add(newItem);
-            return newItem;
         }
     }
 }
