@@ -33,6 +33,8 @@ namespace Aspekt.Hex
         
         protected readonly List<ICellEventObserver> Observers = new List<ICellEventObserver>();
 
+        private Color cellColour;
+
         public void RegisterObserver(ICellEventObserver observer)
         {
             Observers.Add(observer);
@@ -50,7 +52,9 @@ namespace Aspekt.Hex
         {
             IsPlaced = false;
             ApplyHoloMaterial(holoMaterial);
+            cellColour = colour;
             SetColor(colour, 0.5f);
+            ShowAsInvalid();
         }
 
         public void SetCoordinates(HexCoordinates coords)
@@ -63,6 +67,18 @@ namespace Aspekt.Hex
         {
             // TODO animate
         }
+
+        public void ShowAsInvalid()
+        {
+            SetColor(Color.red, 0.5f);
+        }
+
+        public void ShowAsValid()
+        {
+            SetColor(cellColour, 0.5f);
+        }
+
+        public abstract bool CanCreate(Cells.CellTypes cellType);
 
         private void SetColor(Color color, float alpha = 1f)
         {

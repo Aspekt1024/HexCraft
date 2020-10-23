@@ -40,8 +40,8 @@ namespace Aspekt.Hex
         public bool TryPlace(Int16 x, Int16 z, int playerID, Cells.CellTypes type)
         {
             var coords = new HexCoordinates(x, z);
-            if (cells.IsPieceInCell(coords)) return false;
-            // TODO validate placement
+            if (!cells.IsValidPlacement(type, coords, playerID)) return false;
+            
             RpcCreateCell(x, z, (Int16)playerID, (Int16)type);
             return true;
         }

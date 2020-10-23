@@ -9,6 +9,7 @@ namespace Aspekt.Hex
     {
         void BoardClickedPrimary(Vector3 position);
         void BoardClickedSecondary(Vector3 position);
+        void CancelPressed();
     }
     
     internal class PlayerInput : UIBackplate.IMouseEventObserver
@@ -27,7 +28,13 @@ namespace Aspekt.Hex
         
         public void HandleInput()
         {
-            
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                foreach (var observer in observers)
+                {
+                    observer.CancelPressed();
+                }
+            }
         }
 
         public void OnMouseClick(PointerEventData.InputButton buttonId)

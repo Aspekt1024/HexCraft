@@ -24,12 +24,17 @@ namespace Aspekt.Hex
                 new CellUIItem.Details { Sprite = trainingImage, Callback = TrainingItemClicked }
             };
         }
+        
+        public override bool CanCreate(Cells.CellTypes cellType)
+        {
+            return cellType == Cells.CellTypes.Training || cellType == Cells.CellTypes.Income;
+        }
 
         private void TrainingItemClicked()
         {
             foreach (var observer in Observers)
             {
-                observer.BuildCell(Cells.CellTypes.Training, this);
+                observer.IndicateBuildCell(Cells.CellTypes.Training, this);
             }
         }
 
@@ -37,7 +42,7 @@ namespace Aspekt.Hex
         {
             foreach (var observer in Observers)
             {
-                observer.BuildCell(Cells.CellTypes.Income, this);
+                observer.IndicateBuildCell(Cells.CellTypes.Income, this);
             }
         }
     }

@@ -23,15 +23,26 @@ namespace Aspekt.Hex
                 new CellUIItem.Details { Sprite = t2UnitSprite, Callback = T2UnitClicked }
             };
         }
+        
+        public override bool CanCreate(Cells.CellTypes cellType)
+        {
+            return cellType == Cells.CellTypes.UnitT1 || cellType == Cells.CellTypes.UnitT2;
+        }
 
         private void T1UnitClicked()
         {
-            Debug.Log("t1 unit");
+            foreach (var observer in Observers)
+            {
+                observer.IndicateBuildCell(Cells.CellTypes.UnitT1, this);
+            }
         }
 
         private void T2UnitClicked()
         {
-            Debug.Log("t1 unit");
+            foreach (var observer in Observers)
+            {
+                observer.IndicateBuildCell(Cells.CellTypes.UnitT2, this);
+            }
         }
     }
 }

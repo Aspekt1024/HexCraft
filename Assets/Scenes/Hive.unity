@@ -185,7 +185,7 @@ MonoBehaviour:
   income: {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
   unit1: {fileID: 5206515829316234981, guid: 65b6ac6736929d84f9451dcd6599929d, type: 3}
   unit2: {fileID: 3669964315673251290, guid: 7778d321bf01d8845a91e7c9fd2385f8, type: 3}
-  indicator: {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
+  indicator: {fileID: 5150164558244077247, guid: 57a53a2b667dedf43ae5789a5fde2e59, type: 3}
   standardMaterial: {fileID: 2100000, guid: 130d61284baf3d04d8e26dc68de289d3, type: 2}
   holoMaterial: {fileID: 2100000, guid: a7c24f6c775244849bb932b397f61cdd, type: 2}
   blackColour: {r: 0, g: 0, b: 0, a: 1}

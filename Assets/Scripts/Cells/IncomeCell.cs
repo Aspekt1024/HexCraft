@@ -22,6 +22,11 @@ namespace Aspekt.Hex
             };
         }
         
+        public override bool CanCreate(Cells.CellTypes cellType)
+        {
+            return false;
+        }
+        
         private void Update()
         {
             orb.RotateAround(transform.position, Vector3.up, orbSpeed * Time.deltaTime);

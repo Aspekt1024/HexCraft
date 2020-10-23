@@ -74,7 +74,14 @@ namespace Aspekt.Hex
             var coords = HexCoordinates.FromPosition(position);
             if (indicator.IsPlacingCell)
             {
-                CmdPlaceCell((Int16)coords.X, (Int16)coords.Z, (Int16)indicator.CellType);
+                if (indicator.IsProjectedCellInPlacementGrid())
+                {
+                    CmdPlaceCell((Int16)coords.X, (Int16)coords.Z, (Int16)indicator.CellType);
+                }
+                else
+                {
+                    // TODO display error message to player
+                }
             }
             else
             {
@@ -92,8 +99,12 @@ namespace Aspekt.Hex
 
         public void BoardClickedSecondary(Vector3 position)
         {
-            var coords = HexCoordinates.FromPosition(position);
-            CmdClickBoardSecondary((Int16) coords.X, (Int16) coords.Z);
+        }
+
+        public void CancelPressed()
+        {
+            indicator.Hide();
+            game.UI.HideCellInfo();
         }
         
         [Command]
@@ -107,7 +118,7 @@ namespace Aspekt.Hex
         }
         
         [Command]
-        private void CmdClickBoardSecondary(Int16 x, Int16 z)
+        private void CmdRemoveCell(Int16 x, Int16 z)
         {
             game.TryRemove(this, x, z);
         }
@@ -130,7 +141,7 @@ namespace Aspekt.Hex
             
             if (IsCurrentPlayer)
             {
-                
+                // TODO set UI to indicate to player
             }
             else
             {
@@ -138,9 +149,12 @@ namespace Aspekt.Hex
             }
         }
 
-        public void BuildCell(Cells.CellTypes type, HexCell originator)
+        public void IndicateBuildCell(Cells.CellTypes type, HexCell originator)
         {
-            indicator.Show(type, ID);
+            if (!IsCurrentPlayer) return;
+            
+            game.UI.HideCellInfo();
+            indicator.Show(type, ID, originator);
         }
 
         public void UpgradeCell(HexCell originator)

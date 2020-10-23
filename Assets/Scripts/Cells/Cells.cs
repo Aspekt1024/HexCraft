@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace Aspekt.Hex
         [SerializeField] private HexCell unit2;
         
         [Header("Display")]
-        [SerializeField] private HexCell indicator;
+        [SerializeField] private GameObject indicator;
         [SerializeField] private Material standardMaterial;
         [SerializeField] private Material holoMaterial;
         [SerializeField] private Color blackColour;
@@ -103,6 +104,63 @@ namespace Aspekt.Hex
                 cells.Remove(cell);
                 cell.Remove();
             }
+        }
+        
+        public GameObject GetIndicatorPrefab()
+        {
+            return indicator.gameObject;
+        }
+
+        public List<HexCoordinates> GetValidPlacement(CellTypes type, HexCell origin)
+        {
+            var radius = PlacementRules.GetRadius(type);
+            if (radius > 0)
+            {
+                return GetEmptySurroundingCells(origin.Coordinates, radius);
+            }
+            return new List<HexCoordinates>();
+        }
+
+        public bool IsValidPlacement(CellTypes type, HexCoordinates cellCoords, int playerId)
+        {
+            if (IsPieceInCell(cellCoords)) return false;
+
+            if (type == CellTypes.Base) return true;
+            
+            foreach (var cell in cells)
+            {
+                if (cell.PlayerId == playerId && cell.CanCreate(type))
+                {
+                    if (PlacementRules.IsValidPlacementDistance(type, cellCoords, cell.Coordinates))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private List<HexCoordinates> GetEmptySurroundingCells(HexCoordinates center, int radius)
+        {
+            var coords = new List<HexCoordinates>();
+            for (int x = center.X - radius; x <= center.X + radius; x++)
+            {
+                var zMin = center.Z - (x < center.X ? radius - (center.X - x) : radius);
+                var zMax = center.Z + (x > center.X ? radius - (x - center.X) : radius);
+                for (int z = zMin; z <= zMax; z++)
+                {
+                    if (x == center.X && z == center.Z) continue;
+                    
+                    var coord = new HexCoordinates(x, z);
+                    if (!IsPieceInCell(coord))
+                    {
+                        coords.Add(coord);;
+                    }
+                }
+            }
+            
+            return coords;
         }
     }
 }
