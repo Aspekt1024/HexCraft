@@ -46,6 +46,7 @@ namespace Aspekt.Hex
             SetCoordinates(coords);
             SetColor(colour);
             PlayerId = playerId;
+            ShowPlaced();
         }
 
         public void DisplayAsIndicator(Material holoMaterial, Color colour)
@@ -63,7 +64,7 @@ namespace Aspekt.Hex
             transform.position = HexCoordinates.ToPosition(coords);
         }
 
-        public void ShowPlaced()
+        private void ShowPlaced()
         {
             // TODO animate
         }

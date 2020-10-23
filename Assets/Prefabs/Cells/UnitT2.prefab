@@ -208,6 +208,8 @@ MonoBehaviour:
     x: 0
     z: 0
   PlayerId: 0
+  moveImage: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  attackImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &4949076233612875935
 GameObject:
   m_ObjectHideFlags: 0

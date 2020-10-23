@@ -74,5 +74,27 @@ namespace Aspekt.Hex
             var coords = new HexCoordinates(x, z);
             cells.RemoveCell(coords);
         }
+
+        [ClientRpc]
+        public void RpcMoveCell(Int16 fromX, Int16 fromZ, Int16 toX, Int16 toZ)
+        {
+            var cell = cells.GetCellAtPosition(new HexCoordinates(fromX, fromZ));
+            if (cell == null) return;
+            
+            var newCoords = new HexCoordinates(toX, toZ);
+            cell.SetCoordinates(newCoords);
+        }
+        
+        [ClientRpc]
+        public void RpcAttack(Int16 attackerX, Int16 attackerZ, Int16 targetX, Int16 targetZ, Int16 damage)
+        {
+            var attacker = cells.GetCellAtPosition(new HexCoordinates(attackerX, attackerZ));
+            if (attacker == null || !(attacker is UnitCell unit)) return;
+
+            var target = cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
+            if (target == null) return;
+            
+            cells.RemoveCell(target.Coordinates);
+        }
     }
 }

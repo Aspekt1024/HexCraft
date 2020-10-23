@@ -102,6 +102,24 @@ namespace Aspekt.Hex
             }
         }
 
+        public void MoveCell(HexCoordinates from, HexCoordinates to)
+        {
+            grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
+            
+            Data.SetNextPlayer();
+        }
+
+        public void AttackCell(HexCoordinates attackerCoords, HexCoordinates targetCoords, int damage)
+        {
+            grid.RpcAttack((Int16)attackerCoords.X,
+                (Int16)attackerCoords.Z,
+                (Int16)targetCoords.X,
+                (Int16)targetCoords.Z,
+                (Int16)damage);
+            
+            Data.SetNextPlayer();
+        }
+
         private bool IsActionAllowed(NetworkGamePlayerHex player)
         {
             return player == Data.CurrentPlayer;

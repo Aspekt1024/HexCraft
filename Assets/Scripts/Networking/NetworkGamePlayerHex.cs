@@ -83,6 +83,27 @@ namespace Aspekt.Hex
                     // TODO display error message to player
                 }
             }
+            else if (indicator.IsMovingUnit)
+            {
+                var unit = indicator.GetMovingUnit();
+                if (game.Cells.IsValidMove(unit, coords, ID))
+                {
+                    CmdMoveCell((Int16) ID,
+                        (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
+                        (Int16) coords.X, (Int16) coords.Z);
+                }
+            }
+            else if (indicator.IsAttacking)
+            {
+                var unit = indicator.GetAttackingUnit();
+                var target = game.Cells.GetCellAtPosition(coords);
+                if (game.Cells.IsValidAttackTarget(unit, target, ID))
+                {
+                    CmdAttackCell((Int16) ID,
+                        (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
+                        (Int16) coords.X, (Int16) coords.Z);
+                }
+            }
             else
             {
                 var cell = game.Cells.GetCellAtPosition(coords);
@@ -103,31 +124,8 @@ namespace Aspekt.Hex
 
         public void CancelPressed()
         {
-            indicator.Hide();
+            indicator.HideAll();
             game.UI.HideCellInfo();
-        }
-        
-        [Command]
-        private void CmdPlaceCell(Int16 x, Int16 z, Int16 cellTypeIndex)
-        {
-            if (Enum.IsDefined(typeof(Cells.CellTypes), (Int32)cellTypeIndex))
-            {
-                var cellType = (Cells.CellTypes) cellTypeIndex;
-                game.TryPlace(this, x, z, cellType);
-            }
-        }
-        
-        [Command]
-        private void CmdRemoveCell(Int16 x, Int16 z)
-        {
-            game.TryRemove(this, x, z);
-        }
-
-        [Command]
-        public void CmdSetReady()
-        {
-            IsReady = true;
-            room.UpdatePlayerReady();
         }
 
         private void HandleDisplayNameChanged(string oldName, string newName)
@@ -145,7 +143,7 @@ namespace Aspekt.Hex
             }
             else
             {
-                indicator.Hide();
+                indicator.HideAll();
             }
         }
 
@@ -154,13 +152,76 @@ namespace Aspekt.Hex
             if (!IsCurrentPlayer) return;
             
             game.UI.HideCellInfo();
-            indicator.Show(type, ID, originator);
+            indicator.ShowBuild(type, ID, originator);
         }
 
         public void UpgradeCell(HexCell originator)
         {
             // TODO upgrade
             Debug.Log("upgrade cell " + originator.DisplayName);
+        }
+
+        public void IndicateUnitAttack(UnitCell unit)
+        {
+            if (!IsCurrentPlayer) return;
+            
+            game.UI.HideCellInfo();
+            indicator.IndicateAttack(unit);
+        }
+
+        public void IndicateUnitMove(UnitCell unit)
+        {
+            if (!IsCurrentPlayer) return;
+            
+            game.UI.HideCellInfo();
+            indicator.ShowMoveRange(unit);
+        }
+        
+        
+        [Command]
+        private void CmdPlaceCell(Int16 x, Int16 z, Int16 cellTypeIndex)
+        {
+            if (Enum.IsDefined(typeof(Cells.CellTypes), (Int32)cellTypeIndex))
+            {
+                var cellType = (Cells.CellTypes) cellTypeIndex;
+                game.TryPlace(this, x, z, cellType);
+            }
+        }
+
+        [Command]
+        private void CmdAttackCell(Int16 playerId, Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
+        {
+            var attackingCell = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
+            if (attackingCell == null || !(attackingCell is UnitCell attackingUnit)) return;
+            var target = game.Cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
+            if (game.Cells.IsValidAttackTarget(attackingUnit, target, playerId))
+            {
+                game.AttackCell(attackingUnit.Coordinates, target.Coordinates, attackingUnit.AttackDamage);
+            }
+        }
+        
+        [Command]
+        private void CmdMoveCell(Int16 playerId, Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
+        {
+            var movingUnit = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
+            var target = new HexCoordinates(targetX, targetZ);
+            if (game.Cells.IsValidMove(movingUnit, target, playerId))
+            {
+                game.MoveCell(movingUnit.Coordinates, target);
+            }
+        }
+        
+        [Command]
+        private void CmdRemoveCell(Int16 x, Int16 z)
+        {
+            game.TryRemove(this, x, z);
+        }
+
+        [Command]
+        public void CmdSetReady()
+        {
+            IsReady = true;
+            room.UpdatePlayerReady();
         }
     }
 }

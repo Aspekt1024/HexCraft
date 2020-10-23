@@ -63,6 +63,13 @@ namespace Aspekt.Hex
                 coordinates.z * HexCell.OuterRadius * 1.5f
             );
         }
+
+        public static int Distance(HexCoordinates c1, HexCoordinates c2)
+        {
+            return (Mathf.Abs(c1.X - c2.X)
+                    + Mathf.Abs(c1.Y - c2.Y)
+                    + Mathf.Abs(c1.Z - c2.Z)) / 2;
+        }
         
         public override string ToString()
         {

@@ -141,6 +141,24 @@ namespace Aspekt.Hex
             return false;
         }
 
+        public bool IsValidAttackTarget(HexCell attackingUnit, HexCell target, int playerId)
+        {
+            if (!(attackingUnit is UnitCell unit)) return false;
+            if (attackingUnit == null || attackingUnit.PlayerId != playerId) return false;
+            if (target == null || target.PlayerId == playerId) return false;
+            
+            return unit.AttackRange >= HexCoordinates.Distance(attackingUnit.Coordinates, target.Coordinates);
+        }
+        
+        public bool IsValidMove(HexCell cell, HexCoordinates targetCoords, int playerId)
+        {
+            if (!(cell is UnitCell unit)) return false;
+            if (cell == null || cell.PlayerId != playerId) return false;
+            if (IsPieceInCell(targetCoords)) return false;
+
+            return unit.MoveRange >= HexCoordinates.Distance(cell.Coordinates, targetCoords);
+        }
+
         private List<HexCoordinates> GetEmptySurroundingCells(HexCoordinates center, int radius)
         {
             var coords = new List<HexCoordinates>();
