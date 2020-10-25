@@ -43,30 +43,14 @@ namespace Aspekt.Hex
             cellEventObservers.Add(cellEventObserver);
         }
 
+        public HexCell CreateIndicator(CellTypes type)
+        {
+            return CreateCell(type);
+        }
+
         public HexCell Create(CellTypes type)
         {
-            HexCell cell = null;
-            switch (type)
-            {
-                case CellTypes.Base:
-                    cell = Instantiate(home);
-                    break;
-                case CellTypes.Training:
-                    cell = Instantiate(training);
-                    break;
-                case CellTypes.Income:
-                    cell = Instantiate(income);
-                    break;
-                case CellTypes.UnitT1:
-                    cell = Instantiate(unit1);
-                    break;
-                case CellTypes.UnitT2:
-                    cell = Instantiate(unit2);
-                    break;
-                default:
-                    return null;
-            }
-
+            var cell = CreateCell(type);
             if (cell != null)
             {
                 foreach (var observer in cellEventObservers)
@@ -157,6 +141,25 @@ namespace Aspekt.Hex
             if (IsPieceInCell(targetCoords)) return false;
 
             return unit.MoveRange >= HexCoordinates.Distance(cell.Coordinates, targetCoords);
+        }
+
+        private HexCell CreateCell(CellTypes type)
+        {
+            switch (type)
+            {
+                case CellTypes.Base:
+                    return Instantiate(home);
+                case CellTypes.Training:
+                    return Instantiate(training);
+                case CellTypes.Income:
+                    return Instantiate(income);
+                case CellTypes.UnitT1:
+                    return Instantiate(unit1);
+                case CellTypes.UnitT2:
+                    return Instantiate(unit2);
+                default:
+                    return null;
+            }
         }
 
         private List<HexCoordinates> GetEmptySurroundingCells(HexCoordinates center, int radius)

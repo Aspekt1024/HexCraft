@@ -12,7 +12,7 @@ namespace Aspekt.Hex
                 case Cells.CellTypes.Base:
                     return 0;
                 case Cells.CellTypes.Training:
-                    return 2;
+                    return 4;
                 case Cells.CellTypes.Income:
                     return 2;
                 case Cells.CellTypes.UnitT1:

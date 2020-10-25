@@ -79,7 +79,7 @@ namespace Aspekt.Hex
         public override bool Equals(object obj)
         {
             if (obj == null || !(obj is HexCoordinates coords)) return false;
-            return coords.x == x && coords.z == z;
+            return coords.X == X && coords.Z == Z;
         }
 
         public override int GetHashCode()

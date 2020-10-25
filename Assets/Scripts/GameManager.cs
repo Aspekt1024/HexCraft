@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
@@ -78,6 +79,8 @@ namespace Aspekt.Hex
                 grid.SetStartingLocation(room.GamePlayers[i]);
             }
         }
+
+    #region Server Calls
         
         /// <summary>
         /// Called by the server to validate placement
@@ -92,11 +95,11 @@ namespace Aspekt.Hex
             }
         }
 
-        public void TryRemove(NetworkGamePlayerHex player, Int16 x, Int16 z)
+        public void TryRemove(NetworkGamePlayerHex player, int cellX, int cellZ)
         {
             if (!IsActionAllowed(player)) return;
 
-            if (grid.TryRemove(x, z, (Int16)player.ID))
+            if (grid.TryRemove((Int16)cellX, (Int16)cellZ, (Int16)player.ID))
             {
                 Data.SetNextPlayer();
             }
@@ -109,16 +112,26 @@ namespace Aspekt.Hex
             Data.SetNextPlayer();
         }
 
-        public void AttackCell(HexCoordinates attackerCoords, HexCoordinates targetCoords, int damage)
+        public void AttackCell(UnitCell attacker, HexCell target)
         {
-            grid.RpcAttack((Int16)attackerCoords.X,
-                (Int16)attackerCoords.Z,
-                (Int16)targetCoords.X,
-                (Int16)targetCoords.Z,
-                (Int16)damage);
+            var isKillingBlow = target.CurrentHP <= attacker.AttackDamage;
+            
+            grid.RpcAttack((Int16)attacker.Coordinates.X,
+                (Int16)attacker.Coordinates.Z,
+                (Int16)target.Coordinates.X,
+                (Int16)target.Coordinates.Z,
+                (Int16)attacker.AttackDamage);
+            
+            if (isKillingBlow)
+            {
+                var player = room.GamePlayers.First(p => p.ID == attacker.PlayerId);
+                TryRemove(player, target.Coordinates.X, target.Coordinates.Z);
+            }
             
             Data.SetNextPlayer();
         }
+
+    #endregion Server Calls
 
         private bool IsActionAllowed(NetworkGamePlayerHex player)
         {

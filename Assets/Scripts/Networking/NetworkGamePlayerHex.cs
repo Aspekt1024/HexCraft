@@ -196,7 +196,7 @@ namespace Aspekt.Hex
             var target = game.Cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
             if (game.Cells.IsValidAttackTarget(attackingUnit, target, playerId))
             {
-                game.AttackCell(attackingUnit.Coordinates, target.Coordinates, attackingUnit.AttackDamage);
+                game.AttackCell(attackingUnit, target);
             }
         }
         

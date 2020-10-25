@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Aspekt.Hex.UI;
 using UnityEngine;
@@ -18,6 +19,8 @@ namespace Aspekt.Hex
         
         public HexCoordinates Coordinates;
         public int PlayerId;
+        public int MaxHP { get; protected set; } = 1;
+        public int CurrentHP { get; protected set; } = 1;
 
         public bool IsPlaced { get; private set; }
 
@@ -47,6 +50,11 @@ namespace Aspekt.Hex
             SetColor(colour);
             PlayerId = playerId;
             ShowPlaced();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            CurrentHP = Mathf.Max(CurrentHP - damage, 0);
         }
 
         public void DisplayAsIndicator(Material holoMaterial, Color colour)

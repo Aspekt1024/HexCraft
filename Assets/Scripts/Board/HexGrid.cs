@@ -94,7 +94,7 @@ namespace Aspekt.Hex
             var target = cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
             if (target == null) return;
             
-            cells.RemoveCell(target.Coordinates);
+            target.TakeDamage(damage);
         }
     }
 }

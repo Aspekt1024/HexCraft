@@ -36,7 +36,7 @@ namespace Aspekt.Hex
             HideAll();
 
             CellType = type;
-            projectedCell = cells.Create(type);
+            projectedCell = cells.CreateIndicator(type);
             projectedCell.DisplayAsIndicator(cells.HoloMaterial, cells.GetColour(playerID));
 
             ShowPlacementGrid(type, origin);
