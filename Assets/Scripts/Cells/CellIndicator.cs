@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Aspekt.Hex.UI;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -13,6 +14,7 @@ namespace Aspekt.Hex
         public Cells.CellTypes CellType { get; private set; }
 
         private readonly Cells cells;
+        private readonly GameUI ui;
         
         private HexCell projectedCell;
         private UnitCell attackingUnit;
@@ -21,9 +23,10 @@ namespace Aspekt.Hex
         private readonly List<GameObject> placementIndicatorPool = new List<GameObject>();
         private readonly List<GameObject> activePlacementIndicators = new List<GameObject>();
 
-        public CellIndicator(Cells cells)
+        public CellIndicator(Cells cells, GameUI ui)
         {
             this.cells = cells;
+            this.ui = ui;
         }
 
         public UnitCell GetMovingUnit() => movingUnit;
@@ -40,6 +43,7 @@ namespace Aspekt.Hex
             projectedCell.DisplayAsIndicator(cells.HoloMaterial, cells.GetColour(playerID));
 
             ShowPlacementGrid(type, origin);
+            ui.SetCursor(HexCursor.None);
         }
 
         public void IndicateAttack(UnitCell unit)
@@ -74,7 +78,6 @@ namespace Aspekt.Hex
             {
                 movingUnit = null;
             }
-
 
             HideIndicators();
         }
@@ -138,7 +141,7 @@ namespace Aspekt.Hex
             }
             activePlacementIndicators.Clear();
             
-            // TODO set default cursor
+            ui.SetCursor(HexCursor.Default);
         }
 
         private void UpdateBuildPlacementProjection(Vector3 boardPosition)
@@ -165,15 +168,15 @@ namespace Aspekt.Hex
             var target = cells.GetCellAtPosition(coords);
             if (target == null)
             {
-                // TODO set cursor to invalid
+                ui.SetCursor(HexCursor.Invalid);
             }
             else if (cells.IsValidAttackTarget(attackingUnit, target, attackingUnit.PlayerId))
             {
-                // TODO set cursor to valid target
+                ui.SetCursor(HexCursor.Attack);
             }
             else
             {
-                // TODO set cursor to invalid target 
+                ui.SetCursor(HexCursor.Invalid);
             }
         }
 
@@ -184,15 +187,15 @@ namespace Aspekt.Hex
             var coords = HexCoordinates.FromPosition(boardPosition);
             if (cells.IsPieceInCell(coords))
             {
-                // TODO set cursor to invalid
+                ui.SetCursor(HexCursor.Invalid);
             }
             else if (cells.IsValidMove(movingUnit, coords, movingUnit.PlayerId))
             {
-                // TODO set cursor to valid
+                ui.SetCursor(HexCursor.Move);
             }
             else
             {
-                // TODO set cursor to invalid position
+                ui.SetCursor(HexCursor.Invalid);
             }
         }
     }

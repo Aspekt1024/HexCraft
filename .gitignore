@@ -26,6 +26,7 @@ ExportedObj/
 
 # User-specific stuff:
 .idea/*
+Assets/Imported/*
 
 # Unity3D generated meta files
 *.pidb.meta

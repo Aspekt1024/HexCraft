@@ -727,6 +727,10 @@ MonoBehaviour:
   player1: {fileID: 6143521428951980567}
   player2: {fileID: 1914659901}
   cellUI: {fileID: 1479195790}
+  defaultCursor: {fileID: 2800000, guid: 58ea7868a6de7b04180d0c71cb926afb, type: 3}
+  attackCursor: {fileID: 2800000, guid: 59e012930e76917428f9149b0dac9fb6, type: 3}
+  moveCursor: {fileID: 2800000, guid: e26601451d79da34eaf419e791cf3fbf, type: 3}
+  invalidCursor: {fileID: 2800000, guid: ea9c3a313ccc13943bf7111d813b59f2, type: 3}
 --- !u!1 &1361270000
 GameObject:
   m_ObjectHideFlags: 0

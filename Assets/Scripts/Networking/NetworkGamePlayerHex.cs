@@ -40,7 +40,7 @@ namespace Aspekt.Hex
                 input = new PlayerInput();
                 input.RegisterNotify(this);
 
-                indicator = new CellIndicator(FindObjectOfType<Cells>());
+                indicator = new CellIndicator(FindObjectOfType<Cells>(), game.UI);
             }
         }
         
