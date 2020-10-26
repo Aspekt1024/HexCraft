@@ -13,6 +13,7 @@ namespace Aspekt.Hex
     {
         private GameManager game;
         private NetworkManagerHex room;
+        private GameConfig config;
         
         private readonly List<PlayerData> playerData = new List<PlayerData>();
 
@@ -40,17 +41,24 @@ namespace Aspekt.Hex
             room.RegisterGameData(this);
         }
 
-        public void Init(List<NetworkGamePlayerHex> players)
+        public void RegisterPlayers(List<NetworkGamePlayerHex> players)
         {
             foreach (var player in players)
             {
-                playerData.Add(new PlayerData(player));
+                var newPlayerData = new PlayerData(player);
+                newPlayerData.Credits = config.StartingCredits;
+                playerData.Add(newPlayerData);
             }
         }
         
         public void UnregisterPlayer(NetworkGamePlayerHex player)
         {
             playerData.RemoveAt(playerData.FindIndex(p => p.Player.ID == player.ID));
+        }
+
+        public void Init(GameConfig config)
+        {
+            this.config = config;
         }
 
         public void SetGameStarted()

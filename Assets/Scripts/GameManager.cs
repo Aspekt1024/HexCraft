@@ -9,6 +9,7 @@ namespace Aspekt.Hex
     public class GameManager : MonoBehaviour
     {
 #pragma warning disable 649
+        [SerializeField] private GameConfig config;
         [SerializeField] private GameUI ui;
 #pragma warning restore 649
 
@@ -59,6 +60,8 @@ namespace Aspekt.Hex
             room = dependencies.NetworkManager;
             Data = dependencies.Data;
             grid = dependencies.Grid;
+
+            Data.Init(config);
             
             StartCoroutine(AwaitNetworkedPlayerRoutine());
         }

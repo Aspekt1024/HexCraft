@@ -152,7 +152,7 @@ namespace Aspekt.Hex
         {
             gameManagerDependencies.Data = data;
             CheckGameManagerDependencies();
-            data.Init(GamePlayers);
+            data.RegisterPlayers(GamePlayers);
         }
 
         public void RegisterBoard(HexGrid grid)
