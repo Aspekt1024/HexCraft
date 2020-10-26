@@ -20,8 +20,8 @@ namespace Aspekt.Hex
         private UnitCell attackingUnit;
         private UnitCell movingUnit;
         
-        private readonly List<GameObject> placementIndicatorPool = new List<GameObject>();
-        private readonly List<GameObject> activePlacementIndicators = new List<GameObject>();
+        private readonly List<GameObject> indicatorPool = new List<GameObject>();
+        private readonly List<GameObject> activeIndicators = new List<GameObject>();
 
         public CellIndicator(Cells cells, GameUI ui)
         {
@@ -42,7 +42,7 @@ namespace Aspekt.Hex
             projectedCell = cells.CreateIndicator(type);
             projectedCell.DisplayAsIndicator(cells.HoloMaterial, cells.GetColour(playerID));
 
-            ShowPlacementGrid(type, origin);
+            ShowIndicatorGrid(type, origin, new Color(0f, 1f, 0f, 0.5f), true);
             ui.SetCursor(HexCursor.None);
         }
 
@@ -50,13 +50,14 @@ namespace Aspekt.Hex
         {
             HideAll();
             attackingUnit = unit;
-            // TODO show attack range
+            ShowIndicatorGrid(unit.Coordinates, unit.AttackRange, new Color(1f, 0.5f, 0.3f, 0.5f), false);
         }
 
         public void ShowMoveRange(UnitCell unit)
         {
             HideAll();
             movingUnit = unit;
+            ShowIndicatorGrid(unit.Coordinates, unit.MoveRange, new Color(1f, 1f, 0f, 0.5f), true);
         }
         
 #endregion Indication API
@@ -92,33 +93,46 @@ namespace Aspekt.Hex
         public bool IsProjectedCellInPlacementGrid()
         {
             if (projectedCell == null) return false;
-            return activePlacementIndicators.Any(i =>
+            return activeIndicators.Any(i =>
                 HexCoordinates.FromPosition(i.transform.position).Equals(projectedCell.Coordinates));
         }
 
-        private void ShowPlacementGrid(Cells.CellTypes type, HexCell origin)
+        private void ShowIndicatorGrid(HexCoordinates origin, int radius, Color color, bool omitNonEmpty)
         {
-            var coords = cells.GetValidPlacement(type, origin);
+            var coords = cells.GetSurroundingCells(origin, radius, omitNonEmpty);
+            ShowIndicatorGrid(coords, color, omitNonEmpty);
+        }
+
+        private void ShowIndicatorGrid(Cells.CellTypes type, HexCell origin, Color color, bool omitNonEmpty)
+        {
+            var coords = cells.GetValidPlacement(type, origin, omitNonEmpty);
+            ShowIndicatorGrid(coords, color, omitNonEmpty);
+        }
+
+        private void ShowIndicatorGrid(List<HexCoordinates> coords, Color color, bool omitNonEmpty)
+        {
             var indicators = GetPlacementIndicators(coords.Count);
             for (int i = 0; i < coords.Count; i++)
             {
                 indicators[i].transform.position = HexCoordinates.ToPosition(coords[i]);
+                var mr = indicators[i].GetComponentInChildren<MeshRenderer>();
+                mr.material.color = color;
             }
         }
 
         private List<GameObject> GetPlacementIndicators(int numRequired)
         {
             var numIndicators = 0;
-            foreach (var indicator in placementIndicatorPool)
+            foreach (var indicator in indicatorPool)
             {
                 if (indicator.activeSelf) continue;
                 indicator.SetActive(true);
-                activePlacementIndicators.Add(indicator);
+                activeIndicators.Add(indicator);
                 
                 numIndicators++;
                 if (numIndicators == numRequired)
                 {
-                    return activePlacementIndicators;
+                    return activeIndicators;
                 }
             }
 
@@ -126,20 +140,20 @@ namespace Aspekt.Hex
             for (int i = 0; i < numRequired - numIndicators; i++)
             {
                 var newIndicator = Object.Instantiate(indicatorPrefab, cells.transform);
-                placementIndicatorPool.Add(newIndicator);
-                activePlacementIndicators.Add(newIndicator);
+                indicatorPool.Add(newIndicator);
+                activeIndicators.Add(newIndicator);
             }
 
-            return activePlacementIndicators;
+            return activeIndicators;
         }
 
         private void HideIndicators()
         {
-            foreach (var indicator in activePlacementIndicators)
+            foreach (var indicator in activeIndicators)
             {
                 indicator.SetActive(false);
             }
-            activePlacementIndicators.Clear();
+            activeIndicators.Clear();
             
             ui.SetCursor(HexCursor.Default);
         }

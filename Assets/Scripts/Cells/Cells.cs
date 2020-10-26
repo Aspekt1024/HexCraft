@@ -95,12 +95,12 @@ namespace Aspekt.Hex
             return indicator.gameObject;
         }
 
-        public List<HexCoordinates> GetValidPlacement(CellTypes type, HexCell origin)
+        public List<HexCoordinates> GetValidPlacement(CellTypes type, HexCell origin, bool omitNonEmpty)
         {
             var radius = PlacementRules.GetRadius(type);
             if (radius > 0)
             {
-                return GetEmptySurroundingCells(origin.Coordinates, radius);
+                return GetSurroundingCells(origin.Coordinates, radius, omitNonEmpty);
             }
             return new List<HexCoordinates>();
         }
@@ -162,7 +162,7 @@ namespace Aspekt.Hex
             }
         }
 
-        private List<HexCoordinates> GetEmptySurroundingCells(HexCoordinates center, int radius)
+        public List<HexCoordinates> GetSurroundingCells(HexCoordinates center, int radius, bool omitNonEmpty)
         {
             var coords = new List<HexCoordinates>();
             for (int x = center.X - radius; x <= center.X + radius; x++)
@@ -174,10 +174,9 @@ namespace Aspekt.Hex
                     if (x == center.X && z == center.Z) continue;
                     
                     var coord = new HexCoordinates(x, z);
-                    if (!IsPieceInCell(coord))
-                    {
-                        coords.Add(coord);;
-                    }
+                    if (omitNonEmpty & IsPieceInCell(coord)) continue;
+                    
+                    coords.Add(coord);;
                 }
             }
             

@@ -87,7 +87,7 @@ namespace Aspekt.Hex.UI
             switch (type)
             {
                 case HexCursor.Default:
-                    Cursor.SetCursor(defaultCursor, center, CursorMode.ForceSoftware);
+                    Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.ForceSoftware);
                     break;
                 case HexCursor.Attack:
                     Cursor.SetCursor(attackCursor, center, CursorMode.ForceSoftware);
