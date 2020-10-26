@@ -11,8 +11,6 @@ namespace Aspekt.Hex
         [SerializeField] private Sprite incomeImage;
         [SerializeField] private Sprite trainingImage;
 #pragma warning restore 649
-        
-        public override string DisplayName { get; } = "Home Base";
 
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 

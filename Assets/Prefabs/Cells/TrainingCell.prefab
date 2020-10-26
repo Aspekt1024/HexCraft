@@ -301,6 +301,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 3802511737878681994}
+  DisplayName: Training
+  PlacementRadius: 3
+  Cost: 3
+  MaxHP: 2
   Coordinates:
     x: 0
     z: 0

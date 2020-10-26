@@ -108,6 +108,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 2211579191154334677}
+  DisplayName: Home Base
+  PlacementRadius: 2
+  Cost: 7
+  MaxHP: 3
   Coordinates:
     x: 0
     z: 0

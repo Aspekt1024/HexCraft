@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using Mirror;
 
 namespace Aspekt.Hex
@@ -11,7 +14,9 @@ namespace Aspekt.Hex
         private GameManager game;
         private NetworkManagerHex room;
         
-        public NetworkGamePlayerHex CurrentPlayer { get; private set; }
+        private readonly List<PlayerData> playerData = new List<PlayerData>();
+
+        private PlayerData currentPlayer;
 
         private enum GameStates
         {
@@ -23,11 +28,29 @@ namespace Aspekt.Hex
 
         public bool IsRunning => state == GameStates.Started;
         
+        public bool IsCurrentPlayer(NetworkGamePlayerHex player)
+        {
+            return currentPlayer != null && currentPlayer.Player.ID == player.ID;
+        }
+        
         public override void OnStartClient()
         {
             room = FindObjectOfType<NetworkManagerHex>();
             game = room.Game;
             room.RegisterGameData(this);
+        }
+
+        public void Init(List<NetworkGamePlayerHex> players)
+        {
+            foreach (var player in players)
+            {
+                playerData.Add(new PlayerData(player));
+            }
+        }
+        
+        public void UnregisterPlayer(NetworkGamePlayerHex player)
+        {
+            playerData.RemoveAt(playerData.FindIndex(p => p.Player.ID == player.ID));
         }
 
         public void SetGameStarted()
@@ -39,27 +62,27 @@ namespace Aspekt.Hex
         {
             if (!isServer) return;
             
-            if (CurrentPlayer == null)
+            if (currentPlayer == null)
             {
                 room.GamePlayers[0].IsCurrentPlayer = true;
                 RpcSetCurrentPlayer(room.GamePlayers[0].netId);
                 return;
             }
 
-            var currentPlayerIndex = room.GamePlayers.FindIndex(p => p == CurrentPlayer);
+            var currentPlayerIndex = playerData.FindIndex(p => p.Player.ID == currentPlayer.Player.ID);
             currentPlayerIndex = (currentPlayerIndex + 1) % room.GamePlayers.Count;
             
-            CurrentPlayer.IsCurrentPlayer = false;
+            currentPlayer.Player.IsCurrentPlayer = false;
             room.GamePlayers[currentPlayerIndex].IsCurrentPlayer = true;
             
             RpcSetCurrentPlayer(room.GamePlayers[currentPlayerIndex].netId);
         }
         
         [ClientRpc]
-        private void RpcSetCurrentPlayer(uint playerNetId)
+        private void RpcSetCurrentPlayer(uint playerNetID)
         {
-            CurrentPlayer = room.GamePlayers.FirstOrDefault(p => p.netId == playerNetId);
-            game.UI.SetPlayerTurn(CurrentPlayer);
+            currentPlayer = playerData.First(p => p.Player.netId == playerNetID);
+            game.UI.SetPlayerTurn(currentPlayer.Player);
         }
     }
 }

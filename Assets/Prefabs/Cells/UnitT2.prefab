@@ -204,12 +204,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 7351115046331726950}
+  DisplayName: Unit T2
+  PlacementRadius: 1
+  Cost: 5
+  MaxHP: 2
   Coordinates:
     x: 0
     z: 0
   PlayerId: 0
   moveImage: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   attackImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  MoveRange: 2
+  AttackRange: 2
+  AttackDamage: 2
 --- !u!1 &4949076233612875935
 GameObject:
   m_ObjectHideFlags: 0

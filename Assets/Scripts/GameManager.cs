@@ -135,7 +135,7 @@ namespace Aspekt.Hex
 
         private bool IsActionAllowed(NetworkGamePlayerHex player)
         {
-            return player == Data.CurrentPlayer;
+            return Data.IsCurrentPlayer(player);
         }
         
         private IEnumerator AwaitNetworkedPlayerRoutine()

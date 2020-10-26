@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -97,7 +96,7 @@ namespace Aspekt.Hex
 
         public List<HexCoordinates> GetValidPlacement(CellTypes type, HexCell origin, bool omitNonEmpty)
         {
-            var radius = PlacementRules.GetRadius(type);
+            var radius = GetPrefab(type).PlacementRadius;
             if (radius > 0)
             {
                 return GetSurroundingCells(origin.Coordinates, radius, omitNonEmpty);
@@ -115,7 +114,8 @@ namespace Aspekt.Hex
             {
                 if (cell.PlayerId == playerId && cell.CanCreate(type))
                 {
-                    if (PlacementRules.IsValidPlacementDistance(type, cellCoords, cell.Coordinates))
+                    var cellPrefab = GetPrefab(type);
+                    if (PlacementRules.IsValidPlacementDistance(cellPrefab.PlacementRadius, cellCoords, cell.Coordinates))
                     {
                         return true;
                     }
@@ -145,19 +145,26 @@ namespace Aspekt.Hex
 
         private HexCell CreateCell(CellTypes type)
         {
+            var cellPrefab = GetPrefab(type);
+            return cellPrefab == null ? null : Instantiate(cellPrefab);
+        }
+
+        private HexCell GetPrefab(CellTypes type)
+        {
             switch (type)
             {
                 case CellTypes.Base:
-                    return Instantiate(home);
+                    return home;
                 case CellTypes.Training:
-                    return Instantiate(training);
+                    return training;
                 case CellTypes.Income:
-                    return Instantiate(income);
+                    return income;
                 case CellTypes.UnitT1:
-                    return Instantiate(unit1);
+                    return unit1;
                 case CellTypes.UnitT2:
-                    return Instantiate(unit2);
+                    return unit2;
                 default:
+                    Debug.LogError("invalid cell type: " + type);
                     return null;
             }
         }

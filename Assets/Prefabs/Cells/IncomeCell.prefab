@@ -203,11 +203,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 7860111797281857084}
+  DisplayName: Generator
+  PlacementRadius: 2
+  Cost: 4
+  MaxHP: 2
   Coordinates:
     x: 0
     z: 0
+  PlayerId: 0
   orb: {fileID: 3546124501619457251}
   orbSpeed: 160
+  CreditsPerRound: 1
 --- !u!1001 &4005393754473753204
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Aspekt.Hex.UI;
 using UnityEngine;
@@ -10,17 +9,23 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private MeshRenderer meshRenderer;
 #pragma warning restore 649
+
+        [Header("Cell Settings")]
+        public string DisplayName = "Cell";
+        public int PlacementRadius = 2;
+        public int Cost = 2;
+        public int MaxHP = 1;
         
         public const float OuterRadius = 1f;
         public const float InnerRadius = OuterRadius * 0.866025404f;
 
-        public abstract string DisplayName { get; }
         public abstract List<CellUIItem.Details> ItemDetails { get; protected set; }
         
+        [Header("Info")]
         public HexCoordinates Coordinates;
         public int PlayerId;
-        public int MaxHP { get; protected set; } = 1;
-        public int CurrentHP { get; protected set; } = 1;
+        
+        public int CurrentHP { get; protected set; }
 
         public bool IsPlaced { get; private set; }
 
@@ -50,6 +55,7 @@ namespace Aspekt.Hex
             SetColor(colour);
             PlayerId = playerId;
             ShowPlaced();
+            CurrentHP = MaxHP;
         }
 
         public void TakeDamage(int damage)

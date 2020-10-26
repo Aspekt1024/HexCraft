@@ -10,8 +10,6 @@ namespace Aspekt.Hex
         [SerializeField] private Sprite t1UnitSprite;
         [SerializeField] private Sprite t2UnitSprite;
 #pragma warning restore 649
-        
-        public override string DisplayName { get; } = "Training";
 
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 

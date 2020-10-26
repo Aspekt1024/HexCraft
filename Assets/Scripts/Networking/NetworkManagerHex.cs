@@ -24,9 +24,9 @@ namespace Aspekt.Hex
         public readonly List<NetworkGamePlayerHex> GamePlayers = new List<NetworkGamePlayerHex>();
 
         public GameManager Game { get; private set; }
-        
+
         private MainMenu mainMenu;
-        
+
         private GameManager.Dependencies gameManagerDependencies;
         private bool isStartGameActioned;
         private bool isAllPlayersLoadedInGame;
@@ -48,10 +48,10 @@ namespace Aspekt.Hex
             var player = SceneManager.GetActiveScene().path == menuScene
                 ? Instantiate(roomPlayerPrefab).gameObject
                 : Instantiate(gamePlayerPrefab).gameObject;
-            
+
             NetworkServer.AddPlayerForConnection(conn, player);
         }
-        
+
         public override void OnClientDisconnect(NetworkConnection conn)
         {
             base.OnClientDisconnect(conn);
@@ -60,11 +60,19 @@ namespace Aspekt.Hex
 
         public void AddRoomPlayer(NetworkRoomPlayerHex player) => RoomPlayers.Add(player);
         public void RemoveRoomPlayer(NetworkRoomPlayerHex player) => RoomPlayers.Remove(player);
-        
-        public void AddGamePlayer(NetworkGamePlayerHex player) => GamePlayers.Add(player);
-        public void RemoveGamePlayer(NetworkGamePlayerHex player) => GamePlayers.Remove(player);
 
-        public void ShowLobby() => mainMenu.ShowLobby();
+        public void AddGamePlayer(NetworkGamePlayerHex player)
+        {
+            GamePlayers.Add(player);
+        }
+
+        public void RemoveGamePlayer(NetworkGamePlayerHex player)
+        {
+            GamePlayers.Remove(player);
+            Game.Data.UnregisterPlayer(player);
+        }
+
+    public void ShowLobby() => mainMenu.ShowLobby();
         public bool IsLobbyReady() => RoomPlayers.Count == minPlayers && RoomPlayers.All(p => p.IsReady);
         
         public void StartGameFromLobby()
@@ -144,6 +152,7 @@ namespace Aspekt.Hex
         {
             gameManagerDependencies.Data = data;
             CheckGameManagerDependencies();
+            data.Init(GamePlayers);
         }
 
         public void RegisterBoard(HexGrid grid)

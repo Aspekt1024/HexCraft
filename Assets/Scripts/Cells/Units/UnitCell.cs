@@ -11,11 +11,13 @@ namespace Aspekt.Hex
         [SerializeField] private Sprite attackImage;
 #pragma warning restore 649
         
+        [Header("Unit Settings")]
+        public int MoveRange;
+        public int AttackRange;
+        public int AttackDamage;
+        
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 
-        public abstract int MoveRange { get; protected set; }
-        public abstract int AttackRange { get; protected set; }
-        public abstract int AttackDamage { get; protected set; }
         
         private void Awake()
         {

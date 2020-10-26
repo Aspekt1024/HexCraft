@@ -11,7 +11,8 @@ namespace Aspekt.Hex
         [SerializeField] private float orbSpeed = 160f;
 #pragma warning restore 649
 
-        public override string DisplayName { get; } = "Generator";
+        [Header("Income Settings")]
+        public int CreditsPerRound = 1;
         
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 
