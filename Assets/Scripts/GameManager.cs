@@ -48,6 +48,11 @@ namespace Aspekt.Hex
             UI.Init(player);
         }
 
+        public NetworkGamePlayerHex GetPlayerFromID(int id)
+        {
+            return room.GamePlayers.FirstOrDefault(p => p.ID == id);
+        }
+
         public void SetDependencies(Dependencies dependencies)
         {
             if (!dependencies.IsValid())
@@ -78,7 +83,6 @@ namespace Aspekt.Hex
         {
             for (int i = 0; i < room.GamePlayers.Count; i++)
             {
-                room.GamePlayers[i].SetPlayerID(i + 1);
                 grid.SetStartingLocation(room.GamePlayers[i]);
             }
         }
@@ -153,6 +157,12 @@ namespace Aspekt.Hex
             {
                 yield return null;
             }
+
+            while (room.GamePlayers.Any(p => p.ID == 0))
+            {
+                yield return null;
+            }
+            
             UI.UpdatePlayerInfo(room.GamePlayers);
             gamePlayer.CmdSetReady();
             room.Game.Cells.RegisterCellEventObserver(gamePlayer);

@@ -108,7 +108,9 @@ namespace Aspekt.Hex
             }
             SetupGame();
             GamePlayers[0].SetDisplayName("Host");
+            GamePlayers[0].SetPlayerID(1);
             GamePlayers[1].SetDisplayName("Client");
+            GamePlayers[1].SetPlayerID(2);
         }
 
         public override void ServerChangeScene(string newSceneName)

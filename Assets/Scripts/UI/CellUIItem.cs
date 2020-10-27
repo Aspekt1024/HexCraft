@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Aspekt.Hex.UI
 {
-    public class CellUIItem : UIElement
+    public class CellUIItem : MonoBehaviour
     {
 #pragma warning disable 649
         [SerializeField] private Image spriteRenderer;
@@ -30,8 +30,10 @@ namespace Aspekt.Hex.UI
             }
         }
         
-        public void Setup(Details details)
+        public void ShowActions(Details details)
         {
+            gameObject.SetActive(true);
+            
             spriteRenderer.sprite = details.Sprite;
             onClickCallback = details.Callback;
             costText.text = details.Cost == 0 ? "" : details.Cost.ToString();
@@ -42,19 +44,6 @@ namespace Aspekt.Hex.UI
         public void CellItemClicked()
         {
             onClickCallback?.Invoke();
-        }
-
-        public override void Show()
-        {
-            if (!hasContent) return;
-            base.Show();
-        }
-
-        public override void Hide()
-        {
-            onClickCallback = null;
-            hasContent = false;
-            base.Hide();
         }
     }
 }

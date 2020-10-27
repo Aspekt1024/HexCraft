@@ -16,11 +16,13 @@ namespace Aspekt.Hex
         public HexCoordinates startLocation1;
         public HexCoordinates startLocation2;
 
+        private GameManager game;
         private Cells cells;
         
         public override void OnStartClient()
         {
             var room = FindObjectOfType<NetworkManagerHex>();
+            game = FindObjectOfType<GameManager>();
             room.RegisterBoard(this);
             cells = FindObjectOfType<Cells>();
         }
@@ -65,7 +67,8 @@ namespace Aspekt.Hex
             
             var coords = new HexCoordinates(x, z);
             var cell = cells.Create((Cells.CellTypes) cellTypeIndex);
-            cell.Place(coords, cells.GetColour(playerID), playerID);
+            var player = game.GetPlayerFromID(playerID);
+            cell.Place(coords, cells.GetColour(player.ID), player);
         }
 
         [ClientRpc]

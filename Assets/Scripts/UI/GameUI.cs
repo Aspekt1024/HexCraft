@@ -20,9 +20,7 @@ namespace Aspekt.Hex.UI
         [SerializeField] private PlayerInfo player1;
         [SerializeField] private PlayerInfo player2;
         [SerializeField] private CurrencyUI currency;
-        
-        [Header("Overlay")]
-        [SerializeField] private CellUI cellUI;
+        [SerializeField] private ControlPanel controlPanel;
         
         [Header("Cursors")]
         [SerializeField] private Texture2D defaultCursor;
@@ -31,9 +29,12 @@ namespace Aspekt.Hex.UI
         [SerializeField] private Texture2D invalidCursor;
 #pragma warning restore 649
 
+        private NetworkGamePlayerHex player;
+        
         public void Init(NetworkGamePlayerHex player)
         {
-            cellUI.Init(player);
+            this.player = player;
+            controlPanel.RegisterSingleObserver(player);
             SetCursor(HexCursor.Default);
         }
         
@@ -69,6 +70,8 @@ namespace Aspekt.Hex.UI
                 player1.SetTurnIndicator(false);
                 player2.SetTurnIndicator(true);
             }
+
+            controlPanel.SetPlayerTurn(player.hasAuthority);
         }
 
         public void SetCurrency(int credits)
@@ -78,12 +81,12 @@ namespace Aspekt.Hex.UI
 
         public void ShowCellInfo(HexCell cell)
         {
-            cellUI.Show(cell);
+            controlPanel.SetCellSelected(cell, player);
         }
 
         public void HideCellInfo()
         {
-            cellUI.HideAll();
+            controlPanel.SetCellSelected(null, null);
         }
 
         public void SetCursor(HexCursor type)

@@ -53,7 +53,7 @@ namespace Aspekt.Hex
                 
                 if (isServer)
                 {
-                    RpcSetCurrency(player.netId, newPlayerData.Credits);
+                    RpcSetCurrency((Int16)player.ID, newPlayerData.Credits);
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace Aspekt.Hex
 
         public void ModifyCurrency(PlayerData data, int change)
         {
-            RpcSetCurrency(data.Player.netId, data.Credits + change);
+            RpcSetCurrency((Int16)data.Player.ID, data.Credits + change);
         }
         
         public void NextTurn()
@@ -118,7 +118,7 @@ namespace Aspekt.Hex
             
             playerData[playerIndex].Player.IsCurrentPlayer = true;
             playerData[playerIndex].TurnNumber++;
-            RpcSetCurrentPlayer(playerData[playerIndex].Player.netId);
+            RpcSetCurrentPlayer((Int16)playerData[playerIndex].Player.ID);
         }
 
         private void GenerateIncome(PlayerData data)
@@ -130,22 +130,22 @@ namespace Aspekt.Hex
             credits += incomeCells.Sum(c => c.CreditsPerRound);
             credits += homeCells.Sum(c => 2); // TODO set credits per round for home base cells
     
-            RpcSetCurrency(data.Player.netId, credits);
+            RpcSetCurrency((Int16)data.Player.ID, credits);
         }
         
         [ClientRpc]
-        private void RpcSetCurrentPlayer(uint playerNetID)
+        private void RpcSetCurrentPlayer(Int16 playerId)
         {
-            currentPlayer = playerData.First(p => p.Player.netId == playerNetID);
+            currentPlayer = playerData.First(p => p.Player.ID == playerId);
             game.UI.SetPlayerTurn(currentPlayer.Player);
         }
 
         [ClientRpc]
-        private void RpcSetCurrency(uint playerNetId, int credits)
+        private void RpcSetCurrency(Int16 playerId, int credits)
         {
             foreach (var player in playerData)
             {
-                if (player.Player.netId == playerNetId)
+                if (player.Player.ID == playerId)
                 {
                     player.Credits = credits;
                     if (player.Player.hasAuthority)

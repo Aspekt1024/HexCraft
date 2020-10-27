@@ -24,6 +24,7 @@ namespace Aspekt.Hex
         [Header("Info")]
         public HexCoordinates Coordinates;
         public int PlayerId;
+        public NetworkGamePlayerHex Owner;
         
         public int CurrentHP { get; protected set; }
 
@@ -56,12 +57,13 @@ namespace Aspekt.Hex
             Observers.Add(observer);
         }
 
-        public void Place(HexCoordinates coords, Color colour, int playerId)
+        public void Place(HexCoordinates coords, Color colour, NetworkGamePlayerHex owner)
         {
             IsPlaced = true;
             SetCoordinates(coords);
             SetColor(colour);
-            PlayerId = playerId;
+            Owner = owner;
+            PlayerId = owner.ID;
             ShowPlaced();
             CurrentHP = MaxHP;
         }

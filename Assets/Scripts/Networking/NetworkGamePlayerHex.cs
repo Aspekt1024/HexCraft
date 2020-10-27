@@ -1,10 +1,11 @@
 using System;
+using Aspekt.Hex.UI;
 using Mirror;
 using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class NetworkGamePlayerHex : NetworkBehaviour, IInputObserver, ICellEventObserver
+    public class NetworkGamePlayerHex : NetworkBehaviour, IInputObserver, ICellEventObserver, ControlPanel.IEventReceiver
     {
         public bool IsReady { get; private set; }
         
@@ -130,6 +131,11 @@ namespace Aspekt.Hex
             game.UI.HideCellInfo();
         }
 
+        public void OnEndTurnRequested()
+        {
+            CmdEndTurn();
+        }
+
         private void HandleDisplayNameChanged(string oldName, string newName)
         {
             game.UI.UpdatePlayerInfo(room.GamePlayers);
@@ -224,6 +230,12 @@ namespace Aspekt.Hex
         {
             IsReady = true;
             room.UpdatePlayerReady();
+        }
+
+        [Command]
+        private void CmdEndTurn()
+        {
+            game.Data.NextTurn();
         }
     }
 }
