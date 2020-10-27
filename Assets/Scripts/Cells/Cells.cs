@@ -33,7 +33,7 @@ namespace Aspekt.Hex
         [SerializeField] private Color whiteColour;
 #pragma warning restore 649
         
-        private readonly List<HexCell> cells = new List<HexCell>();
+        public List<HexCell> AllCells { get; } = new List<HexCell>();
 
         private readonly List<ICellEventObserver> cellEventObservers = new List<ICellEventObserver>();
         
@@ -52,11 +52,12 @@ namespace Aspekt.Hex
             var cell = CreateCell(type);
             if (cell != null)
             {
+                cell.Init(this);
                 foreach (var observer in cellEventObservers)
                 {
                     cell.RegisterObserver(observer);
                 }
-                cells.Add(cell);
+                AllCells.Add(cell);
             }
 
             return cell;
@@ -71,20 +72,20 @@ namespace Aspekt.Hex
         
         public bool IsPieceInCell(HexCoordinates coordinates)
         {
-            return cells.Any(c => c.IsPlaced && c.Coordinates.Equals(coordinates));
+            return AllCells.Any(c => c.IsPlaced && c.Coordinates.Equals(coordinates));
         }
 
         public HexCell GetCellAtPosition(HexCoordinates coordinates)
         {
-            return cells.FirstOrDefault(c => c.IsPlaced && c.Coordinates.Equals(coordinates));
+            return AllCells.FirstOrDefault(c => c.IsPlaced && c.Coordinates.Equals(coordinates));
         }
 
         public void RemoveCell(HexCoordinates coordinates)
         {
-            var cell = cells.FirstOrDefault(c => c.Coordinates.Equals(coordinates));
+            var cell = AllCells.FirstOrDefault(c => c.Coordinates.Equals(coordinates));
             if (cell != null)
             {
-                cells.Remove(cell);
+                AllCells.Remove(cell);
                 cell.Remove();
             }
         }
@@ -110,7 +111,7 @@ namespace Aspekt.Hex
 
             if (type == CellTypes.Base) return true;
             
-            foreach (var cell in cells)
+            foreach (var cell in AllCells)
             {
                 if (cell.PlayerId == playerId && cell.CanCreate(type))
                 {
@@ -141,6 +142,11 @@ namespace Aspekt.Hex
             if (IsPieceInCell(targetCoords)) return false;
 
             return unit.MoveRange >= HexCoordinates.Distance(cell.Coordinates, targetCoords);
+        }
+
+        public int GetCost(CellTypes type)
+        {
+            return GetPrefab(type).Cost;
         }
 
         private HexCell CreateCell(CellTypes type)

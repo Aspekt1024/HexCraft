@@ -69,7 +69,7 @@ namespace Aspekt.Hex
         public void StartGame()
         {
             SetupPlayers();
-            Data.SetNextPlayer();
+            Data.NextTurn();
             Data.SetGameStarted();
             Debug.Log("Game started");
         }
@@ -91,10 +91,16 @@ namespace Aspekt.Hex
         public void TryPlace(NetworkGamePlayerHex player, Int16 x, Int16 z, Cells.CellTypes type)
         {
             if (!IsActionAllowed(player)) return;
+            
+            var playerData = Data.GetPlayerData(player);
+            var cost = Cells.GetCost(type);
+            
+            if (playerData.Credits < cost) return;
 
             if (grid.TryPlace(x, z, player.ID, type))
             {
-                Data.SetNextPlayer();
+                Data.ModifyCurrency(playerData, -cost);
+                Data.NextTurn();
             }
         }
 
@@ -104,7 +110,7 @@ namespace Aspekt.Hex
 
             if (grid.TryRemove((Int16)cellX, (Int16)cellZ, (Int16)player.ID))
             {
-                Data.SetNextPlayer();
+                Data.NextTurn();
             }
         }
 
@@ -112,7 +118,7 @@ namespace Aspekt.Hex
         {
             grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
             
-            Data.SetNextPlayer();
+            Data.NextTurn();
         }
 
         public void AttackCell(UnitCell attacker, HexCell target)
@@ -131,7 +137,7 @@ namespace Aspekt.Hex
                 TryRemove(player, target.Coordinates.X, target.Coordinates.Z);
             }
             
-            Data.SetNextPlayer();
+            Data.NextTurn();
         }
 
     #endregion Server Calls
@@ -140,7 +146,7 @@ namespace Aspekt.Hex
         {
             return Data.IsCurrentPlayer(player);
         }
-        
+
         private IEnumerator AwaitNetworkedPlayerRoutine()
         {
             while (gamePlayer == null)

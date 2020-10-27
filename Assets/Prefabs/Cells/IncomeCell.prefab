@@ -205,7 +205,7 @@ MonoBehaviour:
   meshRenderer: {fileID: 7860111797281857084}
   DisplayName: Generator
   PlacementRadius: 2
-  Cost: 4
+  Cost: 10
   MaxHP: 2
   Coordinates:
     x: 0

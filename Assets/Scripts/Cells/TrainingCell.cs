@@ -13,12 +13,12 @@ namespace Aspekt.Hex
 
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 
-        private void Awake()
+        protected override void OnInit()
         {
             ItemDetails = new List<CellUIItem.Details>
             {
-                new CellUIItem.Details { Sprite = t1UnitSprite, Callback = T1UnitClicked },
-                new CellUIItem.Details { Sprite = t2UnitSprite, Callback = T2UnitClicked }
+                new CellUIItem.Details(t1UnitSprite, T1UnitClicked, CellData.GetCost(Cells.CellTypes.UnitT1)),
+                new CellUIItem.Details(t2UnitSprite, T2UnitClicked, CellData.GetCost(Cells.CellTypes.UnitT2)),
             };
         }
         

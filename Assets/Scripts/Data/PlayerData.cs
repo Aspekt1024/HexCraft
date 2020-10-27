@@ -6,7 +6,8 @@ namespace DefaultNamespace
     public class PlayerData
     {
         public readonly NetworkGamePlayerHex Player;
-        
+
+        public int TurnNumber;
         public int Credits;
         public int ActionsRemaining;
 

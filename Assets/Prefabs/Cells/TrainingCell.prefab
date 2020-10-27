@@ -192,6 +192,29 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1312393799163408318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2971968159140852605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25a1bf4c22d140b182d95270dfdc09b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 3802511737878681994}
+  DisplayName: Training
+  PlacementRadius: 3
+  Cost: 7
+  MaxHP: 2
+  Coordinates:
+    x: 0
+    z: 0
+  PlayerId: 0
+  t1UnitSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  t2UnitSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &6028434358913773029
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,29 +311,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1312393799163408318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2971968159140852605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25a1bf4c22d140b182d95270dfdc09b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 3802511737878681994}
-  DisplayName: Training
-  PlacementRadius: 3
-  Cost: 3
-  MaxHP: 2
-  Coordinates:
-    x: 0
-    z: 0
-  PlayerId: 0
-  t1UnitSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  t2UnitSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1001 &7946463186258849218
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -120,6 +120,8 @@ namespace Aspekt.Hex
 
         public void BoardClickedSecondary(Vector3 position)
         {
+            // TODO if unit selected, try move it, or attack target
+            // TODO cancel actions
         }
 
         public void CancelPressed()

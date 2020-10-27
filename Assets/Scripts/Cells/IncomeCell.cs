@@ -16,7 +16,7 @@ namespace Aspekt.Hex
         
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 
-        private void Awake()
+        protected override void OnInit()
         {
             ItemDetails = new List<CellUIItem.Details>
             {

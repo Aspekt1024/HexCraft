@@ -14,7 +14,7 @@ namespace Aspekt.Hex
         private GameManager game;
         private NetworkManagerHex room;
         private GameConfig config;
-        
+
         private readonly List<PlayerData> playerData = new List<PlayerData>();
 
         private PlayerData currentPlayer;
@@ -45,9 +45,16 @@ namespace Aspekt.Hex
         {
             foreach (var player in players)
             {
-                var newPlayerData = new PlayerData(player);
-                newPlayerData.Credits = config.StartingCredits;
+                var newPlayerData = new PlayerData(player)
+                {
+                    Credits = config.StartingCredits
+                };
                 playerData.Add(newPlayerData);
+                
+                if (isServer)
+                {
+                    RpcSetCurrency(player.netId, newPlayerData.Credits);
+                }
             }
         }
         
@@ -65,25 +72,65 @@ namespace Aspekt.Hex
         {
             state = GameStates.Started;
         }
+
+        public void ModifyCurrency(PlayerData data, int change)
+        {
+            RpcSetCurrency(data.Player.netId, data.Credits + change);
+        }
         
-        public void SetNextPlayer()
+        public void NextTurn()
         {
             if (!isServer) return;
-            
+            var player = SetNextPlayer();
+            if (player.TurnNumber > 1)
+            {
+                GenerateIncome(player);
+            }
+        }
+
+        public PlayerData GetPlayerData(NetworkGamePlayerHex player)
+        {
+            return playerData.First(p => p.Player.ID == player.ID);
+        }
+
+        private PlayerData SetNextPlayer()
+        {
             if (currentPlayer == null)
             {
-                room.GamePlayers[0].IsCurrentPlayer = true;
-                RpcSetCurrentPlayer(room.GamePlayers[0].netId);
-                return;
+                ServerSetCurrentPlayer(0);
+                return playerData[0];
             }
 
             var currentPlayerIndex = playerData.FindIndex(p => p.Player.ID == currentPlayer.Player.ID);
             currentPlayerIndex = (currentPlayerIndex + 1) % room.GamePlayers.Count;
+
+            ServerSetCurrentPlayer(currentPlayerIndex);
             
-            currentPlayer.Player.IsCurrentPlayer = false;
-            room.GamePlayers[currentPlayerIndex].IsCurrentPlayer = true;
+            return playerData[currentPlayerIndex];
+        }
+
+        private void ServerSetCurrentPlayer(int playerIndex)
+        {
+            if (currentPlayer != null)
+            {
+                currentPlayer.Player.IsCurrentPlayer = false;
+            }
             
-            RpcSetCurrentPlayer(room.GamePlayers[currentPlayerIndex].netId);
+            playerData[playerIndex].Player.IsCurrentPlayer = true;
+            playerData[playerIndex].TurnNumber++;
+            RpcSetCurrentPlayer(playerData[playerIndex].Player.netId);
+        }
+
+        private void GenerateIncome(PlayerData data)
+        {
+            var incomeCells = game.Cells.GetIncomeCells(data.Player.ID);
+            var homeCells = game.Cells.GetHomeCells(data.Player.ID);
+
+            var credits = data.Credits;
+            credits += incomeCells.Sum(c => c.CreditsPerRound);
+            credits += homeCells.Sum(c => 2); // TODO set credits per round for home base cells
+    
+            RpcSetCurrency(data.Player.netId, credits);
         }
         
         [ClientRpc]
@@ -91,6 +138,22 @@ namespace Aspekt.Hex
         {
             currentPlayer = playerData.First(p => p.Player.netId == playerNetID);
             game.UI.SetPlayerTurn(currentPlayer.Player);
+        }
+
+        [ClientRpc]
+        private void RpcSetCurrency(uint playerNetId, int credits)
+        {
+            foreach (var player in playerData)
+            {
+                if (player.Player.netId == playerNetId)
+                {
+                    player.Credits = credits;
+                    if (player.Player.hasAuthority)
+                    {
+                        game.UI.SetCurrency(credits);
+                    }
+                }
+            }
         }
     }
 }

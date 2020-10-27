@@ -19,6 +19,7 @@ namespace Aspekt.Hex.UI
         [Header("HUD")]
         [SerializeField] private PlayerInfo player1;
         [SerializeField] private PlayerInfo player2;
+        [SerializeField] private CurrencyUI currency;
         
         [Header("Overlay")]
         [SerializeField] private CellUI cellUI;
@@ -68,6 +69,11 @@ namespace Aspekt.Hex.UI
                 player1.SetTurnIndicator(false);
                 player2.SetTurnIndicator(true);
             }
+        }
+
+        public void SetCurrency(int credits)
+        {
+            currency.SetCredits(credits);
         }
 
         public void ShowCellInfo(HexCell cell)

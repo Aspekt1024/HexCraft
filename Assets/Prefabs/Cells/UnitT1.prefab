@@ -1,31 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &5206515829316234981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6491074489036626015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b18753fabae34120b81bcd43142263e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 5183463775931429544}
-  DisplayName: Unit T1
-  PlacementRadius: 1
-  Cost: 2
-  MaxHP: 1
-  Coordinates:
-    x: 0
-    z: 0
-  PlayerId: 0
-  moveImage: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  attackImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  MoveRange: 1
-  AttackRange: 1
-  AttackDamage: 1
 --- !u!1 &4183557157424900015
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,6 +129,32 @@ Transform:
   m_Father: {fileID: 1362048004426627143}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5206515829316234981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6491074489036626015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18753fabae34120b81bcd43142263e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 5183463775931429544}
+  DisplayName: Unit T1
+  PlacementRadius: 1
+  Cost: 5
+  MaxHP: 1
+  Coordinates:
+    x: 0
+    z: 0
+  PlayerId: 0
+  moveImage: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  attackImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  MoveRange: 1
+  AttackRange: 1
+  AttackDamage: 1
 --- !u!1 &7974832721547244382
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,8 +18,7 @@ namespace Aspekt.Hex
         
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 
-        
-        private void Awake()
+        protected override void OnInit()
         {
             SetupActionItems();
         }
@@ -30,8 +29,8 @@ namespace Aspekt.Hex
         {
             ItemDetails = new List<CellUIItem.Details>
             {
-                new CellUIItem.Details { Callback = ActionAttack, Sprite = attackImage},
-                new CellUIItem.Details { Callback = ActionMove, Sprite = moveImage },
+                new CellUIItem.Details(attackImage, ActionAttack, 0),
+                new CellUIItem.Details(moveImage, ActionMove, 0),
             };
         }
 

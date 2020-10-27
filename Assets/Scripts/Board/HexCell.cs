@@ -41,8 +41,16 @@ namespace Aspekt.Hex
         
         protected readonly List<ICellEventObserver> Observers = new List<ICellEventObserver>();
 
+        protected Cells CellData;
+        
         private Color cellColour;
 
+        public void Init(Cells cells)
+        {
+            CellData = cells;
+            OnInit();
+        }
+        
         public void RegisterObserver(ICellEventObserver observer)
         {
             Observers.Add(observer);
@@ -94,6 +102,7 @@ namespace Aspekt.Hex
         }
 
         public abstract bool CanCreate(Cells.CellTypes cellType);
+        protected abstract void OnInit();
 
         private void SetColor(Color color, float alpha = 1f)
         {
