@@ -108,16 +108,6 @@ namespace Aspekt.Hex
             }
         }
 
-        public void TryRemove(NetworkGamePlayerHex player, int cellX, int cellZ)
-        {
-            if (!IsActionAllowed(player)) return;
-
-            if (grid.TryRemove((Int16)cellX, (Int16)cellZ, (Int16)player.ID))
-            {
-                Data.NextTurn();
-            }
-        }
-
         public void MoveCell(HexCoordinates from, HexCoordinates to)
         {
             grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
@@ -138,7 +128,15 @@ namespace Aspekt.Hex
             if (isKillingBlow)
             {
                 var player = room.GamePlayers.First(p => p.ID == attacker.PlayerId);
-                TryRemove(player, target.Coordinates.X, target.Coordinates.Z);
+                var gameWon = CheckGameWon(target);
+                
+                grid.RpcRemoveCell((Int16)target.Coordinates.X, (Int16)target.Coordinates.Z, (Int16)player.ID);
+
+                if (gameWon)
+                {
+                    Data.RpcGameWon((Int16)attacker.Owner.ID);
+                    return;
+                }
             }
             
             Data.NextTurn();
@@ -146,6 +144,13 @@ namespace Aspekt.Hex
 
     #endregion Server Calls
 
+        private bool CheckGameWon(HexCell lastDestroyedTarget)
+        {
+            var owner = lastDestroyedTarget.Owner;
+            var homeCells = Cells.GetHomeCells(owner.ID);
+            return homeCells.All(c => c == lastDestroyedTarget);
+        }
+        
         private bool IsActionAllowed(NetworkGamePlayerHex player)
         {
             return Data.IsCurrentPlayer(player);

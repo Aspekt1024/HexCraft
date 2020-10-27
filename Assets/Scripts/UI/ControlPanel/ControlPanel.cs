@@ -1,4 +1,5 @@
 using Aspekt.Hex.UI.Control;
+using DefaultNamespace;
 using UnityEngine;
 
 namespace Aspekt.Hex.UI
@@ -22,8 +23,17 @@ namespace Aspekt.Hex.UI
             this.observer = observer;
         }
 
-        public void SetTurnNumber(int turnNumber) => turns.SetTurnNumber(turnNumber);
-        public void SetPlayerTurn(bool isPlayerTurn) => turns.SetPlayerTurn(isPlayerTurn);
+        public void SetPlayerTurn(PlayerData playerData)
+        {
+            if (playerData == null)
+            {
+                turns.SetPlayerTurn(null);
+                return;
+            }
+            turns.SetTurnNumber(playerData.TurnNumber);
+            turns.SetPlayerTurn(playerData.Player);
+        }
+
         public void SetCellSelected(HexCell cell, NetworkGamePlayerHex queryingPlayer) => cellControl.SetCellDetails(cell, queryingPlayer);
 
         public void EndTurn()

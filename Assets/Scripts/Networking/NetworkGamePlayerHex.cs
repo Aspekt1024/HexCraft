@@ -220,12 +220,6 @@ namespace Aspekt.Hex
         }
         
         [Command]
-        private void CmdRemoveCell(Int16 x, Int16 z)
-        {
-            game.TryRemove(this, x, z);
-        }
-
-        [Command]
         public void CmdSetReady()
         {
             IsReady = true;

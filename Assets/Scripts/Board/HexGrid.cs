@@ -6,13 +6,6 @@ namespace Aspekt.Hex
 {
     public class HexGrid : NetworkBehaviour
     {
-        [Serializable]
-        public struct HexLocation
-        {
-            public int x;
-            public int z;
-        }
-        
         public HexCoordinates startLocation1;
         public HexCoordinates startLocation2;
 
@@ -48,14 +41,6 @@ namespace Aspekt.Hex
             return true;
         }
 
-        public bool TryRemove(Int16 x, Int16 z, Int16 playerID)
-        {
-            var coords = new HexCoordinates(x, z);
-            if (!cells.IsPieceInCell(coords)) return false;
-            RpcRemoveCell(x, z, playerID);
-            return true;
-        }
-
         [ClientRpc]
         private void RpcCreateCell(Int16 x, Int16 z, Int16 playerID, Int16 cellTypeIndex)
         {
@@ -72,7 +57,7 @@ namespace Aspekt.Hex
         }
 
         [ClientRpc]
-        private void RpcRemoveCell(Int16 x, Int16 z, Int16 playerID)
+        public void RpcRemoveCell(Int16 x, Int16 z, Int16 playerID)
         {
             var coords = new HexCoordinates(x, z);
             cells.RemoveCell(coords);

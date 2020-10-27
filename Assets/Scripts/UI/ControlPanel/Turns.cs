@@ -8,6 +8,7 @@ namespace Aspekt.Hex.UI.Control
 #pragma warning disable 649
         [SerializeField] private GameObject playerControls;
         [SerializeField] private GameObject opponentDetails;
+        [SerializeField] private TextMeshProUGUI opponentTurnText;
         [SerializeField] private TextMeshProUGUI turnText;
 #pragma warning restore 649
 
@@ -23,10 +24,19 @@ namespace Aspekt.Hex.UI.Control
             turnText.text = "Turn: " + turnNumber;
         }
 
-        public void SetPlayerTurn(bool isPlayerTurn)
+        public void SetPlayerTurn(NetworkGamePlayerHex player)
         {
-            playerControls.SetActive(isPlayerTurn);
-            opponentDetails.SetActive(!isPlayerTurn);
+            if (player == null)
+            {
+                playerControls.SetActive(false);
+                opponentDetails.SetActive(false);
+                return;
+            }
+            
+            opponentTurnText.text = player.DisplayName + "'s turn";
+                
+            playerControls.SetActive(player.hasAuthority);
+            opponentDetails.SetActive(!player.hasAuthority);
         }
     }
 }

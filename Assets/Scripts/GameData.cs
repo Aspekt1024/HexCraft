@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
 using Mirror;
+using UnityEngine;
 
 namespace Aspekt.Hex
 {
@@ -73,6 +75,16 @@ namespace Aspekt.Hex
             state = GameStates.Started;
         }
 
+        [ClientRpc]
+        public void RpcGameWon(Int16 winningPlayerId)
+        {
+            var winner = playerData.First(p => p.Player.ID == winningPlayerId);
+            game.UI.ShowWinner(winner);
+            currentPlayer.Player.IsCurrentPlayer = false;
+            currentPlayer = null;
+            game.UI.SetPlayerTurn(null);
+        }
+
         public void ModifyCurrency(PlayerData data, int change)
         {
             RpcSetCurrency((Int16)data.Player.ID, data.Credits + change);
@@ -137,7 +149,7 @@ namespace Aspekt.Hex
         private void RpcSetCurrentPlayer(Int16 playerId)
         {
             currentPlayer = playerData.First(p => p.Player.ID == playerId);
-            game.UI.SetPlayerTurn(currentPlayer.Player);
+            game.UI.SetPlayerTurn(currentPlayer);
         }
 
         [ClientRpc]

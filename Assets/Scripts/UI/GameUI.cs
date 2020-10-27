@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 namespace Aspekt.Hex.UI
@@ -21,6 +23,7 @@ namespace Aspekt.Hex.UI
         [SerializeField] private PlayerInfo player2;
         [SerializeField] private CurrencyUI currency;
         [SerializeField] private ControlPanel controlPanel;
+        [SerializeField] private GameOverUI gameOverUI;
         
         [Header("Cursors")]
         [SerializeField] private Texture2D defaultCursor;
@@ -30,12 +33,17 @@ namespace Aspekt.Hex.UI
 #pragma warning restore 649
 
         private NetworkGamePlayerHex player;
-        
+
         public void Init(NetworkGamePlayerHex player)
         {
             this.player = player;
             controlPanel.RegisterSingleObserver(player);
             SetCursor(HexCursor.Default);
+        }
+
+        public void ShowWinner(PlayerData winner)
+        {
+            StartCoroutine(GameWonSequence(winner));
         }
         
         public void UpdatePlayerInfo(List<NetworkGamePlayerHex> players)
@@ -58,9 +66,17 @@ namespace Aspekt.Hex.UI
             }
         }
 
-        public void SetPlayerTurn(NetworkGamePlayerHex player)
+        public void SetPlayerTurn(PlayerData playerData)
         {
-            if (player1.player == player)
+            if (playerData == null)
+            {
+                player1.SetTurnIndicator(false);
+                player2.SetTurnIndicator(false);
+                controlPanel.SetPlayerTurn(null);
+                return;
+            }
+            
+            if (player1.player == playerData.Player)
             {
                 player1.SetTurnIndicator(true);
                 player2.SetTurnIndicator(false);
@@ -71,7 +87,7 @@ namespace Aspekt.Hex.UI
                 player2.SetTurnIndicator(true);
             }
 
-            controlPanel.SetPlayerTurn(player.hasAuthority);
+            controlPanel.SetPlayerTurn(playerData);
         }
 
         public void SetCurrency(int credits)
@@ -108,6 +124,13 @@ namespace Aspekt.Hex.UI
                     Cursor.SetCursor(invalidCursor, center, CursorMode.ForceSoftware);
                     break;
             }
+        }
+        
+        private IEnumerator GameWonSequence(PlayerData winner)
+        {
+            yield return new WaitForSeconds(0.6f);
+            gameOverUI.SetWinner(winner);
+            gameOverUI.Show();
         }
     }
 }
