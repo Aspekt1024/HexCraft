@@ -14,6 +14,12 @@ namespace Aspekt.Hex
             UnitT1 = 2010,
             UnitT2 = 2020,
         }
+
+        public enum Colours
+        {
+            White,
+            Black
+        }
         
 #pragma warning disable 649
         [Header("Buildings")]
@@ -27,10 +33,7 @@ namespace Aspekt.Hex
         
         [Header("Display")]
         [SerializeField] private GameObject indicator;
-        [SerializeField] private Material standardMaterial;
-        [SerializeField] private Material holoMaterial;
-        [SerializeField] private Color blackColour;
-        [SerializeField] private Color whiteColour;
+        [SerializeField] private Shader holoShader;
 #pragma warning restore 649
         
         public List<HexCell> AllCells { get; } = new List<HexCell>();
@@ -45,6 +48,11 @@ namespace Aspekt.Hex
         public HexCell CreateIndicator(CellTypes type)
         {
             return CreateCell(type);
+        }
+
+        public Colours GetColour(int playerId)
+        {
+            return playerId == 1 ? Colours.White : Colours.Black;
         }
 
         public HexCell Create(CellTypes type)
@@ -63,12 +71,7 @@ namespace Aspekt.Hex
             return cell;
         }
 
-        public Material HoloMaterial => holoMaterial;
-        
-        public Color GetColour(int playerId)
-        {
-            return playerId == 1 ? whiteColour : blackColour;
-        }
+        public Shader HoloShader => holoShader;
         
         public bool IsPieceInCell(HexCoordinates coordinates)
         {

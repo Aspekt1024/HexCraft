@@ -40,7 +40,7 @@ namespace Aspekt.Hex
 
             CellType = type;
             projectedCell = cells.CreateIndicator(type);
-            projectedCell.DisplayAsIndicator(cells.HoloMaterial, cells.GetColour(playerID));
+            projectedCell.DisplayAsIndicator(cells.HoloShader, cells.GetColour(playerID));
 
             ShowIndicatorGrid(type, origin, new Color(0f, 1f, 0f, 0.5f), true);
             ui.SetCursor(HexCursor.None);

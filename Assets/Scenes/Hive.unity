@@ -22,9 +22,9 @@ RenderSettings:
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -430,12 +430,9 @@ MonoBehaviour:
   training: {fileID: 1312393799163408318, guid: 1e8f7e0b158b67f4db0523ec6c6c8535, type: 3}
   income: {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
   unit1: {fileID: 5206515829316234981, guid: 65b6ac6736929d84f9451dcd6599929d, type: 3}
-  unit2: {fileID: 3669964315673251290, guid: 7778d321bf01d8845a91e7c9fd2385f8, type: 3}
+  unit2: {fileID: -6404335694949812911, guid: 7a6128ca71b6aa24ea2dcbfa938a58cf, type: 3}
   indicator: {fileID: 5150164558244077247, guid: 57a53a2b667dedf43ae5789a5fde2e59, type: 3}
-  standardMaterial: {fileID: 2100000, guid: 130d61284baf3d04d8e26dc68de289d3, type: 2}
-  holoMaterial: {fileID: 2100000, guid: a7c24f6c775244849bb932b397f61cdd, type: 2}
-  blackColour: {r: 0, g: 0, b: 0, a: 1}
-  whiteColour: {r: 1, g: 1, b: 1, a: 1}
+  holoShader: {fileID: 4800000, guid: 3225ed59715b6f74f9c9a72e9fda8a76, type: 3}
 --- !u!1001 &330668596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1400,7 +1397,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 742944102}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0

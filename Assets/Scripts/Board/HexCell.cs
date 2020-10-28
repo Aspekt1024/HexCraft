@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Aspekt.Hex.UI;
 using UnityEngine;
@@ -7,9 +8,16 @@ namespace Aspekt.Hex
     public abstract class HexCell : MonoBehaviour
     {
 #pragma warning disable 649
-        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private Renderer cellRenderer;
+        [SerializeField] private Material blackMaterial;
+        [SerializeField] private Material whiteMaterial;
+        [SerializeField] private Material redMaterial;
+        [SerializeField] private Material blueMaterial;
+        [SerializeField] private Material greenMaterial;
+        [SerializeField] private Material yellowMaterial;
+        [SerializeField] private Material brownMaterial;
 #pragma warning restore 649
-
+        
         [Header("Cell Settings")]
         public string DisplayName = "Cell";
         public int PlacementRadius = 2;
@@ -44,7 +52,7 @@ namespace Aspekt.Hex
 
         protected Cells CellData;
         
-        private Color cellColour;
+        private Material cellMaterial;
 
         public void Init(Cells cells)
         {
@@ -57,11 +65,11 @@ namespace Aspekt.Hex
             Observers.Add(observer);
         }
 
-        public void Place(HexCoordinates coords, Color colour, NetworkGamePlayerHex owner)
+        public void Place(HexCoordinates coords, Cells.Colours colour, NetworkGamePlayerHex owner)
         {
             IsPlaced = true;
             SetCoordinates(coords);
-            SetColor(colour);
+            SetMaterialFromColour(colour);
             Owner = owner;
             PlayerId = owner.ID;
             ShowPlaced();
@@ -73,12 +81,11 @@ namespace Aspekt.Hex
             CurrentHP = Mathf.Max(CurrentHP - damage, 0);
         }
 
-        public void DisplayAsIndicator(Material holoMaterial, Color colour)
+        public void DisplayAsIndicator(Shader holoShader, Cells.Colours colour)
         {
             IsPlaced = false;
-            ApplyHoloMaterial(holoMaterial);
-            cellColour = colour;
-            SetColor(colour, 0.5f);
+            SetMaterialFromColour(colour);
+            ApplyHoloShader(holoShader);
             ShowAsInvalid();
         }
 
@@ -95,32 +102,53 @@ namespace Aspekt.Hex
 
         public void ShowAsInvalid()
         {
-            SetColor(Color.red, 0.5f);
+            SetColor(new Color(1f, 0f, 0f, 0.5f));
         }
 
         public void ShowAsValid()
         {
-            SetColor(cellColour, 0.5f);
+            SetColor(new Color(1f, 1f, 1f, 0.5f));
         }
 
         public abstract bool CanCreate(Cells.CellTypes cellType);
         protected abstract void OnInit();
 
-        private void SetColor(Color color, float alpha = 1f)
+        private void SetColor(Color color)
         {
-            color.a = alpha;
-            meshRenderer.material.color = color;
+            var material = cellRenderer.material;
+            material.color = color;
+            cellRenderer.material = material;
+        }
+        
+        private void ApplyHoloShader(Shader shader)
+        {
+            var material = new Material(cellMaterial)
+            {
+                shader = shader
+            };
+            SetMaterial(material);
         }
 
-        private void ApplyHoloMaterial(Material material)
+        private void SetMaterial(Material material)
         {
-            var colour = material.color;
-            colour.a = 0.5f;
-            material.color = colour;
-            
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+            cellMaterial = material;
+            cellRenderer.materials = new[] {material};
+        }
+
+        private void SetMaterialFromColour(Cells.Colours colour)
+        {
+            switch (colour)
             {
-                mr.materials = new[] {material};
+                case Cells.Colours.White:
+                    SetMaterial(blueMaterial);
+                    break;
+                case Cells.Colours.Black:
+                    SetMaterial(redMaterial);
+                    break;
+                default:
+                    Debug.LogError("Invalid colour: " + colour);
+                    SetMaterial(blackMaterial);
+                    break;
             }
         }
 
