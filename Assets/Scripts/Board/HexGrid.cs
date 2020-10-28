@@ -70,19 +70,19 @@ namespace Aspekt.Hex
             if (cell == null) return;
             
             var newCoords = new HexCoordinates(toX, toZ);
-            cell.SetCoordinates(newCoords);
+            cell.MoveTo(newCoords);
         }
         
         [ClientRpc]
         public void RpcAttack(Int16 attackerX, Int16 attackerZ, Int16 targetX, Int16 targetZ, Int16 damage)
         {
             var attacker = cells.GetCellAtPosition(new HexCoordinates(attackerX, attackerZ));
-            if (attacker == null || !(attacker is UnitCell unit)) return;
+            if (attacker == null || !(attacker is UnitCell attackingUnit)) return;
 
             var target = cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
             if (target == null) return;
-            
-            target.TakeDamage(damage);
+
+            attackingUnit.ShowAttack(target, damage);
         }
     }
 }

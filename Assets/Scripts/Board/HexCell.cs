@@ -68,15 +68,16 @@ namespace Aspekt.Hex
         public void Place(HexCoordinates coords, Cells.Colours colour, NetworkGamePlayerHex owner)
         {
             IsPlaced = true;
-            SetCoordinates(coords);
-            SetMaterialFromColour(colour);
             Owner = owner;
             PlayerId = owner.ID;
-            ShowPlaced();
             CurrentHP = MaxHP;
+            
+            SetCoordinates(coords);
+            SetMaterialFromColour(colour);
+            ShowPlaced();
         }
 
-        public void TakeDamage(int damage)
+        public virtual void TakeDamage(UnitCell attacker, int damage)
         {
             CurrentHP = Mathf.Max(CurrentHP - damage, 0);
         }
@@ -93,6 +94,11 @@ namespace Aspekt.Hex
         {
             Coordinates = coords;
             transform.position = HexCoordinates.ToPosition(coords);
+        }
+
+        public virtual void MoveTo(HexCoordinates coords)
+        {
+            SetCoordinates(coords);
         }
 
         private void ShowPlaced()
@@ -152,7 +158,7 @@ namespace Aspekt.Hex
             }
         }
 
-        public void Remove()
+        public virtual void Remove()
         {
             // TODO particle effects!
             Destroy(gameObject);
