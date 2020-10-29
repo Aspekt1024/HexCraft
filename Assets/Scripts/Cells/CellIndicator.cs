@@ -57,7 +57,7 @@ namespace Aspekt.Hex
         {
             HideAll();
             movingUnit = unit;
-            ShowIndicatorGrid(unit.Coordinates, unit.MoveRange, new Color(1f, 1f, 0f, 0.5f), true);
+            ShowMovementGrid(unit.Coordinates, unit.MoveRange, new Color(1f, 1f, 0f, 0.5f));
         }
         
 #endregion Indication API
@@ -81,6 +81,7 @@ namespace Aspekt.Hex
             }
 
             HideIndicators();
+            cells.HidePath();
         }
         
         public void Update(Vector3 boardPosition)
@@ -95,6 +96,12 @@ namespace Aspekt.Hex
             if (projectedCell == null) return false;
             return activeIndicators.Any(i =>
                 HexCoordinates.FromPosition(i.transform.position).Equals(projectedCell.Coordinates));
+        }
+
+        private void ShowMovementGrid(HexCoordinates origin, int movement, Color color)
+        {
+            var coords = cells.GetCellsWithinDistance(origin, movement);
+            ShowIndicatorGrid(coords, color, true);
         }
 
         private void ShowIndicatorGrid(HexCoordinates origin, int radius, Color color, bool omitNonEmpty)
@@ -196,21 +203,30 @@ namespace Aspekt.Hex
 
         private void UpdateMoveIndication(Vector3 boardPosition)
         {
-            if (movingUnit == null) return;
+            if (movingUnit == null)
+            {
+                cells.HidePath();
+                return;
+            }
 
             var coords = HexCoordinates.FromPosition(boardPosition);
             if (cells.IsPieceInCell(coords))
             {
                 ui.SetCursor(HexCursor.Invalid);
+                cells.HidePath();
+                return;
             }
-            else if (cells.IsValidMove(movingUnit, coords, movingUnit.PlayerId))
-            {
-                ui.SetCursor(HexCursor.Move);
-            }
-            else
+
+            var path = cells.GetPath(movingUnit, coords);
+            if (path == null)
             {
                 ui.SetCursor(HexCursor.Invalid);
+                cells.HidePath();
+                return;
             }
+            
+            ui.SetCursor(HexCursor.Move);
+            cells.ShowPath(path);
         }
     }
 }

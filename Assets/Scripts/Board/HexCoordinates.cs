@@ -57,10 +57,15 @@ namespace Aspekt.Hex
 
         public static Vector3 ToPosition(HexCoordinates coordinates)
         {
+            return ToPosition(coordinates.X, coordinates.Z);
+        }
+
+        public static Vector3 ToPosition(int x, int z)
+        {
             return new Vector3(
-                (coordinates.x + coordinates.z / 2f) * HexCell.InnerRadius * 2f,
+                (x + z / 2f) * HexCell.InnerRadius * 2f,
                 0f,
-                coordinates.z * HexCell.OuterRadius * 1.5f
+                z * HexCell.OuterRadius * 1.5f
             );
         }
 
@@ -80,6 +85,11 @@ namespace Aspekt.Hex
         {
             if (obj == null || !(obj is HexCoordinates coords)) return false;
             return coords.X == X && coords.Z == Z;
+        }
+
+        public bool EqualsV2(Vector2Int v2)
+        {
+            return v2.x == X && v2.y == Z;
         }
 
         public override int GetHashCode()

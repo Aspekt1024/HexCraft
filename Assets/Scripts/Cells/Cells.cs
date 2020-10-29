@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,8 +31,9 @@ namespace Aspekt.Hex
         [Header("Units")]
         [SerializeField] private HexCell unit1;
         [SerializeField] private HexCell unit2;
-        
+
         [Header("Display")]
+        [SerializeField] private PathIndicator pathIndicator;
         [SerializeField] private GameObject indicator;
         [SerializeField] private Shader holoShader;
 #pragma warning restore 649
@@ -39,7 +41,14 @@ namespace Aspekt.Hex
         public List<HexCell> AllCells { get; } = new List<HexCell>();
 
         private readonly List<ICellEventObserver> cellEventObservers = new List<ICellEventObserver>();
-        
+
+        private CellPathfinder pathfinder;
+
+        private void Awake()
+        {
+            pathfinder = new CellPathfinder(this);
+        }
+
         public void RegisterCellEventObserver(ICellEventObserver cellEventObserver)
         {
             cellEventObservers.Add(cellEventObserver);
@@ -49,6 +58,13 @@ namespace Aspekt.Hex
         {
             return CreateCell(type);
         }
+
+        public void ShowPath(List<Vector3> path)
+        {
+            pathIndicator.ShowPath(path);
+        }
+
+        public void HidePath() => pathIndicator.Hide();
 
         public Colours GetColour(int playerId)
         {
@@ -76,6 +92,11 @@ namespace Aspekt.Hex
         public bool IsPieceInCell(HexCoordinates coordinates)
         {
             return AllCells.Any(c => c.IsPlaced && c.Coordinates.Equals(coordinates));
+        }
+
+        public bool IsPieceInCell(Vector2Int v2)
+        {
+            return AllCells.Any(c => c.IsPlaced && c.Coordinates.EqualsV2(v2));
         }
 
         public HexCell GetCellAtPosition(HexCoordinates coordinates)
@@ -137,16 +158,18 @@ namespace Aspekt.Hex
             
             return unit.AttackRange >= HexCoordinates.Distance(attackingUnit.Coordinates, target.Coordinates);
         }
-        
-        public bool IsValidMove(HexCell cell, HexCoordinates targetCoords, int playerId)
-        {
-            if (!(cell is UnitCell unit)) return false;
-            if (cell == null || cell.PlayerId != playerId) return false;
-            if (IsPieceInCell(targetCoords)) return false;
 
-            return unit.MoveRange >= HexCoordinates.Distance(cell.Coordinates, targetCoords);
+        public List<Vector3> GetPathWithValidityCheck(HexCell cell, HexCoordinates targetCoords, int playerId)
+        {
+            if (!(cell is UnitCell unit) || cell.PlayerId != playerId) return null;
+            return GetPath(unit, targetCoords);
         }
 
+        public List<Vector3> GetPath(UnitCell unit, HexCoordinates targetCoords)
+        {
+            return pathfinder.FindPath(unit.Coordinates, targetCoords, unit.MoveRange);
+        }
+        
         public int GetCost(CellTypes type)
         {
             return GetPrefab(type).Cost;
@@ -198,5 +221,13 @@ namespace Aspekt.Hex
             
             return coords;
         }
+
+        public List<HexCoordinates> GetCellsWithinDistance(HexCoordinates origin, int distance)
+        {
+            var pathCells = pathfinder.GetCellsWithinDistance(origin, distance);
+            var coords = pathCells.Select(c => new HexCoordinates(c.X, c.Z)).ToList();
+            return coords;
+        }
+
     }
 }

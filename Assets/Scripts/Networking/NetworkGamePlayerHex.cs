@@ -87,7 +87,8 @@ namespace Aspekt.Hex
             else if (indicator.IsMovingUnit)
             {
                 var unit = indicator.GetMovingUnit();
-                if (game.Cells.IsValidMove(unit, coords, ID))
+                var path = game.Cells.GetPathWithValidityCheck(unit, coords, ID);
+                if (path != null)
                 {
                     CmdMoveCell((Int16) ID,
                         (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
@@ -213,7 +214,8 @@ namespace Aspekt.Hex
         {
             var movingUnit = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
             var target = new HexCoordinates(targetX, targetZ);
-            if (game.Cells.IsValidMove(movingUnit, target, playerId))
+            var path = game.Cells.GetPathWithValidityCheck(movingUnit, target, playerId);
+            if (path != null)
             {
                 game.MoveCell(movingUnit.Coordinates, target);
             }

@@ -112,6 +112,7 @@ namespace Aspekt.Hex
         {
             grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
             
+            // TODO not new turn yet!
             Data.NextTurn();
         }
 

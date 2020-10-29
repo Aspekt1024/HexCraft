@@ -51,10 +51,9 @@ namespace Aspekt.Hex
         
         public override void MoveTo(HexCoordinates coords)
         {
-            // TODO calculate path and iterate through straight segments
+            var path = CellData.GetPath(this, coords);
             Coordinates = coords;
-            var newPos = HexCoordinates.ToPosition(coords);
-            StartCoroutine(MoveRoutine(newPos));
+            StartCoroutine(MoveRoutine(path));
         }
         
         public void ShowAttack(HexCell target, int damage)
@@ -78,44 +77,52 @@ namespace Aspekt.Hex
             }
         }
 
-        private IEnumerator MoveRoutine(Vector3 newPos)
+        private IEnumerator MoveRoutine(List<Vector3> path)
         {
             var tf = transform;
             var pos = tf.position;
 
-            transform.LookAt(newPos);
-
             var velocity = Vector3.zero;
-            while (Vector3.Distance(pos, newPos) > 0.05f)
+            var target = path[path.Count - 1];
+            
+            for (int i = 0; i < path.Count; i++)
             {
-                velocity = GetMoveVelocity(velocity, pos, newPos);
-                Anim.SetFloat(AnimMoveSpeed, velocity.magnitude);
-                pos += Time.deltaTime * velocity; 
-                tf.position = pos;
-                yield return null;
-            }
+                // TODO smooth rotation
+                transform.LookAt(path[i]);
 
-            transform.position = newPos;
+                while (Vector3.Distance(pos, path[i]) > 0.05f)
+                {
+                    velocity = GetMoveVelocity(velocity, pos, path[i], i == path.Count - 1);
+                    Anim.SetFloat(AnimMoveSpeed, velocity.magnitude);
+                    pos += Time.deltaTime * velocity; 
+                    tf.position = pos;
+                    yield return null;
+                }
+
+            }
+            transform.position = target;
         }
 
-        private Vector3 GetMoveVelocity(Vector3 velocity, Vector3 currentPos, Vector3 targetPos)
+        private Vector3 GetMoveVelocity(Vector3 velocity, Vector3 currentPos, Vector3 targetPos, bool isLastPoint)
         {
             var currentSpeed = velocity.magnitude;
             float maxSpeed = 3f * Mathf.Sqrt(MoveRange);
             
-            var dist = Vector3.Distance(targetPos, currentPos);
             var distVector = (targetPos - currentPos).normalized;
 
-            const float slowThreshold = 0.5f;
-            if (dist > slowThreshold)
+            if (isLastPoint)
             {
-                const float acceleration = 3f;
-                currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed, Time.deltaTime * acceleration);
+                const float slowThreshold = 0.5f;
+                var dist = Vector3.Distance(targetPos, currentPos);
+                if (dist < slowThreshold)
+                {
+                    currentSpeed = Mathf.Lerp(maxSpeed, .3f, 1f - dist / slowThreshold);
+                    return distVector * currentSpeed;
+                }
             }
-            else
-            {
-                currentSpeed = Mathf.Lerp(maxSpeed, .3f, 1f - dist / slowThreshold);
-            }
+            
+            const float acceleration = 3f;
+            currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed, Time.deltaTime * acceleration);
 
             return distVector * currentSpeed;
         }
