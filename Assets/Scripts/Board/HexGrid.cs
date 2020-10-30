@@ -22,14 +22,13 @@ namespace Aspekt.Hex
 
         public void SetStartingLocation(NetworkGamePlayerHex player)
         {
-            if (player.ID == 1)
-            {
-                TryPlace((Int16)startLocation1.X, (Int16)startLocation1.Z, (Int16)player.ID, Cells.CellTypes.Base);
-            }
-            else
-            {
-                TryPlace((Int16)startLocation2.X, (Int16)startLocation2.Z, (Int16)player.ID, Cells.CellTypes.Base);
-            }
+            var startLocation = GetStartLocation(player.ID);
+            TryPlace((Int16)startLocation.X, (Int16)startLocation.Z, (Int16)player.ID, Cells.CellTypes.Base);
+        }
+
+        public HexCoordinates GetStartLocation(int playerId)
+        {
+            return playerId == 1 ? startLocation1 : startLocation2;
         }
 
         public bool TryPlace(Int16 x, Int16 z, int playerID, Cells.CellTypes type)

@@ -5,10 +5,6 @@ namespace Aspekt.Hex
 {
     public class HexCamera : MonoBehaviour
     {
-        // #pragma warning disable 649
-        // [SerializeField] private Camera mainCam;
-        // #pragma warning restore 649
-        
         [SerializeField] private float moveSpeed = 12f;
         [SerializeField] private float scrollSpeed = 3f;
         [SerializeField] private float scrollFactor = 0.1f;
@@ -35,6 +31,15 @@ namespace Aspekt.Hex
             if (!game.IsRunning()) return;
             ActionInput();
             UpdateCameraZoom();
+        }
+
+        public void ScrollTo(HexCoordinates coords)
+        {
+            var pos = HexCoordinates.ToPosition(coords);
+            pos.y = transform.position.y;
+            pos.z -= 5f;
+            // TODO lerp
+            transform.position = pos;
         }
 
         private void ActionInput()

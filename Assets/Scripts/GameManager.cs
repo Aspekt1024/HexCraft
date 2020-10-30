@@ -16,6 +16,7 @@ namespace Aspekt.Hex
         public GameUI UI => ui;
         public GameData Data { get; private set; }
         public Cells Cells { get; private set; }
+        public HexCamera Camera { get; private set; }
 
         #region Networking
 
@@ -41,6 +42,8 @@ namespace Aspekt.Hex
         {
             Cells = FindObjectOfType<Cells>();
             Cells.RegisterCellLifecycleObserver(UI);
+
+            Camera = FindObjectOfType<HexCamera>();
         }
 
         public void SetGamePlayer(NetworkGamePlayerHex player)
@@ -77,6 +80,9 @@ namespace Aspekt.Hex
             SetupPlayers();
             Data.NextTurn();
             Data.SetGameStarted();
+            
+            Camera.ScrollTo(grid.GetStartLocation(gamePlayer.ID));
+            
             Debug.Log("Game started");
         }
 
