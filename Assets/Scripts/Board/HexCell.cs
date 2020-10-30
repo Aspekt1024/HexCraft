@@ -53,6 +53,8 @@ namespace Aspekt.Hex
         protected Cells CellData;
         
         private Material cellMaterial;
+        
+        public event Action<float> OnHealthUpdated = delegate {  };
 
         public void Init(Cells cells)
         {
@@ -80,6 +82,7 @@ namespace Aspekt.Hex
         public virtual void TakeDamage(UnitCell attacker, int damage)
         {
             CurrentHP = Mathf.Max(CurrentHP - damage, 0);
+            OnHealthUpdated((float) CurrentHP / MaxHP);
         }
 
         public void DisplayAsIndicator(Shader holoShader, Cells.Colours colour)
@@ -160,7 +163,6 @@ namespace Aspekt.Hex
 
         public virtual void Remove()
         {
-            // TODO particle effects!
             Destroy(gameObject);
         }
     }

@@ -8,4 +8,9 @@ namespace Aspekt.Hex
         void IndicateUnitMove(UnitCell unit);
         void IndicateUnitAttack(UnitCell unit);
     }
+
+    public interface ICellLifecycleObserver
+    {
+        void OnCellCreated(HexCell cell);
+    }
 }

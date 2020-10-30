@@ -53,7 +53,7 @@ MonoBehaviour:
   yellowMaterial: {fileID: 2100000, guid: 54adf927cb20b8d4e880dc266a7eea38, type: 2}
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
   DisplayName: Training
-  PlacementRadius: 3
+  PlacementRadius: 5
   Cost: 7
   MaxHP: 2
   Coordinates:

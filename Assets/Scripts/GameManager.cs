@@ -40,6 +40,7 @@ namespace Aspekt.Hex
         private void Awake()
         {
             Cells = FindObjectOfType<Cells>();
+            Cells.RegisterCellLifecycleObserver(UI);
         }
 
         public void SetGamePlayer(NetworkGamePlayerHex player)

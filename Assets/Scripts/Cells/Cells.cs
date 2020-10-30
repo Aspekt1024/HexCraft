@@ -41,6 +41,7 @@ namespace Aspekt.Hex
         public List<HexCell> AllCells { get; } = new List<HexCell>();
 
         private readonly List<ICellEventObserver> cellEventObservers = new List<ICellEventObserver>();
+        private readonly List<ICellLifecycleObserver> cellLifecycleObservers = new List<ICellLifecycleObserver>();
 
         private CellPathfinder pathfinder;
 
@@ -52,6 +53,11 @@ namespace Aspekt.Hex
         public void RegisterCellEventObserver(ICellEventObserver cellEventObserver)
         {
             cellEventObservers.Add(cellEventObserver);
+        }
+
+        public void RegisterCellLifecycleObserver(ICellLifecycleObserver observer)
+        {
+            cellLifecycleObservers.Add(observer);
         }
 
         public HexCell CreateIndicator(CellTypes type)
@@ -74,14 +80,19 @@ namespace Aspekt.Hex
         public HexCell Create(CellTypes type)
         {
             var cell = CreateCell(type);
-            if (cell != null)
+            if (cell == null) return cell;
+            
+            cell.Init(this);
+            AllCells.Add(cell);
+            
+            foreach (var observer in cellEventObservers)
             {
-                cell.Init(this);
-                foreach (var observer in cellEventObservers)
-                {
-                    cell.RegisterObserver(observer);
-                }
-                AllCells.Add(cell);
+                cell.RegisterObserver(observer);
+            }
+                
+            foreach (var observer in cellLifecycleObservers)
+            {
+                observer.OnCellCreated(cell);
             }
 
             return cell;

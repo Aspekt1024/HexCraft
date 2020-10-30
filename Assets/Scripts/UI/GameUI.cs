@@ -15,7 +15,7 @@ namespace Aspekt.Hex.UI
         Invalid,
     }
     
-    public class GameUI : MonoBehaviour
+    public class GameUI : MonoBehaviour, ICellLifecycleObserver
     {
 #pragma warning disable 649
         [Header("HUD")]
@@ -30,6 +30,9 @@ namespace Aspekt.Hex.UI
         [SerializeField] private Texture2D attackCursor;
         [SerializeField] private Texture2D moveCursor;
         [SerializeField] private Texture2D invalidCursor;
+
+        [Header("Units")]
+        [SerializeField] private HealthBars healthBars;
 #pragma warning restore 649
 
         private NetworkGamePlayerHex player;
@@ -125,7 +128,13 @@ namespace Aspekt.Hex.UI
                     break;
             }
         }
-        
+
+        public void OnCellCreated(HexCell cell)
+        {
+            // TODO show alert for created unit on side panel
+            healthBars.LinkHealthBar(cell);
+        }
+
         private IEnumerator GameWonSequence(PlayerData winner)
         {
             yield return new WaitForSeconds(0.6f);
