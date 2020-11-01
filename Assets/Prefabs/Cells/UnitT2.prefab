@@ -44,7 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a160e2c036c483e84db9530dd1b40bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellRenderer: {fileID: 1902381486884366073}
+  cellRenderers:
+  - {fileID: 1902381486900016043}
+  - {fileID: 1902381486884366073}
+  - {fileID: 1902381486884422223}
   blackMaterial: {fileID: 2100000, guid: 54f19161a54e56442a8dd7f6239fc93b, type: 2}
   whiteMaterial: {fileID: 2100000, guid: cf1fa6c73dc509448863697c25254027, type: 2}
   redMaterial: {fileID: 2100000, guid: 98a7fdcb4ebb44344b4afe0424d44b82, type: 2}
@@ -73,9 +76,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1362048004426627143}
     m_Modifications:
+    - target: {fileID: 100096, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 115186, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
       propertyPath: m_Name
       value: TT_Mounted_Paladin
+      objectReference: {fileID: 0}
+    - target: {fileID: 119598, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 136786, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 160344, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 177660, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 190614, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197308, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400226, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -832,8 +863,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 451700, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
   m_PrefabInstance: {fileID: 1902381486898145581}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &1902381486900016043 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2333318, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+  m_PrefabInstance: {fileID: 1902381486898145581}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &1902381486884366073 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 13782996, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
+  m_PrefabInstance: {fileID: 1902381486898145581}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1902381486884422223 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13724514, guid: 3b5b8018d62c7fb43b2805cf19ffaff7, type: 3}
   m_PrefabInstance: {fileID: 1902381486898145581}
   m_PrefabAsset: {fileID: 0}

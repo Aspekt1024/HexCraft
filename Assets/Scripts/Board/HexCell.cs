@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Aspekt.Hex.UI;
@@ -9,7 +8,7 @@ namespace Aspekt.Hex
     public abstract class HexCell : MonoBehaviour
     {
 #pragma warning disable 649
-        [SerializeField] private Renderer cellRenderer;
+        [SerializeField] private Renderer[] cellRenderers;
         [SerializeField] private Material blackMaterial;
         [SerializeField] private Material whiteMaterial;
         [SerializeField] private Material redMaterial;
@@ -135,9 +134,12 @@ namespace Aspekt.Hex
 
         private void SetColor(Color color)
         {
-            var material = cellRenderer.material;
-            material.color = color;
-            cellRenderer.material = material;
+            foreach (var r in cellRenderers)
+            {
+                var material = r.material;
+                material.color = color;
+                r.material = material;
+            }
         }
         
         private void ApplyHoloShader(Shader shader)
@@ -152,7 +154,10 @@ namespace Aspekt.Hex
         private void SetMaterial(Material material)
         {
             cellMaterial = material;
-            cellRenderer.materials = new[] {material};
+            foreach (var r in cellRenderers)
+            {
+                r.materials = new[] {material};
+            }
         }
 
         private void SetMaterialFromColour(Cells.Colours colour)

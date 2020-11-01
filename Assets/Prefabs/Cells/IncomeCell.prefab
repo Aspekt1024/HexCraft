@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa203622da84cb38358a4022a10a1ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellRenderer: {fileID: 4694660904767215729}
+  cellRenderers:
+  - {fileID: 4694660904767215729}
   blackMaterial: {fileID: 2100000, guid: 19e5e5a2c659faf49a059ec9fc3e642d, type: 2}
   whiteMaterial: {fileID: 2100000, guid: 0c68c1882ddd40b4ebf2fa7eae477af0, type: 2}
   redMaterial: {fileID: 2100000, guid: a2085ab309c94a143a706621cd42e213, type: 2}
