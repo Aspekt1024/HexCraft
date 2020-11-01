@@ -113,9 +113,9 @@ namespace Aspekt.Hex
             }
             SetupGame();
             GamePlayers[0].SetDisplayName("Host");
-            GamePlayers[0].SetPlayerID(1);
+            GamePlayers[0].SetPlayerId(1);
             GamePlayers[1].SetDisplayName("Client");
-            GamePlayers[1].SetPlayerID(2);
+            GamePlayers[1].SetPlayerId(2);
         }
 
         public override void ServerChangeScene(string newSceneName)
@@ -127,7 +127,7 @@ namespace Aspekt.Hex
                 {
                     var gamePlayer = Instantiate(gamePlayerPrefab);
                     gamePlayer.SetDisplayName(RoomPlayers[i].DisplayName);
-                    gamePlayer.SetPlayerID(i + 1);
+                    gamePlayer.SetPlayerId(i + 1);
 
                     var conn = RoomPlayers[i].connectionToClient;
                     NetworkServer.ReplacePlayerForConnection(conn, gamePlayer.gameObject);

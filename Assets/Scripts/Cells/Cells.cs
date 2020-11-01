@@ -18,8 +18,8 @@ namespace Aspekt.Hex
 
         public enum Colours
         {
-            White,
-            Black
+            Blue,
+            Red
         }
         
 #pragma warning disable 649
@@ -74,7 +74,7 @@ namespace Aspekt.Hex
 
         public Colours GetColour(int playerId)
         {
-            return playerId == 1 ? Colours.White : Colours.Black;
+            return playerId == 1 ? Colours.Blue : Colours.Red;
         }
 
         public HexCell Create(CellTypes type)

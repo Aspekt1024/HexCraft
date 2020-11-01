@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
 using Mirror;
-using UnityEngine;
 
 namespace Aspekt.Hex
 {
@@ -151,30 +149,13 @@ namespace Aspekt.Hex
         [ClientRpc]
         private void RpcSetCurrency(Int16 playerId, int credits)
         {
-            Debug.Log("setting currency client");
-            if (playerData == null)
-            {
-                Debug.LogWarning("client no player data");
-            }
             foreach (var player in playerData)
             {
-                if (player.Player == null)
-                {
-                    Debug.LogWarning("client playerdata has no player");
-                }
                 if (player.Player.ID == playerId)
                 {
                     player.Credits = credits;
                     if (player.Player.hasAuthority)
                     {
-                        if (game == null)
-                        {
-                            Debug.LogWarning("no game!");
-                        }
-                        if (game.UI == null)
-                        {
-                            Debug.LogWarning("client no UI");
-                        }
                         game.UI.SetCurrency(credits);
                     }
                 }

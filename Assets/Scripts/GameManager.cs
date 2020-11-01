@@ -104,7 +104,7 @@ namespace Aspekt.Hex
         /// </summary>
         public void TryPlace(NetworkGamePlayerHex player, Int16 x, Int16 z, Cells.CellTypes type)
         {
-            if (!IsActionAllowed(player)) return;
+            if (!IsCurrentPlayer(player)) return;
             
             var playerData = Data.GetPlayerData(player);
             var cost = Cells.GetCost(type);
@@ -161,11 +161,8 @@ namespace Aspekt.Hex
             var homeCells = Cells.GetHomeCells(owner.ID);
             return homeCells.All(c => c == lastDestroyedTarget);
         }
-        
-        private bool IsActionAllowed(NetworkGamePlayerHex player)
-        {
-            return Data.IsCurrentPlayer(player);
-        }
+
+        public bool IsCurrentPlayer(NetworkGamePlayerHex player) => Data.IsCurrentPlayer(player);
 
         private IEnumerator AwaitNetworkedPlayerRoutine()
         {

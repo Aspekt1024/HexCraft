@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class NetworkGamePlayerHex : NetworkBehaviour, IInputObserver, ICellEventObserver, ControlPanel.IEventReceiver
+    public class NetworkGamePlayerHex : NetworkBehaviour, ICellEventObserver, ControlPanel.IEventReceiver
     {
         public bool IsReady { get; private set; }
         
@@ -19,9 +19,8 @@ namespace Aspekt.Hex
         
         private NetworkManagerHex room;
         private GameManager game;
-        private PlayerInput input;
 
-        private CellIndicator indicator;
+        private CellActions actions;
 
         public string DisplayName => displayName;
         
@@ -38,10 +37,8 @@ namespace Aspekt.Hex
             this.game = game;
             if (hasAuthority)
             {
-                input = new PlayerInput();
-                input.RegisterNotify(this);
                 game.SetGamePlayer(this);
-                indicator = new CellIndicator(FindObjectOfType<Cells>(), game.UI);
+                actions = new CellActions(this, game);
             }
         }
         
@@ -51,7 +48,7 @@ namespace Aspekt.Hex
         }
 
         [Server]
-        public void SetPlayerID(int id)
+        public void SetPlayerId(int id)
         {
             ID = id;
         }
@@ -65,77 +62,15 @@ namespace Aspekt.Hex
         private void Update()
         {
             if (!hasAuthority || !game.IsRunning()) return;
-            
-            input.HandleInput();
-            indicator.Update(input.GetMousePositionOnBoard());
-        }
-
-        public void BoardClickedPrimary(Vector3 position)
-        {
-            var coords = HexCoordinates.FromPosition(position);
-            if (indicator.IsPlacingCell)
-            {
-                if (indicator.IsProjectedCellInPlacementGrid())
-                {
-                    CmdPlaceCell((Int16)coords.X, (Int16)coords.Z, (Int16)indicator.CellType);
-                }
-                else
-                {
-                    // TODO display error message to player
-                }
-            }
-            else if (indicator.IsMovingUnit)
-            {
-                var unit = indicator.GetMovingUnit();
-                var path = game.Cells.GetPathWithValidityCheck(unit, coords, ID);
-                if (path != null)
-                {
-                    CmdMoveCell((Int16) ID,
-                        (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
-                        (Int16) coords.X, (Int16) coords.Z);
-                }
-            }
-            else if (indicator.IsAttacking)
-            {
-                var unit = indicator.GetAttackingUnit();
-                var target = game.Cells.GetCellAtPosition(coords);
-                if (game.Cells.IsValidAttackTarget(unit, target, ID))
-                {
-                    CmdAttackCell((Int16) ID,
-                        (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
-                        (Int16) coords.X, (Int16) coords.Z);
-                }
-            }
-            else
-            {
-                var cell = game.Cells.GetCellAtPosition(coords);
-                if (cell != null)
-                {
-                    game.UI.ShowCellInfo(cell);
-                }
-                else
-                {
-                    game.UI.HideCellInfo();
-                }
-            }
-        }
-
-        public void BoardClickedSecondary(Vector3 position)
-        {
-            // TODO if unit selected, try move it, or attack target
-            // TODO cancel actions
-        }
-
-        public void CancelPressed()
-        {
-            indicator.HideAll();
-            game.UI.HideCellInfo();
+            actions.Update();
         }
 
         public void OnEndTurnRequested()
         {
             CmdEndTurn();
         }
+
+        public void SetCursorInUI(bool isInUI) => game.UI.SetCursorInUI(isInUI);
 
         private void HandleDisplayNameChanged(string oldName, string newName)
         {
@@ -146,23 +81,18 @@ namespace Aspekt.Hex
         private void HandleCurrentPlayerChanged(bool oldStatus, bool newStatus)
         {
             if (!hasAuthority) return;
+            actions.UpdatePlayerTurn(IsCurrentPlayer);
             
             if (IsCurrentPlayer)
             {
                 // TODO set UI to indicate to player
-            }
-            else
-            {
-                indicator.HideAll();
             }
         }
 
         public void IndicateBuildCell(Cells.CellTypes type, HexCell originator)
         {
             if (!IsCurrentPlayer) return;
-            
-            game.UI.HideCellInfo();
-            indicator.ShowBuild(type, ID, originator);
+            actions.SetBuild(originator, type);
         }
 
         public void UpgradeCell(HexCell originator)
@@ -174,49 +104,49 @@ namespace Aspekt.Hex
         public void IndicateUnitAttack(UnitCell unit)
         {
             if (!IsCurrentPlayer) return;
-            
-            game.UI.HideCellInfo();
-            indicator.IndicateAttack(unit);
+            actions.SetUnitAttack(unit);
         }
 
         public void IndicateUnitMove(UnitCell unit)
         {
             if (!IsCurrentPlayer) return;
-            
-            game.UI.HideCellInfo();
-            indicator.ShowMoveRange(unit);
+            actions.SetUnitMove(unit);
         }
         
-        
         [Command]
-        private void CmdPlaceCell(Int16 x, Int16 z, Int16 cellTypeIndex)
+        public void CmdPlaceCell(Int16 x, Int16 z, Int16 cellTypeIndex)
         {
+            if (!game.IsCurrentPlayer(this)) return;
+            
             if (Enum.IsDefined(typeof(Cells.CellTypes), (Int32)cellTypeIndex))
             {
                 var cellType = (Cells.CellTypes) cellTypeIndex;
-                Debug.Log("game required: " + game);
                 game.TryPlace(this, x, z, cellType);
             }
         }
 
         [Command]
-        private void CmdAttackCell(Int16 playerId, Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
+        public void CmdAttackCell(Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
         {
+            if (!game.IsCurrentPlayer(this)) return;
+            
             var attackingCell = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
             if (attackingCell == null || !(attackingCell is UnitCell attackingUnit)) return;
             var target = game.Cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
-            if (game.Cells.IsValidAttackTarget(attackingUnit, target, playerId))
+            if (game.Cells.IsValidAttackTarget(attackingUnit, target, ID))
             {
                 game.AttackCell(attackingUnit, target);
             }
         }
         
         [Command]
-        private void CmdMoveCell(Int16 playerId, Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
+        public void CmdMoveCell(Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
         {
+            if (!game.IsCurrentPlayer(this)) return;
+            
             var movingUnit = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
             var target = new HexCoordinates(targetX, targetZ);
-            var path = game.Cells.GetPathWithValidityCheck(movingUnit, target, playerId);
+            var path = game.Cells.GetPathWithValidityCheck(movingUnit, target, ID);
             if (path != null)
             {
                 game.MoveCell(movingUnit.Coordinates, target);

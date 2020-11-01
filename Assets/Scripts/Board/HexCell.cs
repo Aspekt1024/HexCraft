@@ -8,6 +8,7 @@ namespace Aspekt.Hex
     public abstract class HexCell : MonoBehaviour
     {
 #pragma warning disable 649
+        [SerializeField] private CellHexOutline hexOutline;
         [SerializeField] private Renderer[] cellRenderers;
         [SerializeField] private Material blackMaterial;
         [SerializeField] private Material whiteMaterial;
@@ -122,12 +123,17 @@ namespace Aspekt.Hex
         public void ShowAsInvalid()
         {
             SetColor(new Color(1f, 0f, 0f, 0.5f));
+            hexOutline.SetInvalid();
         }
 
         public void ShowAsValid()
         {
             SetColor(new Color(1f, 1f, 1f, 0.5f));
+            hexOutline.SetValid();
         }
+
+        public void SetSelected() => hexOutline.SetSelected();
+        public void SetUnselected() => hexOutline.SetUnselected();
 
         public abstract bool CanCreate(Cells.CellTypes cellType);
         protected abstract void OnInit();
@@ -164,10 +170,10 @@ namespace Aspekt.Hex
         {
             switch (colour)
             {
-                case Cells.Colours.White:
+                case Cells.Colours.Blue:
                     SetMaterial(blueMaterial);
                     break;
-                case Cells.Colours.Black:
+                case Cells.Colours.Red:
                     SetMaterial(redMaterial);
                     break;
                 default:
@@ -175,6 +181,8 @@ namespace Aspekt.Hex
                     SetMaterial(blackMaterial);
                     break;
             }
+            
+            hexOutline.SetColour(colour);
         }
 
         public virtual void Remove()

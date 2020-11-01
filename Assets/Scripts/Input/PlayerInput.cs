@@ -7,9 +7,9 @@ namespace Aspekt.Hex
 {
     internal interface IInputObserver
     {
-        void BoardClickedPrimary(Vector3 position);
-        void BoardClickedSecondary(Vector3 position);
-        void CancelPressed();
+        void OnBoardClickedPrimary(Vector3 position);
+        void OnBoardClickedSecondary(Vector3 position);
+        void OnCancelPressed();
     }
     
     internal class PlayerInput : UIBackplate.IMouseEventObserver
@@ -21,7 +21,7 @@ namespace Aspekt.Hex
             Object.FindObjectOfType<UIBackplate>().RegisterNotify(this);
         }
         
-        public void RegisterNotify(IInputObserver observer)
+        public void RegisterObserver(IInputObserver observer)
         {
             observers.Add(observer);
         }
@@ -32,7 +32,7 @@ namespace Aspekt.Hex
             {
                 foreach (var observer in observers)
                 {
-                    observer.CancelPressed();
+                    observer.OnCancelPressed();
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace Aspekt.Hex
             
             foreach (var observer in observers)
             {
-                observer.BoardClickedPrimary(boardPosition);
+                observer.OnBoardClickedPrimary(boardPosition);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Aspekt.Hex
 
             foreach (var observer in observers)
             {
-                observer.BoardClickedSecondary(boardPosition);
+                observer.OnBoardClickedSecondary(boardPosition);
             }
         }
     }

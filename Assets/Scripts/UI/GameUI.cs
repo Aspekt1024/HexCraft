@@ -36,12 +36,16 @@ namespace Aspekt.Hex.UI
 #pragma warning restore 649
 
         private NetworkGamePlayerHex player;
+        private bool isCursorInUI;
+        private HexCursor gameCursor;
+        private HexCursor uiCursor;
 
         public void Init(NetworkGamePlayerHex player)
         {
             this.player = player;
             controlPanel.RegisterSingleObserver(player);
-            SetCursor(HexCursor.Default);
+            SetGameCursor(HexCursor.Default);
+            SetUICursor(HexCursor.Default);
         }
 
         public void ShowWinner(PlayerData winner)
@@ -108,7 +112,36 @@ namespace Aspekt.Hex.UI
             controlPanel.SetCellSelected(null, null);
         }
 
-        public void SetCursor(HexCursor type)
+        public void SetCursorInUI(bool isInUI)
+        {
+            isCursorInUI = isInUI;
+            if (isInUI)
+            {
+                SetCursor(uiCursor);
+            }
+            else
+            {
+                SetCursor(gameCursor);
+            }
+        }
+
+        public void SetGameCursor(HexCursor type)
+        {
+            gameCursor = type;
+            if (isCursorInUI) return;
+            SetCursor(type);
+        }
+
+        public void SetUICursor(HexCursor type)
+        {
+            uiCursor = type;
+            if (isCursorInUI)
+            {
+                SetCursor(type);
+            }
+        }
+
+        private void SetCursor(HexCursor type)
         {
             Cursor.visible = type != HexCursor.None;
             var center = new Vector2(16f, 16f);

@@ -11,6 +11,7 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private Sprite moveImage;
         [SerializeField] private Sprite attackImage;
+        [SerializeField] private Transform model;
 #pragma warning restore 649
         
         [Header("Unit Settings")]
@@ -29,7 +30,7 @@ namespace Aspekt.Hex
 
         private void Start()
         {
-            transform.LookAt(transform.position + Vector3.back);
+            model.LookAt(transform.position + Vector3.back);
         }
 
         protected override void OnInit()
@@ -72,7 +73,7 @@ namespace Aspekt.Hex
             
             if (CurrentHP > 0)
             {
-                transform.LookAt(attacker.transform);
+                model.LookAt(attacker.transform);
                 Anim.SetTrigger(AnimDamagedTrigger);
             }
         }
@@ -88,7 +89,7 @@ namespace Aspekt.Hex
             for (int i = 0; i < path.Count; i++)
             {
                 // TODO smooth rotation
-                transform.LookAt(path[i]);
+                model.LookAt(path[i]);
 
                 while (Vector3.Distance(pos, path[i]) > 0.05f)
                 {
@@ -129,7 +130,7 @@ namespace Aspekt.Hex
 
         private IEnumerator AttackRoutine(HexCell target, int damage)
         {
-            transform.LookAt(target.transform);
+            model.LookAt(target.transform);
             Anim.SetTrigger(AnimAttackTrigger);
             yield return new WaitForSeconds(0.3f);
             target.TakeDamage(this, damage);

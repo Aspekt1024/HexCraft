@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ToonTerrain
+  m_Shader: {fileID: 4800000, guid: 60ab60516d44fa04285a9bf8bde5403a, type: 3}
+  m_ShaderKeywords: TCP2_DISABLE_WRAPPED_LIGHT _MAINSCROLLROTATE_SCROLL _SECONDARYSCROLLROTATE_SCROLL
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Control:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Maintex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noisetex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ramp:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Secondarytex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat0:
+        m_Texture: {fileID: 2800000, guid: 780e2806520034f438c229e150320f33, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat1:
+        m_Texture: {fileID: 2800000, guid: 780e2806520034f438c229e150320f33, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat2:
+        m_Texture: {fileID: 2800000, guid: 780e2806520034f438c229e150320f33, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat3:
+        m_Texture: {fileID: 2800000, guid: 780e2806520034f438c229e150320f33, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainHolesTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ToonShade:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _Arcrange: 360
+    - _Backgroundborderopacity: 1
+    - _Backgroundborderradialwidth: 0
+    - _Backgroundbordertangentwidth: 0
+    - _Backgroundopacity: 1
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _Fillpercentage: 0.25
+    - _Globalopacity: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0
+    - _GlossyReflections: 1
+    - _Invertmaintex: 0
+    - _Invertnoisetex: 0
+    - _Invertsecondarytex: 0
+    - _Mainbarborderopacity: 1
+    - _Mainborderradialwidth: 0
+    - _Mainbordertangentwidth: 0
+    - _Mainscrollrotate: 0
+    - _Maintexcontrast: 1
+    - _Maintexopacity: 1
+    - _Maintexrotationspeed: 1
+    - _Metallic: 0.011
+    - _Mode: 0
+    - _Noiseintensity: 5
+    - _Noisetexcontrast: 1
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _Radius: 0.3
+    - _RampSmooth: 0.2
+    - _RampSmoothAdd: 0.75
+    - _RampThreshold: 0.5
+    - _RimMax: 0.85
+    - _RimMin: 0.6
+    - _RimStrength: 0.5
+    - _Rotation: 0
+    - _Secondaryscrollrotate: 0
+    - _Secondarytexcontrast: 1
+    - _Secondarytexopacity: 1
+    - _Secondarytexrotationspeed: 1
+    - _SmoothnessTextureChannel: 0
+    - _SpecBlend: 1
+    - _SpecSmooth: 1
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _TCP2_DISABLE_WRAPPED_LIGHT: 1
+    - _TCP2_RAMPTEXT: 0
+    - _TCP2_SPEC_TOON: 0
+    - _TCP2_STYLIZED_FRESNEL: 0
+    - _UVSec: 0
+    - _ZWrite: 1
+    - __dirty: 1
+    - __dummy__: 0
+    m_Colors:
+    - _Backgroundbordercolor: {r: 0.2132353, g: 0.6418865, b: 1, a: 1}
+    - _Backgroundfillcolor: {r: 0.2132353, g: 0.6418865, b: 1, a: 1}
+    - _Barmaxcolor: {r: 0, g: 1, b: 0.08965516, a: 1}
+    - _Barmincolor: {r: 1, g: 0, b: 0, a: 1}
+    - _Barsecondarymaxcolor: {r: 0, g: 1, b: 0.08965516, a: 1}
+    - _Barsecondarymincolor: {r: 1, g: 0, b: 0, a: 1}
+    - _Bordermaxcolor: {r: 0, g: 1, b: 0.08965516, a: 1}
+    - _Bordermincolor: {r: 1, g: 0, b: 0, a: 1}
+    - _Color: {r: 0.3443396, g: 1, b: 0.3855027, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Maintexoffset: {r: 0, g: 0, b: 0, a: 0}
+    - _Maintexscrollspeed: {r: 0, g: 0, b: 0, a: 0}
+    - _Maintextiling: {r: 0, g: 0, b: 0, a: 0}
+    - _Noisetexoffset: {r: 0, g: 0, b: 0, a: 0}
+    - _Noisetexspeed: {r: 0, g: 0, b: 0, a: 0}
+    - _Noisetextiling: {r: 0, g: 0, b: 0, a: 0}
+    - _RampThresholdRGB: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.6}
+    - _SColor: {r: 0.25, g: 0.25, b: 0.25, a: 1}
+    - _Secondarytexoffset: {r: 0, g: 0, b: 0, a: 0}
+    - _Secondarytexscrollspeed: {r: 0, g: 0, b: 0, a: 0}
+    - _Secondarytextiling: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []

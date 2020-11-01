@@ -1,10 +1,12 @@
+using System;
 using Aspekt.Hex.UI.Control;
 using DefaultNamespace;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Aspekt.Hex.UI
 {
-    public class ControlPanel : MonoBehaviour
+    public class ControlPanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
 #pragma warning disable 649
         [SerializeField] private Turns turns;
@@ -14,6 +16,7 @@ namespace Aspekt.Hex.UI
         public interface IEventReceiver
         {
             void OnEndTurnRequested();
+            void SetCursorInUI(bool isInUI);
         }
 
         private IEventReceiver observer;
@@ -39,6 +42,16 @@ namespace Aspekt.Hex.UI
         public void EndTurn()
         {
             observer?.OnEndTurnRequested();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            observer?.SetCursorInUI(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            observer?.SetCursorInUI(false);
         }
     }
 }
