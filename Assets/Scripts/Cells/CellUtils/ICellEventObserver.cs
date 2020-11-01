@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Aspekt.Hex
 {
     public interface ICellEventObserver
@@ -12,5 +14,10 @@ namespace Aspekt.Hex
     public interface ICellLifecycleObserver
     {
         void OnCellCreated(HexCell cell);
+    }
+
+    public interface ICellHealthObserver
+    {
+        void OnCellHealthChanged(HexCell cell, float prevPercent, float newPercent);
     }
 }

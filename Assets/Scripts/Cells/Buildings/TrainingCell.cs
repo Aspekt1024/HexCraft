@@ -29,7 +29,7 @@ namespace Aspekt.Hex
 
         private void T1UnitClicked()
         {
-            foreach (var observer in Observers)
+            foreach (var observer in EventObservers)
             {
                 observer.IndicateBuildCell(Cells.CellTypes.UnitT1, this);
             }
@@ -37,7 +37,7 @@ namespace Aspekt.Hex
 
         private void T2UnitClicked()
         {
-            foreach (var observer in Observers)
+            foreach (var observer in EventObservers)
             {
                 observer.IndicateBuildCell(Cells.CellTypes.UnitT2, this);
             }

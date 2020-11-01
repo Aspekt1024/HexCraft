@@ -39,7 +39,6 @@ namespace Aspekt.Hex
         public override void OnStartClient()
         {
             room = FindObjectOfType<NetworkManagerHex>();
-            game = room.Game;
             room.RegisterGameData(this);
         }
 
@@ -47,16 +46,7 @@ namespace Aspekt.Hex
         {
             foreach (var player in players)
             {
-                var newPlayerData = new PlayerData(player)
-                {
-                    Credits = config.StartingCredits
-                };
-                playerData.Add(newPlayerData);
-                
-                if (isServer)
-                {
-                    RpcSetCurrency((Int16)player.ID, newPlayerData.Credits);
-                }
+                playerData.Add(new PlayerData(player));
             }
         }
         
@@ -65,8 +55,9 @@ namespace Aspekt.Hex
             playerData.RemoveAt(playerData.FindIndex(p => p.Player.ID == player.ID));
         }
 
-        public void Init(GameConfig config)
+        public void Init(GameManager game, GameConfig config)
         {
+            this.game = game;
             this.config = config;
         }
 
@@ -83,6 +74,11 @@ namespace Aspekt.Hex
             currentPlayer.Player.IsCurrentPlayer = false;
             currentPlayer = null;
             game.UI.SetPlayerTurn(null);
+        }
+
+        public void SetCurrency(NetworkGamePlayerHex player, int credits)
+        {
+            RpcSetCurrency((Int16)player.ID, credits);
         }
 
         public void ModifyCurrency(PlayerData data, int change)
@@ -155,13 +151,30 @@ namespace Aspekt.Hex
         [ClientRpc]
         private void RpcSetCurrency(Int16 playerId, int credits)
         {
+            Debug.Log("setting currency client");
+            if (playerData == null)
+            {
+                Debug.LogWarning("client no player data");
+            }
             foreach (var player in playerData)
             {
+                if (player.Player == null)
+                {
+                    Debug.LogWarning("client playerdata has no player");
+                }
                 if (player.Player.ID == playerId)
                 {
                     player.Credits = credits;
                     if (player.Player.hasAuthority)
                     {
+                        if (game == null)
+                        {
+                            Debug.LogWarning("no game!");
+                        }
+                        if (game.UI == null)
+                        {
+                            Debug.LogWarning("client no UI");
+                        }
                         game.UI.SetCurrency(credits);
                     }
                 }

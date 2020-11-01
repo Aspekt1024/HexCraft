@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Aspekt.Hex.UI;
 using UnityEngine;
@@ -48,13 +49,12 @@ namespace Aspekt.Hex
             new Vector3(0f, 0f, OuterRadius), 
         };
         
-        protected readonly List<ICellEventObserver> Observers = new List<ICellEventObserver>();
+        protected readonly List<ICellEventObserver> EventObservers = new List<ICellEventObserver>();
+        private readonly List<ICellHealthObserver> healthObservers = new List<ICellHealthObserver>();
 
         protected Cells CellData;
         
         private Material cellMaterial;
-        
-        public event Action<float> OnHealthUpdated = delegate {  };
 
         public void Init(Cells cells)
         {
@@ -62,9 +62,14 @@ namespace Aspekt.Hex
             OnInit();
         }
         
-        public void RegisterObserver(ICellEventObserver observer)
+        public void RegisterEventObserver(ICellEventObserver observer)
         {
-            Observers.Add(observer);
+            EventObservers.Add(observer);
+        }
+
+        public void RegisterHealthObserver(ICellHealthObserver observer)
+        {
+            healthObservers.Add(observer);
         }
 
         public void Place(HexCoordinates coords, Cells.Colours colour, NetworkGamePlayerHex owner)
@@ -81,8 +86,14 @@ namespace Aspekt.Hex
 
         public virtual void TakeDamage(UnitCell attacker, int damage)
         {
+            var prevHealthPercent = (float) CurrentHP / MaxHP;
             CurrentHP = Mathf.Max(CurrentHP - damage, 0);
-            OnHealthUpdated((float) CurrentHP / MaxHP);
+            var newHealthPercent = (float) CurrentHP / MaxHP;
+
+            foreach (var observer in healthObservers)
+            {
+                observer.OnCellHealthChanged(this, prevHealthPercent, newHealthPercent);
+            }
         }
 
         public void DisplayAsIndicator(Shader holoShader, Cells.Colours colour)
@@ -163,6 +174,12 @@ namespace Aspekt.Hex
 
         public virtual void Remove()
         {
+            StartCoroutine(RemoveRoutine());
+        }
+
+        private IEnumerator RemoveRoutine()
+        {
+            yield return new WaitForSeconds(1f);
             Destroy(gameObject);
         }
     }

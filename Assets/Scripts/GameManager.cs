@@ -70,7 +70,7 @@ namespace Aspekt.Hex
             Data = dependencies.Data;
             grid = dependencies.Grid;
 
-            Data.Init(config);
+            Data.Init(this, config);
             
             StartCoroutine(AwaitNetworkedPlayerRoutine());
         }
@@ -88,10 +88,13 @@ namespace Aspekt.Hex
 
         private void SetupPlayers()
         {
-            for (int i = 0; i < room.GamePlayers.Count; i++)
+            foreach (var player in room.GamePlayers)
             {
-                grid.SetStartingLocation(room.GamePlayers[i]);
+                grid.SetStartingLocation(player);
+                Data.SetCurrency(player, config.StartingCredits);
             }
+
+            UI.UpdatePlayerInfo(room.GamePlayers);
         }
 
     #region Server Calls

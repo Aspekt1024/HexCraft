@@ -153,7 +153,7 @@ namespace Aspekt.Hex
 
         private void ActionAttack()
         {
-            foreach (var observer in Observers)
+            foreach (var observer in EventObservers)
             {
                 observer.IndicateUnitAttack(this);
             }
@@ -161,7 +161,7 @@ namespace Aspekt.Hex
 
         private void ActionMove()
         {
-            foreach (var observer in Observers)
+            foreach (var observer in EventObservers)
             {
                 observer.IndicateUnitMove(this);
             }

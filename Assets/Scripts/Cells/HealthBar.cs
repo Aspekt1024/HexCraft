@@ -11,6 +11,13 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private Image health;
 #pragma warning restore 649
+        
+        public interface IObserver
+        {
+            void OnHealthbarHidden(HealthBar bar);
+        }
+
+        private IObserver observer;
 
         private Transform tf;
         private HexCamera mainCam;
@@ -25,16 +32,18 @@ namespace Aspekt.Hex
             mainCam = FindObjectOfType<HexCamera>();
         }
 
-        public void Init(Transform cellTf, float initialHealthPercent)
+        public void RegisterObserver(IObserver observer)
         {
-            this.cellTf = cellTf;
-            health.fillAmount = initialHealthPercent;
+            this.observer = observer;
         }
 
-        public void SetHealth(float percent)
+        public void SetHealth(Transform cellTf, float prevPercent, float newPercent)
         {
+            this.cellTf = cellTf;
+            Show();
+            
             if (setHealthRoutine != null) StopCoroutine(setHealthRoutine);
-            setHealthRoutine = StartCoroutine(SetHealthRoutine(percent));
+            setHealthRoutine = StartCoroutine(SetHealthRoutine(prevPercent, newPercent));
         }
 
         private void LateUpdate()
@@ -44,18 +53,15 @@ namespace Aspekt.Hex
             tf.position = mainCam.Camera.WorldToScreenPoint(pos);
         }
 
-        private IEnumerator SetHealthRoutine(float newPercent)
+        private IEnumerator SetHealthRoutine(float prevPercent, float newPercent)
         {
-            Show();
-            
-            var originalPercent = health.fillAmount;
             float timer = 0f;
             const float duration = 0.5f;
             
             while (timer < duration)
             {
                 timer += Time.deltaTime;
-                health.fillAmount = Mathf.Lerp(originalPercent, newPercent, timer / duration);
+                health.fillAmount = Mathf.Lerp(prevPercent, newPercent, timer / duration);
                 yield return null;
             }
             

@@ -30,7 +30,7 @@ namespace Aspekt.Hex
 
         private void TrainingItemClicked()
         {
-            foreach (var observer in Observers)
+            foreach (var observer in EventObservers)
             {
                 observer.IndicateBuildCell(Cells.CellTypes.Training, this);
             }
@@ -38,7 +38,7 @@ namespace Aspekt.Hex
 
         private void IncomeItemClicked()
         {
-            foreach (var observer in Observers)
+            foreach (var observer in EventObservers)
             {
                 observer.IndicateBuildCell(Cells.CellTypes.Income, this);
             }

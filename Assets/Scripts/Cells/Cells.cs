@@ -87,7 +87,7 @@ namespace Aspekt.Hex
             
             foreach (var observer in cellEventObservers)
             {
-                cell.RegisterObserver(observer);
+                cell.RegisterEventObserver(observer);
             }
                 
             foreach (var observer in cellLifecycleObservers)

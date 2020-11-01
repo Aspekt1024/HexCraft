@@ -4,7 +4,7 @@ namespace Aspekt.Hex
     {
         public static bool IsRunning(this GameManager mgr)
         {
-            return mgr.Data != null && mgr.Data.IsRunning;
+            return mgr != null && mgr.Data != null && mgr.Data.IsRunning;
         }
     }
 }

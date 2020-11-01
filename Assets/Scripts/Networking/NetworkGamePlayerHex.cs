@@ -30,17 +30,17 @@ namespace Aspekt.Hex
             DontDestroyOnLoad(gameObject);
 
             room = FindObjectOfType<NetworkManagerHex>();
-            game = room.Game;
-
             room.AddGamePlayer(this);
-            
+        }
+
+        public void Init(GameManager game)
+        {
+            this.game = game;
             if (hasAuthority)
             {
-                game.SetGamePlayer(this);
-            
                 input = new PlayerInput();
                 input.RegisterNotify(this);
-
+                game.SetGamePlayer(this);
                 indicator = new CellIndicator(FindObjectOfType<Cells>(), game.UI);
             }
         }
@@ -139,6 +139,7 @@ namespace Aspekt.Hex
 
         private void HandleDisplayNameChanged(string oldName, string newName)
         {
+            if (game == null) return; // When created by the network manager, the main scene hasn't loaded yet
             game.UI.UpdatePlayerInfo(room.GamePlayers);
         }
 
@@ -193,6 +194,7 @@ namespace Aspekt.Hex
             if (Enum.IsDefined(typeof(Cells.CellTypes), (Int32)cellTypeIndex))
             {
                 var cellType = (Cells.CellTypes) cellTypeIndex;
+                Debug.Log("game required: " + game);
                 game.TryPlace(this, x, z, cellType);
             }
         }

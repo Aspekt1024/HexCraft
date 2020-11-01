@@ -35,7 +35,6 @@ namespace Aspekt.Hex
         public override void Awake()
         {
             base.Awake();
-            Game = FindObjectOfType<GameManager>();
             gameManagerDependencies.NetworkManager = this;
         }
 
@@ -59,7 +58,12 @@ namespace Aspekt.Hex
             mainMenu.OnClientDisconnect();
         }
 
-        public void AddRoomPlayer(NetworkRoomPlayerHex player) => RoomPlayers.Add(player);
+        public void AddRoomPlayer(NetworkRoomPlayerHex player)
+        {
+            player.IsLeader = RoomPlayers.Count == 0;
+            RoomPlayers.Add(player);
+        }
+
         public void RemoveRoomPlayer(NetworkRoomPlayerHex player) => RoomPlayers.Remove(player);
 
         public void AddGamePlayer(NetworkGamePlayerHex player)
@@ -73,7 +77,7 @@ namespace Aspekt.Hex
             Game.Data.UnregisterPlayer(player);
         }
 
-    public void ShowLobby() => mainMenu.ShowLobby();
+        public void ShowLobby() => mainMenu.ShowLobby();
         public bool IsLobbyReady() => RoomPlayers.Count == minPlayers && RoomPlayers.All(p => p.IsReady);
         
         public void StartGameFromLobby()
@@ -123,6 +127,7 @@ namespace Aspekt.Hex
                 {
                     var gamePlayer = Instantiate(gamePlayerPrefab);
                     gamePlayer.SetDisplayName(RoomPlayers[i].DisplayName);
+                    gamePlayer.SetPlayerID(i + 1);
 
                     var conn = RoomPlayers[i].connectionToClient;
                     NetworkServer.ReplacePlayerForConnection(conn, gamePlayer.gameObject);
@@ -168,7 +173,7 @@ namespace Aspekt.Hex
         {
             if (gameManagerDependencies.IsValid())
             {
-                Game.SetDependencies(gameManagerDependencies);
+                StartCoroutine(SetDependenciesAfterGameManagerInstantiated());
             }
         }
 
@@ -179,6 +184,22 @@ namespace Aspekt.Hex
             {
                 Game.StartGame();
             }
+        }
+
+        private IEnumerator SetDependenciesAfterGameManagerInstantiated()
+        {
+            while (Game == null)
+            {
+                Game = FindObjectOfType<GameManager>();
+                yield return null;
+            }
+            
+            foreach (var player in GamePlayers)
+            {
+                player.Init(Game);
+            }
+            
+            Game.SetDependencies(gameManagerDependencies);
         }
         
         #endregion

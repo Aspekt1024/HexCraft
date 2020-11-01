@@ -33,6 +33,7 @@ namespace Aspekt.Hex.UI
 
         public virtual void Show()
         {
+            gameObject.SetActive(true);
             if (state == States.Visible || state == States.TransitionToVisible) return;
             ClearRoutines();
             showRoutine = StartCoroutine(ShowRoutine());
@@ -73,6 +74,7 @@ namespace Aspekt.Hex.UI
 
         private void SetVisible()
         {
+            gameObject.SetActive(true);
             state = States.Visible;
             group.alpha = 1f;
             group.interactable = true;
@@ -85,6 +87,7 @@ namespace Aspekt.Hex.UI
             group.alpha = 0f;
             group.interactable = false;
             group.blocksRaycasts = false;
+            gameObject.SetActive(false);
         }
 
         private void ClearRoutines()

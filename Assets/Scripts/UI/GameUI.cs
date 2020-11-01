@@ -132,7 +132,7 @@ namespace Aspekt.Hex.UI
         public void OnCellCreated(HexCell cell)
         {
             // TODO show alert for created unit on side panel
-            healthBars.LinkHealthBar(cell);
+            cell.RegisterHealthObserver(healthBars);
         }
 
         private IEnumerator GameWonSequence(PlayerData winner)
