@@ -172,7 +172,7 @@ namespace Aspekt.Hex
 
         public List<Vector3> GetPathWithValidityCheck(HexCell cell, HexCoordinates targetCoords, int playerId)
         {
-            if (!(cell is UnitCell unit) || cell.PlayerId != playerId) return null;
+            if (!(cell is UnitCell unit) || cell.PlayerId != playerId || unit.HasMoved) return null;
             return GetPath(unit, targetCoords);
         }
 
@@ -212,6 +212,30 @@ namespace Aspekt.Hex
             }
         }
 
+        public List<HexCoordinates> GetAttackableCells(HexCell cell, int range)
+        {
+            var coords = new List<HexCoordinates>();
+            var center = cell.Coordinates;
+            for (int x = center.X - range; x <= center.X + range; x++)
+            {
+                var zMin = center.Z - (x < center.X ? range - (center.X - x) : range);
+                var zMax = center.Z + (x > center.X ? range - (x - center.X) : range);
+                for (int z = zMin; z <= zMax; z++)
+                {
+                    if (x == center.X && z == center.Z) continue;
+
+                    var coord = new HexCoordinates(x, z);
+                    var hexCell = GetCellAtPosition(coord);
+                    if (hexCell != null && hexCell.PlayerId != cell.PlayerId)
+                    {
+                        coords.Add(coord);
+                    }
+                }
+            }
+
+            return coords;
+        }
+
         public List<HexCoordinates> GetSurroundingCells(HexCoordinates center, int radius, bool omitNonEmpty)
         {
             var coords = new List<HexCoordinates>();
@@ -238,6 +262,17 @@ namespace Aspekt.Hex
             var pathCells = pathfinder.GetCellsWithinDistance(origin, distance);
             var coords = pathCells.Select(c => new HexCoordinates(c.X, c.Z)).ToList();
             return coords;
+        }
+
+        public void OnNewTurn()
+        {
+            foreach (var cell in AllCells)
+            {
+                if (cell is UnitCell unit)
+                {
+                    unit.TurnReset();
+                }
+            }
         }
 
     }

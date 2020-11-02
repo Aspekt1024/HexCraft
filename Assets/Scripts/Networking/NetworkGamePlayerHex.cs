@@ -14,13 +14,12 @@ namespace Aspekt.Hex
         
         [SyncVar] public int ID;
 
-        [SyncVar(hook = nameof(HandleCurrentPlayerChanged))]
         public bool IsCurrentPlayer = false;
         
         private NetworkManagerHex room;
         private GameManager game;
 
-        private CellActions actions;
+        private UnitActions actions;
 
         public string DisplayName => displayName;
         
@@ -38,7 +37,7 @@ namespace Aspekt.Hex
             if (hasAuthority)
             {
                 game.SetGamePlayer(this);
-                actions = new CellActions(this, game);
+                actions = new UnitActions(this, game);
             }
         }
         
@@ -78,14 +77,13 @@ namespace Aspekt.Hex
             game.UI.UpdatePlayerInfo(room.GamePlayers);
         }
 
-        private void HandleCurrentPlayerChanged(bool oldStatus, bool newStatus)
+        public void UpdateCurrentPlayerStatus(bool isCurrentPlayer)
         {
-            if (!hasAuthority) return;
-            actions.UpdatePlayerTurn(IsCurrentPlayer);
+            IsCurrentPlayer = isCurrentPlayer;
             
-            if (IsCurrentPlayer)
+            if (hasAuthority)
             {
-                // TODO set UI to indicate to player
+                actions.UpdatePlayerTurn(isCurrentPlayer);
             }
         }
 
@@ -132,6 +130,8 @@ namespace Aspekt.Hex
             
             var attackingCell = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
             if (attackingCell == null || !(attackingCell is UnitCell attackingUnit)) return;
+            if (attackingUnit.HasAttacked) return;
+            
             var target = game.Cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
             if (game.Cells.IsValidAttackTarget(attackingUnit, target, ID))
             {
@@ -145,6 +145,7 @@ namespace Aspekt.Hex
             if (!game.IsCurrentPlayer(this)) return;
             
             var movingUnit = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
+            
             var target = new HexCoordinates(targetX, targetZ);
             var path = game.Cells.GetPathWithValidityCheck(movingUnit, target, ID);
             if (path != null)

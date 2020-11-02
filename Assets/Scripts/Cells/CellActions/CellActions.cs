@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class CellActions : IInputObserver
+    public class UnitActions : IInputObserver, IUnitActionObserver
     {
         private readonly CellIndicator indicator;
         private readonly GameManager game;
@@ -30,7 +30,7 @@ namespace Aspekt.Hex
 
         private HexCoordinates currentCoords;
         
-        public CellActions(NetworkGamePlayerHex player, GameManager game)
+        public UnitActions(NetworkGamePlayerHex player, GameManager game)
         {
             this.player = player;
             this.game = game;
@@ -55,7 +55,7 @@ namespace Aspekt.Hex
 
             if (isPlayerTurn)
             {
-                UpdateIndicator(coords);
+                UpdateCursor(coords);
             }
         }
         
@@ -112,13 +112,12 @@ namespace Aspekt.Hex
             }
             else if (unit != null)
             {
-                SetOwnUnitSelected(unit);
+                RefreshOwnUnitActions();
             }
         }
         
         public void SetBuild(HexCell originator, Cells.CellTypes type)
         {
-            indicator.Clear();
             state = States.Building;
             cellBuildType = type;
             builder = originator;
@@ -128,7 +127,6 @@ namespace Aspekt.Hex
 
         public void SetUnitMove(UnitCell movingUnit)
         {
-            indicator.Clear();
             unit = movingUnit;
             state = States.Moving;
             indicator.ShowMovementGrid(unit.Coordinates, unit.MoveRange);
@@ -136,41 +134,69 @@ namespace Aspekt.Hex
 
         public void SetUnitAttack(UnitCell attackingUnit)
         {
-            indicator.Clear();
             unit = attackingUnit;
             state = States.Attacking;
-            indicator.ShowAttackGrid(unit.Coordinates, unit.AttackRange);
+            indicator.ShowAttackRange(unit.Coordinates, unit.AttackRange);
+        }
+
+        public void OnFinishedMove(UnitCell unit)
+        {
+            if (unit == this.unit)
+            {
+                RefreshOwnUnitActions();
+            }
+        }
+
+        public void OnFinishedAttack(UnitCell unit)
+        {
+            if (unit == this.unit)
+            {
+                RefreshOwnUnitActions();
+            }
         }
 
         private void SetOwnUnitSelected(UnitCell unit)
         {
-            indicator.Clear();
             this.unit = unit;
             state = States.OwnUnitSelected;
-
-            if (game.IsCurrentPlayer(player))
-            {
-                // TODO overlay attack cells on top of movement grid
-                indicator.ShowMovementGrid(unit.Coordinates, unit.MoveRange);
-                indicator.ShowAttackGrid(unit.Coordinates, unit.AttackRange);
-            }
+            unit.RegisterActionObserver(this);
+            RefreshOwnUnitActions();
         }
 
-        private void UpdateIndicator(HexCoordinates coords)
+        private void RefreshOwnUnitActions()
+        {
+            if (!game.IsCurrentPlayer(player)) return;
+
+            state = States.OwnUnitSelected;
+            
+            if (!unit.HasMoved)
+            {
+                indicator.ShowMovementGrid(unit.Coordinates, unit.MoveRange);
+            }
+
+            if (!unit.HasAttacked)
+            {
+                indicator.ShowAttackableCells(unit, unit.AttackRange, false);
+            }
+            
+            indicator.UpdateUnitCursor(unit, currentCoords);
+        }
+
+        private void UpdateCursor(HexCoordinates coords)
         {
             switch (state)
             {
                 case States.Building:
-                    indicator.UpdateBuildPlacement(coords);
+                    indicator.UpdateBuildCursor(coords);
                     break;
                 case States.OwnUnitSelected:
-                    indicator.UpdateUnitIndication(unit, coords);
+                    indicator.UpdateUnitCursor(unit, coords);
                     break;
                 case States.Moving:
-                    indicator.UpdateMoveIndication(unit, coords);
+                    indicator.UpdateMoveCursor(unit, coords);
                     break;
                 case States.Attacking:
-                    indicator.UpdateAttackIndication(unit, coords);
+                    indicator.UpdateAttackCursor(unit, coords);
                     break;
             }
         }
@@ -179,8 +205,10 @@ namespace Aspekt.Hex
         {
             if (indicator.IsProjectedCellInPlacementGrid())
             {
+                indicator.Clear();
                 player.CmdPlaceCell((Int16)coords.X, (Int16)coords.Z, (Int16)cellBuildType);
                 state = States.None;
+                game.UI.ShowCellInfo(builder);
             }
             else
             {
@@ -221,11 +249,13 @@ namespace Aspekt.Hex
         
         private bool MoveIfValid(UnitCell unit, HexCoordinates coords)
         {
+            if (unit.HasMoved) return false;
             var path = game.Cells.GetPathWithValidityCheck(unit, coords, player.ID);
             var isValidPath = path != null;
             if (isValidPath)
             {
                 state = States.None;
+                indicator.Clear();
                 player.CmdMoveCell(
                     (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
                     (Int16) coords.X, (Int16) coords.Z);
@@ -235,11 +265,13 @@ namespace Aspekt.Hex
 
         private bool AttackIfValid(UnitCell unit, HexCoordinates coords)
         {
+            if (unit.HasAttacked) return false;
             var target = game.Cells.GetCellAtPosition(coords);
             var isValid = game.Cells.IsValidAttackTarget(unit, target, player.ID);
             if (isValid)
             {
                 state = States.None;
+                indicator.Clear();
                 player.CmdAttackCell(
                     (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
                     (Int16) coords.X, (Int16) coords.Z);
@@ -257,10 +289,18 @@ namespace Aspekt.Hex
                 selectedCell = null;
             }
 
-            unit = null;
+            ClearOwnUnit();
             builder = null;
 
             game.UI.HideCellInfo();
+        }
+
+        private void ClearOwnUnit()
+        {
+            if (unit == null) return;
+            unit.UnregisterActionObserver(this);
+            state = States.None;
+            unit = null;
         }
     }
 }

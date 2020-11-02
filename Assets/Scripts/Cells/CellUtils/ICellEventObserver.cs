@@ -20,4 +20,10 @@ namespace Aspekt.Hex
     {
         void OnCellHealthChanged(HexCell cell, float prevPercent, float newPercent);
     }
+
+    public interface IUnitActionObserver
+    {
+        void OnFinishedMove(UnitCell unit);
+        void OnFinishedAttack(UnitCell unit);
+    }
 }

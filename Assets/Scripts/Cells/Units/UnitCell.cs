@@ -22,12 +22,17 @@ namespace Aspekt.Hex
         public override List<CellUIItem.Details> ItemDetails { get; protected set; }
 
         private Animator Anim;
+
+        public bool HasMoved { get; private set; }
+        public bool HasAttacked { get; private set; }
         
         private static readonly int AnimMoveSpeed = Animator.StringToHash("moveSpeed");
         private static readonly int AnimAttackTrigger = Animator.StringToHash("attack");
         private static readonly int AnimDamagedTrigger = Animator.StringToHash("damaged");
         private static readonly int AnimDeathTrigger = Animator.StringToHash("dead");
 
+        private readonly List<IUnitActionObserver> unitActionObservers = new List<IUnitActionObserver>();
+        
         private void Start()
         {
             model.LookAt(transform.position + Vector3.back);
@@ -40,6 +45,16 @@ namespace Aspekt.Hex
         }
 
         public override bool CanCreate(Cells.CellTypes cellType) => false;
+
+        public void RegisterActionObserver(IUnitActionObserver observer)
+        {
+            unitActionObservers.Add(observer);
+        }
+
+        public void UnregisterActionObserver(IUnitActionObserver observer)
+        {
+            unitActionObservers.Remove(observer);
+        }
         
         protected virtual void SetupActionItems()
         {
@@ -49,9 +64,19 @@ namespace Aspekt.Hex
                 new CellUIItem.Details(moveImage, ActionMove, 0),
             };
         }
+
+        /// <summary>
+        /// Called at the start of a new turn
+        /// </summary>
+        public void TurnReset()
+        {
+            HasMoved = false;
+            HasAttacked = false;
+        }
         
         public override void MoveTo(HexCoordinates coords)
         {
+            HasMoved = true;
             var path = CellData.GetPath(this, coords);
             Coordinates = coords;
             StartCoroutine(MoveRoutine(path));
@@ -59,6 +84,7 @@ namespace Aspekt.Hex
         
         public void ShowAttack(HexCell target, int damage)
         {
+            HasAttacked = true;
             StartCoroutine(AttackRoutine(target, damage));
         }
 
@@ -66,7 +92,7 @@ namespace Aspekt.Hex
         {
             StartCoroutine(DeathRoutine());
         }
-
+        
         public override void TakeDamage(UnitCell attacker, int damage)
         {
             base.TakeDamage(attacker, damage);
@@ -102,6 +128,11 @@ namespace Aspekt.Hex
 
             }
             transform.position = target;
+            
+            foreach (var observer in unitActionObservers)
+            {
+                observer.OnFinishedMove(this);
+            }
         }
 
         private Vector3 GetMoveVelocity(Vector3 velocity, Vector3 currentPos, Vector3 targetPos, bool isLastPoint)
@@ -134,6 +165,11 @@ namespace Aspekt.Hex
             Anim.SetTrigger(AnimAttackTrigger);
             yield return new WaitForSeconds(0.3f);
             target.TakeDamage(this, damage);
+
+            foreach (var observer in unitActionObservers)
+            {
+                observer.OnFinishedAttack(this);
+            }
         }
         
         private IEnumerator DeathRoutine()
