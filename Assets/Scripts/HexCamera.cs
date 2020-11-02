@@ -13,17 +13,23 @@ namespace Aspekt.Hex
         
         private GameManager game;
 
-        private float currentZoom = 0.8f;
+        private float currentZoom = 0.6f;
         private float defaultYPos;
         private float defaultRotation;
+
+        private bool isBoundsSet = false;
+        private Vector3 gridBounds;
+        private Transform camTf;
         
         private void Awake()
         {
             Camera = GetComponent<Camera>();
             game = FindObjectOfType<GameManager>();
             currentZoom = 1f;
-            defaultYPos = transform.position.y;
-            defaultRotation = transform.eulerAngles.x;
+            
+            camTf = transform;
+            defaultYPos = camTf.position.y;
+            defaultRotation = camTf.eulerAngles.x;
         }
 
         private void Update()
@@ -33,13 +39,18 @@ namespace Aspekt.Hex
             UpdateCameraZoom();
         }
 
+        private void LateUpdate()
+        {
+            HandleBounds();
+        }
+
         public void ScrollTo(HexCoordinates coords)
         {
             var pos = HexCoordinates.ToPosition(coords);
             pos.y = transform.position.y;
             pos.z -= 5f;
             // TODO lerp
-            transform.position = pos;
+            camTf.position = pos;
         }
 
         private void ActionInput()
@@ -71,13 +82,34 @@ namespace Aspekt.Hex
             camPos.y = Mathf.Lerp(camPos.y, targetYPos, Time.deltaTime * scrollSpeed);
             transform.position = camPos;
 
-            var camRot = transform.eulerAngles;
+            var camRot = camTf.eulerAngles;
             var targetRot = currentZoom < 0.2f
                 ? Mathf.Lerp(defaultRotation - 40f, defaultRotation, currentZoom / 0.2f)
                 : defaultRotation;
             
             camRot.x = Mathf.Lerp(camRot.x, targetRot, Time.deltaTime * scrollSpeed);
             transform.eulerAngles = camRot;
+        }
+
+        private void HandleBounds()
+        {
+            if (!isBoundsSet)
+            {
+                var grid = FindObjectOfType<HexGrid>();
+                if (grid == null) return;
+                
+                gridBounds = grid.GetBoardLimitsInWorldUnits();
+                isBoundsSet = true;
+            }
+
+            const float xAllowance = -1f;
+            const float zAllowanceTop = -8f;
+            const float zAllowanceBottom = 5f;
+
+            var pos = camTf.position;
+            pos.x = Mathf.Clamp(pos.x, -gridBounds.x - xAllowance, gridBounds.x + xAllowance);
+            pos.z = Mathf.Clamp(pos.z, -gridBounds.z - zAllowanceBottom, gridBounds.z + zAllowanceTop);
+            camTf.position = pos;
         }
     }
 }

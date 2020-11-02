@@ -184,7 +184,7 @@ Material:
     - _Barsecondarymincolor: {r: 1, g: 0, b: 0, a: 1}
     - _Bordermaxcolor: {r: 0, g: 1, b: 0.08965516, a: 1}
     - _Bordermincolor: {r: 1, g: 0, b: 0, a: 1}
-    - _Color: {r: 0.3443396, g: 1, b: 0.3855027, a: 1}
+    - _Color: {r: 0.70440245, g: 1, b: 0.73371875, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HColor: {r: 1, g: 1, b: 1, a: 1}
     - _Maintexoffset: {r: 0, g: 0, b: 0, a: 0}

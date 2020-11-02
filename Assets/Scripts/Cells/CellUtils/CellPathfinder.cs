@@ -7,6 +7,7 @@ namespace Aspekt.Hex
     public class CellPathfinder
     {
         private readonly Cells cells;
+        private readonly HexGrid grid;
 
         private readonly Vector2Int[] neighbourOffsets =
         {
@@ -21,9 +22,10 @@ namespace Aspekt.Hex
         private readonly List<PathCell> reachableCells = new List<PathCell>();
         private Vector2Int neighbour;
         
-        public CellPathfinder(Cells cells)
+        public CellPathfinder(Cells cells, HexGrid grid)
         {
             this.cells = cells;
+            this.grid = grid;
         }
 
         public List<Vector3> FindPath(HexCoordinates origin, HexCoordinates target, int maxDistance)
@@ -75,7 +77,10 @@ namespace Aspekt.Hex
                     var reachableCell = new PathCell(neighbour.x, neighbour.y, cell.Dist + 1, cell);
                     if (!newCells.Contains(reachableCell) && !reachableCells.Contains(reachableCell))
                     {
-                        newCells.Add(reachableCell);
+                        if (grid.IsWithinGridBoundary(reachableCell.X, reachableCell.Z))
+                        {
+                            newCells.Add(reachableCell);
+                        }
                     }
                 }
             }

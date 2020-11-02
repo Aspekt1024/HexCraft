@@ -44,10 +44,12 @@ namespace Aspekt.Hex
         private readonly List<ICellLifecycleObserver> cellLifecycleObservers = new List<ICellLifecycleObserver>();
 
         private CellPathfinder pathfinder;
+        private HexGrid grid;
 
-        private void Awake()
+        public void Init(HexGrid grid)
         {
-            pathfinder = new CellPathfinder(this);
+            this.grid = grid;
+            pathfinder = new CellPathfinder(this, grid);
         }
 
         public void RegisterCellEventObserver(ICellEventObserver cellEventObserver)
@@ -142,7 +144,7 @@ namespace Aspekt.Hex
 
         public bool IsValidPlacement(CellTypes type, HexCoordinates cellCoords, int playerId)
         {
-            if (IsPieceInCell(cellCoords)) return false;
+            if (!grid.IsWithinGridBoundary(cellCoords) || IsPieceInCell(cellCoords)) return false;
 
             if (type == CellTypes.Base) return true;
             
@@ -249,8 +251,10 @@ namespace Aspekt.Hex
                     
                     var coord = new HexCoordinates(x, z);
                     if (omitNonEmpty & IsPieceInCell(coord)) continue;
-                    
-                    coords.Add(coord);;
+                    if (grid.IsWithinGridBoundary(coord))
+                    {
+                        coords.Add(coord);;
+                    }
                 }
             }
             

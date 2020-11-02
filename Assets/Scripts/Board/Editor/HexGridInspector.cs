@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering.VirtualTexturing;
 
 namespace Aspekt.Hex
 {
@@ -29,6 +30,8 @@ namespace Aspekt.Hex
 
             grid.startLocation1 = ShowPositionHandles(grid.startLocation1, 1);
             grid.startLocation2 = ShowPositionHandles(grid.startLocation2, 2);
+
+            ShowBoardLimits(grid);
         }
 
         private HexCoordinates ShowPositionHandles(HexCoordinates coords, int player)
@@ -44,6 +47,24 @@ namespace Aspekt.Hex
             var newCoord = HexCoordinates.FromPosition(newPos);
 
             return newCoord;
+        }
+
+        private void ShowBoardLimits(HexGrid grid)
+        {
+            var limits = grid.GetBoardLimitsInWorldUnits();
+            var points = new[]
+            {
+                new Vector3(-limits.x, 0, -limits.z),
+                new Vector3(-limits.x, 0, limits.z),
+                new Vector3(limits.x, 0, limits.z),
+                new Vector3(limits.x, 0, -limits.z),
+                new Vector3(-limits.x, 0, -limits.z),
+            };
+            
+            Handles.color = Color.cyan;
+            //Handles.DrawLines(points);
+            Handles.DrawPolyLine(points);
+            
         }
         
     }
