@@ -23,6 +23,7 @@ namespace Aspekt.Hex.UI
         [SerializeField] private PlayerInfo player2;
         [SerializeField] private CurrencyUI currency;
         [SerializeField] private ControlPanel controlPanel;
+        [SerializeField] private TurnIndicator turnIndicator;
         [SerializeField] private GameOverUI gameOverUI;
         
         [Header("Cursors")]
@@ -44,6 +45,7 @@ namespace Aspekt.Hex.UI
         {
             this.player = player;
             controlPanel.RegisterSingleObserver(player);
+            turnIndicator.RegisterSingleObserver(player);
             SetGameCursor(HexCursor.Default);
             SetUICursor(HexCursor.Default);
         }
@@ -79,7 +81,7 @@ namespace Aspekt.Hex.UI
             {
                 player1.SetTurnIndicator(false);
                 player2.SetTurnIndicator(false);
-                controlPanel.SetPlayerTurn(null);
+                turnIndicator.SetTurn(null);
                 return;
             }
             
@@ -93,8 +95,8 @@ namespace Aspekt.Hex.UI
                 player1.SetTurnIndicator(false);
                 player2.SetTurnIndicator(true);
             }
-
-            controlPanel.SetPlayerTurn(playerData);
+            
+            turnIndicator.SetTurn(playerData);
         }
 
         public void SetCurrency(int credits)

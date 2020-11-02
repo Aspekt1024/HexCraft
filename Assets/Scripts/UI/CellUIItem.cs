@@ -14,8 +14,6 @@ namespace Aspekt.Hex.UI
 
         private Action onClickCallback;
 
-        private bool hasContent = false;
-        
         public struct Details
         {
             public readonly Sprite Sprite;
@@ -37,8 +35,6 @@ namespace Aspekt.Hex.UI
             spriteRenderer.sprite = details.Sprite;
             onClickCallback = details.Callback;
             costText.text = details.Cost == 0 ? "" : details.Cost.ToString();
-            
-            hasContent = true;
         }
 
         public void CellItemClicked()

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class NetworkGamePlayerHex : NetworkBehaviour, ICellEventObserver, ControlPanel.IEventReceiver
+    public class NetworkGamePlayerHex : NetworkBehaviour, ICellEventObserver, ControlPanel.IEventReceiver, TurnIndicator.IEventReceiver
     {
         public bool IsReady { get; private set; }
         
@@ -64,7 +64,7 @@ namespace Aspekt.Hex
             actions.Update();
         }
 
-        public void OnEndTurnRequested()
+        public void OnEndTurnClicked()
         {
             CmdEndTurn();
         }
@@ -164,6 +164,7 @@ namespace Aspekt.Hex
         [Command]
         private void CmdEndTurn()
         {
+            if (!IsCurrentPlayer) return;
             game.Data.NextTurn();
         }
     }
