@@ -9,7 +9,6 @@ namespace DefaultNamespace
 
         public int TurnNumber;
         public int Credits;
-        public int ActionsRemaining;
 
         public PlayerData(NetworkGamePlayerHex player)
         {

@@ -89,6 +89,7 @@ namespace Aspekt.Hex
         public void AddActionPoints(int actionPoints)
         {
             currentPlayerActionPoints += actionPoints;
+            RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayerActionPoints));
             if (currentPlayerActionPoints >= MaxActionPoints)
             {
                 NextTurn();
@@ -104,6 +105,7 @@ namespace Aspekt.Hex
                 GenerateIncome(player);
             }
             currentPlayerActionPoints = 0;
+            RpcSetPlayerActions((Int16)player.Player.ID, (Int16)MaxActionPoints);
         }
 
         public PlayerData GetPlayerData(NetworkGamePlayerHex player)
@@ -183,6 +185,18 @@ namespace Aspekt.Hex
                     }
                 }
             }
+        }
+
+        [ClientRpc]
+        private void RpcSetPlayerActions(Int16 playerId, Int16 actionCount)
+        {
+            var data = GetPlayerFromId(playerId);
+            game.UI.SetPlayerActionCount(data, MaxActionPoints - currentPlayerActionPoints);
+        }
+
+        private PlayerData GetPlayerFromId(int id)
+        {
+            return playerData.FirstOrDefault(data => data.Player.ID == id);
         }
     }
 }

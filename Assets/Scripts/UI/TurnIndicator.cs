@@ -18,7 +18,8 @@ namespace Aspekt.Hex.UI
         
 #pragma warning disable 649
         [SerializeField] private TextMeshProUGUI label;
-        [SerializeField] private TextMeshProUGUI turnCount;
+        [SerializeField] private TextMeshProUGUI actionsCount;
+        [SerializeField] private TextMeshProUGUI actionsLabel;
         [SerializeField] private GameObject hourGlassObject;
         [SerializeField] private Button endTurnButton;
 #pragma warning restore 649
@@ -44,7 +45,7 @@ namespace Aspekt.Hex.UI
         {
             if (data == null)
             {
-                turnCount.text = "";
+                actionsCount.text = "";
                 label.text = "";
                 return;
             }
@@ -59,9 +60,13 @@ namespace Aspekt.Hex.UI
             }
         }
 
-        public void SetActionCount(int numActions)
+        public void SetActionCount(PlayerData data, int numActions)
         {
-            turnCount.text = numActions.ToString();
+            if (data.Player.hasAuthority)
+            {
+                actionsCount.text = numActions.ToString();
+                actionsLabel.gameObject.SetActive(true);
+            }
         }
 
         public void EndTurn()
@@ -94,10 +99,11 @@ namespace Aspekt.Hex.UI
         
         private IEnumerator ShowOpponentTurnRoutine(PlayerData data)
         {
-            turnCount.text = "";
-            hourGlassObject.SetActive(true);
+            actionsCount.text = "";
             label.text = "";
+            hourGlassObject.SetActive(true);
             endTurnButton.interactable = false;
+            actionsLabel.gameObject.SetActive(false);
             
             yield return new WaitForSeconds(1.5f);
             anim.Play(OpeningAnim, 0, 0f);

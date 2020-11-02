@@ -99,6 +99,11 @@ namespace Aspekt.Hex.UI
             turnIndicator.SetTurn(playerData);
         }
 
+        public void SetPlayerActionCount(PlayerData data, int actionCount)
+        {
+            turnIndicator.SetActionCount(data, actionCount);
+        }
+
         public void SetCurrency(int credits)
         {
             currency.SetCredits(credits);
