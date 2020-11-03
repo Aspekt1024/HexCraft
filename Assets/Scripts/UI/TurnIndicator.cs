@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DefaultNamespace;
 using TMPro;
+using UI.ControlPanel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,11 +14,12 @@ namespace Aspekt.Hex.UI
         public interface IEventReceiver
         {
             void OnEndTurnClicked();
-            void SetCursorInUI(bool isInUI);
+            void SetCursorInUI(MonoBehaviour caller, bool isInUI);
         }
         
 #pragma warning disable 649
         [SerializeField] private TextMeshProUGUI label;
+        [SerializeField] private ActionsIndicator actionsIndicator;
         [SerializeField] private TextMeshProUGUI actionsCount;
         [SerializeField] private TextMeshProUGUI actionsLabel;
         [SerializeField] private GameObject hourGlassObject;
@@ -34,6 +36,11 @@ namespace Aspekt.Hex.UI
         {
             anim = GetComponent<Animator>();
             anim.Play(OpeningAnim, 0, 1f);
+        }
+
+        public void Init(Tooltip tooltip)
+        {
+            actionsIndicator.RegisterObserver(tooltip);
         }
 
         public void RegisterSingleObserver(IEventReceiver observer)
@@ -66,6 +73,11 @@ namespace Aspekt.Hex.UI
             {
                 actionsCount.text = numActions.ToString();
                 actionsLabel.gameObject.SetActive(true);
+                actionsIndicator.SetTurnDetails(true, numActions);
+            }
+            else
+            {
+                actionsIndicator.SetTurnDetails(false, numActions);
             }
         }
 
@@ -76,12 +88,12 @@ namespace Aspekt.Hex.UI
         
         public void OnPointerEnter(PointerEventData eventData)
         {
-            observer?.SetCursorInUI(true);
+            observer?.SetCursorInUI(this, true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            observer?.SetCursorInUI(false);
+            observer?.SetCursorInUI(this, false);
         }
 
         private IEnumerator ShowOwnTurnRoutine(PlayerData data)

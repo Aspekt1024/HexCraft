@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Aspekt.Hex.UI;
 using Mirror;
 using UnityEngine;
@@ -20,6 +22,8 @@ namespace Aspekt.Hex
         private GameManager game;
 
         private UnitActions actions;
+        
+        private readonly List<MonoBehaviour> uiObjectsInMouseover = new List<MonoBehaviour>();
 
         public string DisplayName => displayName;
         
@@ -69,7 +73,20 @@ namespace Aspekt.Hex
             CmdEndTurn();
         }
 
-        public void SetCursorInUI(bool isInUI) => game.UI.SetCursorInUI(isInUI);
+        public void SetCursorInUI(MonoBehaviour caller, bool isInUI)
+        {
+            if (isInUI)
+            {
+                if (uiObjectsInMouseover.Contains(caller)) return;
+                uiObjectsInMouseover.Add(caller);
+            }
+            else
+            {
+                uiObjectsInMouseover.Remove(caller);
+            }
+            
+            game.UI.SetCursorInUI(uiObjectsInMouseover.Any());
+        }
 
         private void HandleDisplayNameChanged(string oldName, string newName)
         {

@@ -45,11 +45,13 @@ namespace Aspekt.Hex.UI
         public void Init(NetworkGamePlayerHex player)
         {
             this.player = player;
-            controlPanel.Init(tooltip);
             controlPanel.RegisterSingleObserver(player);
             turnIndicator.RegisterSingleObserver(player);
             SetGameCursor(HexCursor.Default);
             SetUICursor(HexCursor.Default);
+            
+            controlPanel.Init(tooltip);
+            turnIndicator.Init(tooltip);
             
             tooltip.EnableTooltips();
         }

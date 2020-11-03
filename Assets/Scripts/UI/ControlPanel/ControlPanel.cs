@@ -12,7 +12,7 @@ namespace Aspekt.Hex.UI
         
         public interface IEventReceiver
         {
-            void SetCursorInUI(bool isInUI);
+            void SetCursorInUI(MonoBehaviour caller, bool isInUI);
         }
 
         private IEventReceiver observer;
@@ -31,12 +31,12 @@ namespace Aspekt.Hex.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            observer?.SetCursorInUI(true);
+            observer?.SetCursorInUI(this, true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            observer?.SetCursorInUI(false);
+            observer?.SetCursorInUI(this, false);
         }
     }
 }

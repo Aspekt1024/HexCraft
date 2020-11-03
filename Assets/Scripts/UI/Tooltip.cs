@@ -12,7 +12,9 @@ namespace Aspekt.Hex.UI
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private GameObject costObject;
         [SerializeField] private TextMeshProUGUI costText;
-        [SerializeField] private TextMeshProUGUI[] descriptionFields;
+        [SerializeField] private GameObject actionsObject;
+        [SerializeField] private TextMeshProUGUI actionText;
+        [SerializeField] private TextMeshProUGUI description;
 #pragma warning restore 649
 
         private bool isEnabled;
@@ -33,6 +35,16 @@ namespace Aspekt.Hex.UI
             public readonly int ActionCost;
             public readonly string[] Description;
 
+            public Details(string title, string[] description)
+            {
+                Title = title;
+                CostCurrency1 = 0;
+                CostCurrency2 = 0;
+                CostCurrency3 = 0;
+                ActionCost = 0;
+                Description = description;
+            }
+            
             public Details(string title, int cost1, int cost2, int cost3, int actionCost, string[] description)
             {
                 Title = title;
@@ -130,6 +142,7 @@ namespace Aspekt.Hex.UI
             var tooltipDetails = item.GetTooltipDetails();
             SetTitle(tooltipDetails);
             SetCost(tooltipDetails);
+            SetActions(tooltipDetails);
             SetDescription(tooltipDetails);
             Show();
         }
@@ -160,19 +173,40 @@ namespace Aspekt.Hex.UI
             }
         }
 
+        private void SetActions(Details details)
+        {
+            if (details.ActionCost == 0)
+            {
+                actionsObject.SetActive(false);
+            }
+            else
+            {
+                actionsObject.SetActive(true);
+                actionText.text = details.ActionCost + " Action" + (details.ActionCost == 1 ? "" : "s");
+            }
+        }
+
         private void SetDescription(Details details)
         {
-            // TODO allow any number of items?
-            var numDescriptions = details.Description.Length;
-            for (int i = 0; i < numDescriptions; i++)
+            if (!details.HasDescription)
             {
-                descriptionFields[i].text = details.Description[i];
+                description.gameObject.SetActive(false);
+                return;
             }
             
-            for (int i = numDescriptions; i < descriptionFields.Length; i++)
+            description.gameObject.SetActive(true);
+            
+            var descriptionText = "";
+            foreach (var desc in details.Description)
             {
-                descriptionFields[i].gameObject.SetActive(false);
+                if (descriptionText != "")
+                {
+                    descriptionText += "\n\n";
+                }
+                descriptionText += desc;
             }
+
+            description.text = descriptionText;
         }
     }
 }
