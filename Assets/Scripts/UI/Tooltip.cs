@@ -26,19 +26,30 @@ namespace Aspekt.Hex.UI
         [Serializable]
         public struct Details
         {
-            public string title;
-            public int costCurrency1;
-            public int costCurrency2;
-            public int costCurrency3;
-            public string[] description;
+            public readonly string Title;
+            public readonly int CostCurrency1;
+            public readonly int CostCurrency2;
+            public readonly int CostCurrency3;
+            public readonly int ActionCost;
+            public readonly string[] Description;
 
+            public Details(string title, int cost1, int cost2, int cost3, int actionCost, string[] description)
+            {
+                Title = title;
+                CostCurrency1 = cost1;
+                CostCurrency2 = cost2;
+                CostCurrency3 = cost3;
+                ActionCost = actionCost;
+                Description = description;
+            }
+            
             public bool IsValid()
             {
                 return HasTitle || HasDescription;
             }
 
-            public bool HasTitle => !string.IsNullOrWhiteSpace(title);
-            public bool HasDescription => description.Any() && !string.IsNullOrWhiteSpace(description[0]);
+            public bool HasTitle => !string.IsNullOrWhiteSpace(Title);
+            public bool HasDescription => Description.Any() && !string.IsNullOrWhiteSpace(Description[0]);
         }
 
         protected override void Awake()
@@ -128,7 +139,7 @@ namespace Aspekt.Hex.UI
             if (details.HasTitle)
             {
                 title.gameObject.SetActive(true);
-                title.text = details.title;
+                title.text = details.Title;
             }
             else
             {
@@ -138,24 +149,24 @@ namespace Aspekt.Hex.UI
 
         private void SetCost(Details details)
         {
-            if (details.costCurrency1 == 0)
+            if (details.CostCurrency1 == 0)
             {
                 costObject.SetActive(false);
             }
             else
             {
                 costObject.SetActive(true);
-                costText.text = details.costCurrency1.ToString();
+                costText.text = details.CostCurrency1.ToString();
             }
         }
 
         private void SetDescription(Details details)
         {
             // TODO allow any number of items?
-            var numDescriptions = details.description.Length;
+            var numDescriptions = details.Description.Length;
             for (int i = 0; i < numDescriptions; i++)
             {
-                descriptionFields[i].text = details.description[i];
+                descriptionFields[i].text = details.Description[i];
             }
             
             for (int i = numDescriptions; i < descriptionFields.Length; i++)

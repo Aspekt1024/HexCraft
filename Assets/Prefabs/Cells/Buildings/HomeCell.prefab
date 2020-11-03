@@ -46,14 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - tooltipDetails:
-      title: Build Farm
-      costCurrency1: 10
-      costCurrency2: 0
-      costCurrency3: 0
-      description:
-      - Generates 1 credit at the start of your turn.
-    sprite: {fileID: 21300000, guid: 4ed6710b3d55b2f4692172e012eb2c49, type: 3}
+  - definiton: {fileID: 11400000, guid: 23a5950c911e37c42a1052d366232dc5, type: 2}
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -69,14 +62,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - tooltipDetails:
-      title: Build Barracks
-      costCurrency1: 7
-      costCurrency2: 0
-      costCurrency3: 0
-      description:
-      - Allows the training of infantry
-    sprite: {fileID: 21300000, guid: ab2c0effa4522104dbdb381ab0b16a7b, type: 3}
+  - definiton: {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -102,10 +88,11 @@ MonoBehaviour:
   greenMaterial: {fileID: 2100000, guid: 774e3206a73de7d49b22dca748ca487c, type: 2}
   yellowMaterial: {fileID: 2100000, guid: 54adf927cb20b8d4e880dc266a7eea38, type: 2}
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
-  DisplayName: Home Base
+  DisplayName: Town Hall
   PlacementRadius: 2
   Cost: 15
   MaxHP: 3
+  BasicDescription: Protect this building, or you lose!
   Coordinates:
     x: 0
     z: 0

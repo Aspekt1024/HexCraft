@@ -25,6 +25,7 @@ namespace Aspekt.Hex
         public int PlacementRadius = 2;
         public int Cost = 2;
         public int MaxHP = 1;
+        public string BasicDescription = "";
         
         public const float OuterRadius = 1f;
         public const float InnerRadius = OuterRadius * 0.866025404f;

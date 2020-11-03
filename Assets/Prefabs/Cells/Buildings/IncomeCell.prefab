@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa203622da84cb38358a4022a10a1ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actions: []
   hexOutline: {fileID: 8217559798967141292}
   cellRenderers:
   - {fileID: 4694660904767215729}
@@ -55,10 +56,11 @@ MonoBehaviour:
   greenMaterial: {fileID: 2100000, guid: 774e3206a73de7d49b22dca748ca487c, type: 2}
   yellowMaterial: {fileID: 2100000, guid: 54adf927cb20b8d4e880dc266a7eea38, type: 2}
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
-  DisplayName: Generator
+  DisplayName: Farm
   PlacementRadius: 2
   Cost: 10
   MaxHP: 2
+  BasicDescription: Generates 1 food per round, at the start of your turn.
   Coordinates:
     x: 0
     z: 0

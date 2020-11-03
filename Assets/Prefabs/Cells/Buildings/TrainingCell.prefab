@@ -46,15 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - tooltipDetails:
-      title: Train Swordsman
-      costCurrency1: 5
-      costCurrency2: 0
-      costCurrency3: 0
-      description:
-      - Trains a swordsman.
-      - A basic ground unit with a moderate short-range attack.
-    sprite: {fileID: 21300000, guid: 3d5de3033771a224ba4f9b2409012617, type: 3}
+  - definiton: {fileID: 11400000, guid: a98df505ed862b84b9687d943ed9c1ba, type: 2}
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -70,15 +62,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - tooltipDetails:
-      title: Train Paladin
-      costCurrency1: 0
-      costCurrency2: 0
-      costCurrency3: 0
-      description:
-      - Trains the paladin.
-      - A fast, powerful ground unit with a strong short-range attack.
-    sprite: {fileID: 21300000, guid: e6b241e893089a444ada2b7be8ed5f7b, type: 3}
+  - definiton: {fileID: 11400000, guid: 310b28ff9b45fa74fb1e4972c57dab13, type: 2}
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -104,10 +88,11 @@ MonoBehaviour:
   greenMaterial: {fileID: 2100000, guid: 774e3206a73de7d49b22dca748ca487c, type: 2}
   yellowMaterial: {fileID: 2100000, guid: 54adf927cb20b8d4e880dc266a7eea38, type: 2}
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
-  DisplayName: Training
+  DisplayName: Barracks
   PlacementRadius: 5
   Cost: 7
   MaxHP: 2
+  BasicDescription: Trains ground units.
   Coordinates:
     x: 0
     z: 0

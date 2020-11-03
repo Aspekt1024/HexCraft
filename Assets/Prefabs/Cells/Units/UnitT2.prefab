@@ -46,14 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - tooltipDetails:
-      title: Move
-      costCurrency1: 0
-      costCurrency2: 0
-      costCurrency3: 0
-      description:
-      - Direct the unit to move to a free space.
-    sprite: {fileID: 21300000, guid: df13e416863370c41add5982a09d00d6, type: 3}
+  - definiton: {fileID: 11400000, guid: 7ae43f96e0654834c9e5ad1b5c738dd2, type: 2}
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -69,14 +62,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - tooltipDetails:
-      title: Attack
-      costCurrency1: 0
-      costCurrency2: 0
-      costCurrency3: 0
-      description:
-      - Direct the unit to attack a hostile unit or building.
-    sprite: {fileID: 21300000, guid: 28a02df1369b7fd4eab040459b0cc450, type: 3}
+  - definiton: {fileID: 11400000, guid: aa4a25d2f374b464a832c37f601abcb1, type: 2}
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -108,6 +94,7 @@ MonoBehaviour:
   PlacementRadius: 1
   Cost: 20
   MaxHP: 3
+  BasicDescription: A fast ground unit with a strong attack.
   Coordinates:
     x: 0
     z: 0
