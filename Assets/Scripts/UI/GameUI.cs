@@ -24,6 +24,7 @@ namespace Aspekt.Hex.UI
         [SerializeField] private CurrencyUI currency;
         [SerializeField] private ControlPanel controlPanel;
         [SerializeField] private TurnIndicator turnIndicator;
+        [SerializeField] private Tooltip tooltip;
         [SerializeField] private GameOverUI gameOverUI;
         
         [Header("Cursors")]
@@ -44,10 +45,18 @@ namespace Aspekt.Hex.UI
         public void Init(NetworkGamePlayerHex player)
         {
             this.player = player;
+            controlPanel.Init(tooltip);
             controlPanel.RegisterSingleObserver(player);
             turnIndicator.RegisterSingleObserver(player);
             SetGameCursor(HexCursor.Default);
             SetUICursor(HexCursor.Default);
+            
+            tooltip.EnableTooltips();
+        }
+
+        private void Update()
+        {
+            tooltip.Tick();
         }
 
         public void ShowWinner(PlayerData winner)

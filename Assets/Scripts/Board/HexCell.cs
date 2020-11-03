@@ -8,6 +8,7 @@ namespace Aspekt.Hex
     public abstract class HexCell : MonoBehaviour
     {
 #pragma warning disable 649
+        [SerializeField] private CellUIItem.Details[] actions;
         [SerializeField] private CellHexOutline hexOutline;
         [SerializeField] private Renderer[] cellRenderers;
         [SerializeField] private Material blackMaterial;
@@ -27,13 +28,13 @@ namespace Aspekt.Hex
         
         public const float OuterRadius = 1f;
         public const float InnerRadius = OuterRadius * 0.866025404f;
-
-        public abstract List<CellUIItem.Details> ItemDetails { get; protected set; }
         
         [Header("Info")]
         public HexCoordinates Coordinates;
         public int PlayerId;
         public NetworkGamePlayerHex Owner;
+
+        public CellUIItem.Details[] Actions => actions;
         
         public int CurrentHP { get; protected set; }
 
@@ -136,7 +137,7 @@ namespace Aspekt.Hex
         public void SetUnselected() => hexOutline.SetUnselected();
 
         public abstract bool CanCreate(Cells.CellTypes cellType);
-        protected abstract void OnInit();
+        protected virtual void OnInit() {}
 
         private void SetColor(Color color)
         {

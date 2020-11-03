@@ -20,6 +20,14 @@ namespace Aspekt.Hex.UI.Control
             ClearDetails();
         }
 
+        public void Init(Tooltip tooltip)
+        {
+            foreach (var actionItem in cellActions)
+            {
+                actionItem.RegisterObserver(tooltip);
+            }
+        }
+
         public void SetCellDetails(HexCell cell, NetworkGamePlayerHex queryingPlayer)
         {
             if (cell == null)
@@ -46,7 +54,7 @@ namespace Aspekt.Hex.UI.Control
 
         private void ShowCellActions(HexCell cell)
         {
-            for (int i = 0; i < cell.ItemDetails.Count; i++)
+            for (int i = 0; i < cell.Actions.Length; i++)
             {
                 if (i >= cellActions.Count)
                 {
@@ -54,10 +62,10 @@ namespace Aspekt.Hex.UI.Control
                     return;
                 }
                 
-                var action = cell.ItemDetails[i];
+                var action = cell.Actions[i];
                 cellActions[i].ShowActions(action);
             }
-            HideCellActions(cell.ItemDetails.Count);
+            HideCellActions(cell.Actions.Length);
         }
 
         private void ClearDetails()

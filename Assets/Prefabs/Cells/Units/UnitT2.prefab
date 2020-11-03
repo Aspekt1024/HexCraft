@@ -45,6 +45,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a160e2c036c483e84db9530dd1b40bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actions:
+  - tooltipDetails:
+      title: Move
+      costCurrency1: 0
+      costCurrency2: 0
+      costCurrency3: 0
+      description:
+      - Direct the unit to move to a free space.
+    sprite: {fileID: 21300000, guid: df13e416863370c41add5982a09d00d6, type: 3}
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: -6404335694949812911}
+          m_TargetAssemblyTypeName: Aspekt.Hex.UnitCell, Assembly-CSharp
+          m_MethodName: ActionMove
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - tooltipDetails:
+      title: Attack
+      costCurrency1: 0
+      costCurrency2: 0
+      costCurrency3: 0
+      description:
+      - Direct the unit to attack a hostile unit or building.
+    sprite: {fileID: 21300000, guid: 28a02df1369b7fd4eab040459b0cc450, type: 3}
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: -6404335694949812911}
+          m_TargetAssemblyTypeName: Aspekt.Hex.UnitCell, Assembly-CSharp
+          m_MethodName: ActionAttack
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   hexOutline: {fileID: 1488597347085281970}
   cellRenderers:
   - {fileID: 1902381486900016043}
@@ -66,8 +113,6 @@ MonoBehaviour:
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
-  moveImage: {fileID: 21300000, guid: 083b79cd6280b4186beaea0a39352110, type: 3}
-  attackImage: {fileID: 21300000, guid: f9bb58f5cd5d74e6f8b342a51fa10128, type: 3}
   model: {fileID: 1902381486897696089}
   MoveRange: 2
   AttackRange: 2

@@ -7,7 +7,14 @@ namespace Aspekt.Hex.UI
     public abstract class UIElement : MonoBehaviour
     {
         public bool IsVisible => state != States.Hidden;
+        public bool IsHidden => state == States.Hidden;
+        public bool IsShowing => state == States.Visible || state == States.TransitionToVisible;
         public bool IsHiding => state == States.Hidden || state == States.TransitionToHidden;
+        
+#pragma warning disable 649
+        [SerializeField] private bool isInteractable;
+        [SerializeField] private bool blocksRaycasts;
+#pragma warning disable 649
 
         private enum States
         {
@@ -19,7 +26,7 @@ namespace Aspekt.Hex.UI
 
         private States state;
 
-        protected const float FadeDuration = 0.6f; 
+        protected float FadeDuration = 0.6f; 
         
         private CanvasGroup group;
         private Coroutine showRoutine;
@@ -77,8 +84,8 @@ namespace Aspekt.Hex.UI
             gameObject.SetActive(true);
             state = States.Visible;
             group.alpha = 1f;
-            group.interactable = true;
-            group.blocksRaycasts = true;
+            group.interactable = isInteractable;
+            group.blocksRaycasts = blocksRaycasts;
         }
 
         private void SetHidden()

@@ -17,6 +17,11 @@ namespace Aspekt.Hex.UI
 
         private IEventReceiver observer;
 
+        public void Init(Tooltip tooltip)
+        {
+            cellControl.Init(tooltip);
+        }
+        
         public void RegisterSingleObserver(IEventReceiver observer)
         {
             this.observer = observer;

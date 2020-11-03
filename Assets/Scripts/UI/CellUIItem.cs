@@ -1,45 +1,44 @@
 using System;
-using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Aspekt.Hex.UI
 {
-    public class CellUIItem : MonoBehaviour
+    public class CellUIItem : TooltipElement
     {
 #pragma warning disable 649
         [SerializeField] private Image spriteRenderer;
-        [SerializeField] private TextMeshProUGUI costText;
 #pragma warning restore 649
 
-        private Action onClickCallback;
+        private EventTrigger.TriggerEvent onClickCallback;
+        private Details currentDetails;
 
+        [Serializable]
         public struct Details
         {
-            public readonly Sprite Sprite;
-            public readonly Action Callback;
-            public readonly int Cost;
-
-            public Details(Sprite sprite, Action callback, int cost)
-            {
-                Sprite = sprite;
-                Callback = callback;
-                Cost = cost;
-            }
+            public Tooltip.Details tooltipDetails;
+            public Sprite sprite;
+            public EventTrigger.TriggerEvent callback;
         }
         
         public void ShowActions(Details details)
         {
             gameObject.SetActive(true);
-            
-            spriteRenderer.sprite = details.Sprite;
-            onClickCallback = details.Callback;
-            costText.text = details.Cost == 0 ? "" : details.Cost.ToString();
+
+            currentDetails = details;
+            spriteRenderer.sprite = details.sprite;
+            onClickCallback = details.callback;
         }
 
         public void CellItemClicked()
         {
-            onClickCallback?.Invoke();
+            onClickCallback?.Invoke(null);
+        }
+
+        public override Tooltip.Details GetTooltipDetails()
+        {
+            return currentDetails.tooltipDetails;
         }
     }
 }

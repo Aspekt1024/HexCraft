@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Aspekt.Hex.UI;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -9,8 +7,6 @@ namespace Aspekt.Hex
     public abstract class UnitCell : HexCell
     {
 #pragma warning disable 649
-        [SerializeField] private Sprite moveImage;
-        [SerializeField] private Sprite attackImage;
         [SerializeField] private Transform model;
 #pragma warning restore 649
         
@@ -18,9 +14,6 @@ namespace Aspekt.Hex
         public int MoveRange;
         public int AttackRange;
         public int AttackDamage;
-        
-        public override List<CellUIItem.Details> ItemDetails { get; protected set; }
-
         private Animator Anim;
 
         public bool HasMoved { get; private set; }
@@ -40,7 +33,7 @@ namespace Aspekt.Hex
 
         protected override void OnInit()
         {
-            SetupActionItems();
+            // Must be done here instead of Start
             Anim = GetComponentInChildren<Animator>();
         }
 
@@ -56,15 +49,6 @@ namespace Aspekt.Hex
             unitActionObservers.Remove(observer);
         }
         
-        protected virtual void SetupActionItems()
-        {
-            ItemDetails = new List<CellUIItem.Details>
-            {
-                new CellUIItem.Details(attackImage, ActionAttack, 0),
-                new CellUIItem.Details(moveImage, ActionMove, 0),
-            };
-        }
-
         /// <summary>
         /// Called at the start of a new turn
         /// </summary>
@@ -188,7 +172,7 @@ namespace Aspekt.Hex
             Destroy(gameObject);
         }
 
-        private void ActionAttack()
+        public void ActionAttack()
         {
             foreach (var observer in EventObservers)
             {
@@ -196,7 +180,7 @@ namespace Aspekt.Hex
             }
         }
 
-        private void ActionMove()
+        public void ActionMove()
         {
             foreach (var observer in EventObservers)
             {

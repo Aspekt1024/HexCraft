@@ -45,6 +45,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25a1bf4c22d140b182d95270dfdc09b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actions:
+  - tooltipDetails:
+      title: Train Swordsman
+      costCurrency1: 5
+      costCurrency2: 0
+      costCurrency3: 0
+      description:
+      - Trains a swordsman.
+      - A basic ground unit with a moderate short-range attack.
+    sprite: {fileID: 21300000, guid: 3d5de3033771a224ba4f9b2409012617, type: 3}
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1312393799163408318}
+          m_TargetAssemblyTypeName: Aspekt.Hex.TrainingCell, Assembly-CSharp
+          m_MethodName: ActionTrainUnitT1
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - tooltipDetails:
+      title: Train Paladin
+      costCurrency1: 0
+      costCurrency2: 0
+      costCurrency3: 0
+      description:
+      - Trains the paladin.
+      - A fast, powerful ground unit with a strong short-range attack.
+    sprite: {fileID: 21300000, guid: e6b241e893089a444ada2b7be8ed5f7b, type: 3}
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1312393799163408318}
+          m_TargetAssemblyTypeName: Aspekt.Hex.TrainingCell, Assembly-CSharp
+          m_MethodName: ActionTrainUnitT2
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   hexOutline: {fileID: 6301690519140048039}
   cellRenderers:
   - {fileID: 715057725961301179}
@@ -64,8 +113,6 @@ MonoBehaviour:
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
-  t1UnitSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  t2UnitSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1001 &715057725963334875
 PrefabInstance:
   m_ObjectHideFlags: 0
