@@ -6,15 +6,12 @@ namespace Aspekt.Hex
 {
     public abstract class UnitCell : HexCell
     {
-#pragma warning disable 649
-        [SerializeField] private Transform model;
-#pragma warning restore 649
+        protected Transform Model;
         
         [Header("Unit Settings")]
         public int MoveRange;
         public int AttackRange;
         public int AttackDamage;
-        private Animator Anim;
 
         public bool HasMoved { get; private set; }
         public bool HasAttacked { get; private set; }
@@ -28,8 +25,10 @@ namespace Aspekt.Hex
         
         private void Start()
         {
-            model.LookAt(transform.position + Vector3.back);
+            Model.LookAt(transform.position + Vector3.back);
         }
+        
+        protected Animator Anim;
 
         protected override void OnInit()
         {
@@ -83,7 +82,7 @@ namespace Aspekt.Hex
             
             if (CurrentHP > 0)
             {
-                model.LookAt(attacker.transform);
+                Model.LookAt(attacker.transform);
                 Anim.SetTrigger(AnimDamagedTrigger);
             }
         }
@@ -99,7 +98,7 @@ namespace Aspekt.Hex
             for (int i = 0; i < path.Count; i++)
             {
                 // TODO smooth rotation
-                model.LookAt(path[i]);
+                Model.LookAt(path[i]);
 
                 while (Vector3.Distance(pos, path[i]) > 0.05f)
                 {
@@ -145,7 +144,7 @@ namespace Aspekt.Hex
 
         private IEnumerator AttackRoutine(HexCell target, int damage)
         {
-            model.LookAt(target.transform);
+            Model.LookAt(target.transform);
             Anim.SetTrigger(AnimAttackTrigger);
             yield return new WaitForSeconds(0.3f);
             target.TakeDamage(this, damage);

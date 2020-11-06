@@ -79,8 +79,6 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   hexOutline: {fileID: 1105101854328856294}
-  cellRenderers:
-  - {fileID: 8061839451840137656}
   blackMaterial: {fileID: 2100000, guid: 19e5e5a2c659faf49a059ec9fc3e642d, type: 2}
   whiteMaterial: {fileID: 2100000, guid: 0c68c1882ddd40b4ebf2fa7eae477af0, type: 2}
   redMaterial: {fileID: 2100000, guid: a2085ab309c94a143a706621cd42e213, type: 2}
@@ -98,6 +96,8 @@ MonoBehaviour:
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
+  renderers:
+  - {fileID: 8061839451840137656}
 --- !u!1001 &8061839451838108120
 PrefabInstance:
   m_ObjectHideFlags: 0

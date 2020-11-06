@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class IncomeCell : HexCell
+    public class IncomeCell : BuildingCell
     {
         [Header("Income Settings")]
         public int CreditsPerRound = 1;

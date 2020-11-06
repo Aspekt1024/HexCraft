@@ -12,17 +12,38 @@ namespace Aspekt.Hex
 
         private UnitModel currentModel;
 
-        public void Init(int armorLevel, int weaponLevel, int mountLevel)
+        private int armorLevel;
+        private int weaponLevel;
+        private int shieldLevel;
+
+        private void Awake()
         {
+            SetModel(groundUnitModel);
+        }
+
+        protected override void OnInit()
+        {
+            armorLevel = 0;
+            weaponLevel = 0;
+            shieldLevel = 0;
+            var mountLevel = 0;
+            
             SetArmorLevel(armorLevel);
             SetWeaponLevel(weaponLevel);
+            SetShieldLevel(shieldLevel);
             SetMountLevel(mountLevel);
         }
+
+#region Debug and Test
 
         [ContextMenu("setup")]
         public void Setup()
         {
+            SetModel(groundUnitModel);
             SetMount0();
+            SetArmor0();
+            SetWeapon0();
+            SetShield0();
         }
 
         [ContextMenu("armor0")]
@@ -43,6 +64,15 @@ namespace Aspekt.Hex
         [ContextMenu("weapon3")]
         public void SetWeapon3() => SetWeaponLevel(3);
         
+        [ContextMenu("shield0")]
+        public void SetShield0() => SetShieldLevel(0);
+        [ContextMenu("shield1")]
+        public void SetShield1() => SetShieldLevel(1);
+        [ContextMenu("shield2")]
+        public void SetShield2() => SetShieldLevel(2);
+        [ContextMenu("shield3")]
+        public void SetShield3() => SetShieldLevel(3);
+        
         [ContextMenu("mount0")]
         public void SetMount0() => SetMountLevel(0);
         [ContextMenu("mount1")]
@@ -51,9 +81,8 @@ namespace Aspekt.Hex
         public void SetMount2() => SetMountLevel(2);
         [ContextMenu("mount3")]
         public void SetMount3() => SetMountLevel(3);
-
-        private int armorLevel;
-        private int weaponLevel;
+        
+#endregion Debug and Test
         
         public void SetArmorLevel(int level)
         {
@@ -67,21 +96,43 @@ namespace Aspekt.Hex
             currentModel.SetWeapon(level);
         }
 
+        public void SetShieldLevel(int level)
+        {
+            shieldLevel = level;
+            currentModel.SetShield(level);
+        }
+
         public void SetMountLevel(int level)
         {
             if (level == 0)
             {
-                groundUnitModel.SetEnabled();
-                mountedUnitModel.SetDisabled();
-                currentModel = groundUnitModel;
-                SetEquipmentLevels();
-                return;
+                SetModel(groundUnitModel);
+            }
+            else
+            {
+                SetModel(mountedUnitModel);
+                mountedUnitModel.SetMountLevel(level - 1);
             }
             
-            groundUnitModel.SetDisabled();
-            mountedUnitModel.SetEnabled();
-            currentModel = mountedUnitModel;
-            mountedUnitModel.SetMountLevel(level - 1);
+            SetEquipmentLevels();
+        }
+
+        private void SetModel(UnitModel model)
+        {
+            Model = model.transform;
+            currentModel = model;
+            Anim = currentModel.GetComponent<Animator>();
+            
+            if (model == groundUnitModel)
+            {
+                groundUnitModel.SetEnabled();
+                mountedUnitModel.SetDisabled();
+            }
+            else
+            {
+                groundUnitModel.SetDisabled();
+                mountedUnitModel.SetEnabled();
+            }
             
             SetEquipmentLevels();
         }
@@ -89,7 +140,21 @@ namespace Aspekt.Hex
         private void SetEquipmentLevels()
         {
             currentModel.SetArmor(armorLevel);
-            currentModel.SetWeapon(armorLevel);
+            currentModel.SetWeapon(weaponLevel);
+            currentModel.SetShield(shieldLevel);
+        }
+
+        protected override void SetMaterial(Material material)
+        {
+            CellMaterial = material;
+            groundUnitModel.SetMaterial(material);
+            mountedUnitModel.SetMaterial(material);
+        }
+
+        protected override void SetColor(Color color)
+        {
+            groundUnitModel.SetColor(color);
+            mountedUnitModel.SetColor(color);
         }
     }
 }

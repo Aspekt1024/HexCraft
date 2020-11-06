@@ -11,6 +11,7 @@ namespace Aspekt.Hex
             Base = 1000,
             Training = 1200,
             Income = 1300,
+            MeleeUnit = 2000,
             UnitT1 = 2010,
             UnitT2 = 2020,
         }
@@ -30,6 +31,7 @@ namespace Aspekt.Hex
         [Header("Units")]
         [SerializeField] private HexCell unit1;
         [SerializeField] private HexCell unit2;
+        [SerializeField] private HexCell meleeUnit;
 
         [Header("Display")]
         [SerializeField] private PathIndicator pathIndicator;
@@ -203,6 +205,8 @@ namespace Aspekt.Hex
                     return training;
                 case CellTypes.Income:
                     return income;
+                case CellTypes.MeleeUnit:
+                    return meleeUnit;
                 case CellTypes.UnitT1:
                     return unit1;
                 case CellTypes.UnitT2:

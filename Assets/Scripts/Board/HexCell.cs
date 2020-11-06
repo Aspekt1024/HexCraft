@@ -10,7 +10,6 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private CellUIItem.Details[] actions;
         [SerializeField] private CellHexOutline hexOutline;
-        [SerializeField] private Renderer[] cellRenderers;
         [SerializeField] private Material blackMaterial;
         [SerializeField] private Material whiteMaterial;
         [SerializeField] private Material redMaterial;
@@ -56,7 +55,7 @@ namespace Aspekt.Hex
 
         protected Cells CellData;
         
-        private Material cellMaterial;
+        protected Material CellMaterial;
 
         public void Init(Cells cells)
         {
@@ -140,33 +139,18 @@ namespace Aspekt.Hex
         public abstract bool CanCreate(Cells.CellTypes cellType);
         protected virtual void OnInit() {}
 
-        private void SetColor(Color color)
-        {
-            foreach (var r in cellRenderers)
-            {
-                var material = r.material;
-                material.color = color;
-                r.material = material;
-            }
-        }
+        protected abstract void SetColor(Color color);
         
         private void ApplyHoloShader(Shader shader)
         {
-            var material = new Material(cellMaterial)
+            var material = new Material(CellMaterial)
             {
                 shader = shader
             };
             SetMaterial(material);
         }
 
-        private void SetMaterial(Material material)
-        {
-            cellMaterial = material;
-            foreach (var r in cellRenderers)
-            {
-                r.materials = new[] {material};
-            }
-        }
+        protected abstract void SetMaterial(Material material);
 
         private void SetMaterialFromColour(Cells.Colours colour)
         {

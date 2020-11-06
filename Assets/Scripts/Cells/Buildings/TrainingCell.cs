@@ -4,26 +4,18 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class TrainingCell : HexCell
+    public class TrainingCell : BuildingCell
     {
         public override bool CanCreate(Cells.CellTypes cellType)
         {
-            return cellType == Cells.CellTypes.UnitT1 || cellType == Cells.CellTypes.UnitT2;
+            return cellType == Cells.CellTypes.MeleeUnit || cellType == Cells.CellTypes.UnitT2;
         }
 
-        public void ActionTrainUnitT1()
+        public void ActionTrainMeleeUnit()
         {
             foreach (var observer in EventObservers)
             {
-                observer.IndicateBuildCell(Cells.CellTypes.UnitT1, this);
-            }
-        }
-
-        public void ActionTrainUnitT2()
-        {
-            foreach (var observer in EventObservers)
-            {
-                observer.IndicateBuildCell(Cells.CellTypes.UnitT2, this);
+                observer.IndicateBuildCell(Cells.CellTypes.MeleeUnit, this);
             }
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class HomeCell : HexCell
+    public class HomeCell : BuildingCell
     {
         public override bool CanCreate(Cells.CellTypes cellType)
         {

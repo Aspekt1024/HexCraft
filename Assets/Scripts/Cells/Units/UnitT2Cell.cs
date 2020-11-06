@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Aspekt.Hex.UI;
+using UnityEngine;
 
 namespace Aspekt.Hex
 {
@@ -7,6 +8,16 @@ namespace Aspekt.Hex
     {
         private void Start()
         {
+        }
+
+        protected override void SetColor(Color color)
+        {
+            
+        }
+
+        protected override void SetMaterial(Material material)
+        {
+            
         }
     }
 }

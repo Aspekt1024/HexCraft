@@ -6,6 +6,7 @@ namespace Aspekt.Hex
     public class UnitModel : MonoBehaviour
     {
 #pragma warning disable 649
+        [SerializeField] private Renderer[] renderers;
         [SerializeField] private ArmorSet[] armorSets;
         [SerializeField] private GameObject[] weapons;
         [SerializeField] private GameObject[] shields;
@@ -48,9 +49,28 @@ namespace Aspekt.Hex
 
         public void SetShield(int level)
         {
+            level--; // Shield level 0 = no shield, so make it match index -1 (nothing)
             for (int i = 0; i < shields.Length; i++)
             {
                 shields[i].SetActive(i == level);
+            }
+        }
+
+        public void SetMaterial(Material material)
+        {
+            foreach (var r in renderers)
+            {
+                r.materials = new[] {material};
+            }
+        }
+
+        public void SetColor(Color color)
+        {
+            foreach (var r in renderers)
+            {
+                var material = r.material;
+                material.color = color;
+                r.material = material;
             }
         }
     }
