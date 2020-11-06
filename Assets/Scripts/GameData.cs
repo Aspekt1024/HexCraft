@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DefaultNamespace;
 using Mirror;
 
 namespace Aspekt.Hex
@@ -16,6 +15,8 @@ namespace Aspekt.Hex
         private GameConfig config;
 
         private readonly List<PlayerData> playerData = new List<PlayerData>();
+        
+        private UpgradeData upgradeData;
 
         private PlayerData currentPlayer;
         private int currentPlayerActionPoints;
