@@ -9,7 +9,7 @@ namespace Aspekt.Hex.Actions
         public string title;
         public string description;
         
-        public override Tooltip.Details GetTooltipDetails()
+        protected override Tooltip.Details GetTooltipRequirementsMet()
         {
             return new Tooltip.Details(
                 title, 
@@ -17,6 +17,19 @@ namespace Aspekt.Hex.Actions
                 1,
                 new[] {description}
             );
+        }
+
+        protected override Tooltip.Details GetTooltipRequirementsNotMet()
+        {
+            return new Tooltip.Details(
+                title,
+                "You cannot perform this action right now.");
+        }
+
+        protected override bool IsRequirementsMet()
+        {
+            // TODO return is player turn
+            return true;
         }
     }
 }

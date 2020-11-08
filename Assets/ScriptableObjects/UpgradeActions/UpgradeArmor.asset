@@ -15,14 +15,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 0010e352a9b1abc4ebab3f3235c95e0b, type: 3}
   upgradeDetails:
   - icon: {fileID: 21300000, guid: 0010e352a9b1abc4ebab3f3235c95e0b, type: 3}
-    title: Leather Armor
-    cost: 5
-    description: +2 HP to all units.
+    tech: 3110
   - icon: {fileID: 21300000, guid: fc6468be32c0f5449bef5dee3059a6f6, type: 3}
-    title: Plate Armor
-    cost: 7
-    description: +2 HP to all units.
+    tech: 3111
   - icon: {fileID: 21300000, guid: fc4789f021f02264385fab7ff3625027, type: 3}
-    title: Mithral Armor
-    cost: 10
-    description: +2 HP to all units.
+    tech: 3112

@@ -1,18 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Aspekt.Hex.Config;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
 namespace Aspekt.Hex.Actions
 {
-    // TODO move to Aspekt.Hex namespace
-    public enum UpgradeTypes
-    {
-        Armor = 1000,
-        Weapon = 2000,
-        Shield = 3000,
-        Mount = 4000,
-    }
-    
     [CreateAssetMenu(menuName = "Hex/UpgradeAction")]
     public class UpgradeAction : ActionDefinition
     {
@@ -20,31 +14,73 @@ namespace Aspekt.Hex.Actions
         public struct UpgradeDetails
         {
             public Sprite icon;
-            public string title;
-            public int cost;
-            public string description;
+            public Technology tech;
         }
 
         [Tooltip("Defines the upgrade details per level")]
         public UpgradeDetails[] upgradeDetails;
-        
-        public override Tooltip.Details GetTooltipDetails()
+
+        private UpgradeDetails currentLevelTech;
+        private TechDetails currentLevelTechDetails;
+
+        public override void Update()
         {
-            var currentLevel = GetCurrentLevel();
-            var details = upgradeDetails[currentLevel];
-            
+            GetCurrentLevelTechDetails();
+        }
+
+        public override Sprite GetIcon()
+        {
+            return currentLevelTech.icon;
+        }
+
+        public override bool CanDisplay()
+        {
+            var allTech = upgradeDetails.Select(d => d.tech).ToList();
+            return !Data.IsTechAvailable(allTech, PlayerId);
+        }
+
+        public Technology GetNextTech()
+        {
+            return currentLevelTechDetails.technology;
+        }
+        
+        protected override bool IsRequirementsMet()
+        {
+            return IsTechAvailable(currentLevelTechDetails.requiredTech);
+        }
+
+        protected override Tooltip.Details GetTooltipRequirementsMet()
+        {
             return new Tooltip.Details(
-                details.title, 
-                details.cost, 0, 0, 
+                currentLevelTechDetails.title, 
+                currentLevelTechDetails.cost, 0, 0, 
                 1,
-                new[] {details.description}
+                new[] {currentLevelTechDetails.description}
             );
         }
 
-        private int GetCurrentLevel()
+        protected override Tooltip.Details GetTooltipRequirementsNotMet()
         {
-            // TODO get upgrade level from player data
-            return 0;
+            return new Tooltip.Details(
+                currentLevelTechDetails.title,
+                GenerateRequirementsText(currentLevelTechDetails.requiredTech));
+        }
+
+        private void GetCurrentLevelTechDetails()
+        {
+            // TODO this is an inefficient and potentially expensive operation. Profile for this!
+            for (int i = 0; i < upgradeDetails.Length; i++)
+            {
+                if (Data.IsTechAvailable(upgradeDetails[i].tech, PlayerId)) continue;
+
+                var details = Data.Config.GetTechDetails(upgradeDetails[i].tech);
+                if (Data.IsTechAvailable(details.requiredTech, PlayerId))
+                {
+                    currentLevelTech = upgradeDetails[i];
+                    currentLevelTechDetails = details;
+                    return;
+                }
+            }
         }
     }
 }

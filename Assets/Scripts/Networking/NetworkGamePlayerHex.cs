@@ -110,16 +110,16 @@ namespace Aspekt.Hex
             actions.SetBuild(originator, type);
         }
 
-        public void UpgradeCell(HexCell originator)
-        {
-            // TODO upgrade
-            Debug.Log("upgrade cell " + originator.DisplayName);
-        }
-
         public void IndicateUnitAttack(UnitCell unit)
         {
             if (!IsCurrentPlayer) return;
             actions.SetUnitAttack(unit);
+        }
+
+        public void TryPurchaseTech(Technology tech)
+        {
+            Debug.Log("Gameplayer: purchasing " + tech);
+            //game.Data.TryPurchaseTech(tech, ID);
         }
 
         public void IndicateUnitMove(UnitCell unit)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
@@ -7,14 +8,26 @@ namespace Aspekt.Hex.Actions
     public class BuildAction : ActionDefinition
     {
         public HexCell prefab;
-        
-        public override Tooltip.Details GetTooltipDetails()
+        public List<Technology> techRequirements;
+
+        protected override bool IsRequirementsMet()
+        {
+            return IsTechAvailable(techRequirements);
+        }
+
+        protected override Tooltip.Details GetTooltipRequirementsMet()
         {
             return new Tooltip.Details(
-                GetBuildTitle(), 
-                prefab.Cost, 0, 0, 
-                1,
-                new[] {prefab.BasicDescription}
+                GetBuildTitle(),
+                prefab.Cost,
+                0, 0, 0,
+                new[] {prefab.BasicDescription});
+        }
+
+        protected override Tooltip.Details GetTooltipRequirementsNotMet() {
+            return new Tooltip.Details(
+                GetBuildTitle(),
+                GenerateRequirementsText(techRequirements)
             );
         }
 

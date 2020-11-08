@@ -24,13 +24,16 @@ namespace Aspekt.Hex
             return new Vector3(lengthPos.x, 0f, heightPos.z);
         }
 
+        public void Init(GameManager game)
+        {
+            this.game = game;
+            cells = game.Cells;
+        }
+
         public override void OnStartClient()
         {
             var room = FindObjectOfType<NetworkManagerHex>();
-            game = FindObjectOfType<GameManager>();
             room.RegisterBoard(this);
-            cells = FindObjectOfType<Cells>();
-            cells.Init(this);
             boardHalfSizeWorldUnits = GetBoardLimitsInWorldUnits();
         }
 
@@ -76,9 +79,9 @@ namespace Aspekt.Hex
             }
             
             var coords = new HexCoordinates(x, z);
-            var cell = cells.Create((Cells.CellTypes) cellTypeIndex);
             var player = game.GetPlayerFromID(playerID);
-            cell.Place(coords, cells.GetColour(player.ID), player);
+            var cell = cells.Create((Cells.CellTypes) cellTypeIndex, player);
+            cell.Place(coords);
         }
 
         [ClientRpc]

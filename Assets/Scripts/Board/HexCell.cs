@@ -57,9 +57,16 @@ namespace Aspekt.Hex
         
         protected Material CellMaterial;
 
-        public void Init(Cells cells)
+        public void Init(Cells cells, GameData data, NetworkGamePlayerHex owner)
         {
             CellData = cells;
+            Owner = owner;
+            PlayerId = Owner.ID;
+            
+            foreach (var action in actions)
+            {
+                action.definiton.Init(data, PlayerId);
+            }
             OnInit();
         }
         
@@ -73,15 +80,13 @@ namespace Aspekt.Hex
             healthObservers.Add(observer);
         }
 
-        public void Place(HexCoordinates coords, Cells.Colours colour, NetworkGamePlayerHex owner)
+        public void Place(HexCoordinates coords)
         {
             IsPlaced = true;
-            Owner = owner;
-            PlayerId = owner.ID;
             CurrentHP = MaxHP;
             
             SetCoordinates(coords);
-            SetMaterialFromColour(colour);
+            SetMaterialFromColour(CellData.GetColour(PlayerId));
             ShowPlaced();
         }
 

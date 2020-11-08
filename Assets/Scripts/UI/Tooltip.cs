@@ -34,6 +34,7 @@ namespace Aspekt.Hex.UI
             public readonly int CostCurrency3;
             public readonly int ActionCost;
             public readonly string[] Description;
+            public readonly string RequirementsText;
 
             public Details(string title, string[] description)
             {
@@ -43,6 +44,7 @@ namespace Aspekt.Hex.UI
                 CostCurrency3 = 0;
                 ActionCost = 0;
                 Description = description;
+                RequirementsText = "";
             }
             
             public Details(string title, int cost1, int cost2, int cost3, int actionCost, string[] description)
@@ -53,6 +55,19 @@ namespace Aspekt.Hex.UI
                 CostCurrency3 = cost3;
                 ActionCost = actionCost;
                 Description = description;
+                RequirementsText = "";
+            }
+
+            public Details(string title, string requirements)
+            {
+                
+                Title = title;
+                CostCurrency1 = 0;
+                CostCurrency2 = 0;
+                CostCurrency3 = 0;
+                ActionCost = 0;
+                Description = new string[0];
+                RequirementsText = requirements;
             }
             
             public bool IsValid()

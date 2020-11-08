@@ -1,14 +1,15 @@
-using UnityEngine;
+
+using Aspekt.Hex.Actions;
 
 namespace Aspekt.Hex
 {
     public interface ICellEventObserver
     {
         void IndicateBuildCell(Cells.CellTypes type, HexCell originator);
-        void UpgradeCell(HexCell cell);
 
         void IndicateUnitMove(UnitCell unit);
         void IndicateUnitAttack(UnitCell unit);
+        void TryPurchaseTech(Technology tech);
     }
 
     public interface ICellLifecycleObserver

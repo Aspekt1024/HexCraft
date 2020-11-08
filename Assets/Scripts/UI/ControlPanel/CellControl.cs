@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -54,7 +55,8 @@ namespace Aspekt.Hex.UI.Control
 
         private void ShowCellActions(HexCell cell)
         {
-            for (int i = 0; i < cell.Actions.Length; i++)
+            var availableActions = cell.Actions.Where(a => a.CanDisplay()).ToArray();
+            for (int i = 0; i < availableActions.Length; i++)
             {
                 if (i >= cellActions.Count)
                 {
@@ -62,10 +64,10 @@ namespace Aspekt.Hex.UI.Control
                     return;
                 }
                 
-                var action = cell.Actions[i];
-                cellActions[i].ShowActions(action);
+                var action = availableActions[i];
+                cellActions[i].ShowAction(action);
             }
-            HideCellActions(cell.Actions.Length);
+            HideCellActions(availableActions.Length);
         }
 
         private void ClearDetails()

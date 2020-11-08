@@ -6,7 +6,7 @@ namespace Aspekt.Hex
     public class PlayerData
     {
         public readonly NetworkGamePlayerHex Player;
-        public readonly UpgradeData UpgradeData;
+        public readonly TechnologyData TechnologyData;
 
         public int TurnNumber;
         public int Credits;
@@ -14,7 +14,12 @@ namespace Aspekt.Hex
         public PlayerData(NetworkGamePlayerHex player)
         {
             Player = player;
-            UpgradeData = new UpgradeData();
+            TechnologyData = new TechnologyData();
+        }
+
+        public void TechnologyAchieved(Technology tech)
+        {
+            TechnologyData.AddTechnology(tech);
         }
     }
 }

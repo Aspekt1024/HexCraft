@@ -11,6 +11,7 @@ namespace Aspekt.Hex
             Base = 1000,
             Training = 1200,
             Income = 1300,
+            Blacksmith = 1400,
             MeleeUnit = 2000,
             UnitT1 = 2010,
             UnitT2 = 2020,
@@ -27,6 +28,7 @@ namespace Aspekt.Hex
         [SerializeField] private HomeCell home;
         [SerializeField] private TrainingCell training;
         [SerializeField] private IncomeCell income;
+        [SerializeField] private BlacksmithCell blacksmith;
         
         [Header("Units")]
         [SerializeField] private HexCell unit1;
@@ -46,10 +48,12 @@ namespace Aspekt.Hex
 
         private CellPathfinder pathfinder;
         private HexGrid grid;
+        private GameData data;
 
-        public void Init(HexGrid grid)
+        public void Init(HexGrid grid, GameData data)
         {
             this.grid = grid;
+            this.data = data;
             pathfinder = new CellPathfinder(this, grid);
         }
 
@@ -80,12 +84,12 @@ namespace Aspekt.Hex
             return playerId == 1 ? Colours.Blue : Colours.Red;
         }
 
-        public HexCell Create(CellTypes type)
+        public HexCell Create(CellTypes type, NetworkGamePlayerHex owner)
         {
             var cell = CreateCell(type);
             if (cell == null) return cell;
             
-            cell.Init(this);
+            cell.Init(this, data, owner);
             AllCells.Add(cell);
             
             foreach (var observer in cellEventObservers)
@@ -207,6 +211,8 @@ namespace Aspekt.Hex
                     return income;
                 case CellTypes.MeleeUnit:
                     return meleeUnit;
+                case CellTypes.Blacksmith:
+                    return blacksmith;
                 case CellTypes.UnitT1:
                     return unit1;
                 case CellTypes.UnitT2:

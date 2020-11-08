@@ -12,12 +12,9 @@ namespace Aspekt.Hex
     {
         private GameManager game;
         private NetworkManagerHex room;
-        private GameConfig config;
 
         private readonly List<PlayerData> playerData = new List<PlayerData>();
         
-        private UpgradeData upgradeData;
-
         private PlayerData currentPlayer;
         private int currentPlayerActionPoints;
         private const int MaxActionPoints = 4;
@@ -32,6 +29,8 @@ namespace Aspekt.Hex
 
         public bool IsRunning => state == GameStates.Started;
         
+        public GameConfig Config { get; private set; }
+
         public bool IsCurrentPlayer(NetworkGamePlayerHex player)
         {
             return currentPlayer != null && currentPlayer.Player.ID == player.ID;
@@ -59,22 +58,12 @@ namespace Aspekt.Hex
         public void Init(GameManager game, GameConfig config)
         {
             this.game = game;
-            this.config = config;
+            Config = config;
         }
 
         public void SetGameStarted()
         {
             state = GameStates.Started;
-        }
-
-        [ClientRpc]
-        public void RpcGameWon(Int16 winningPlayerId)
-        {
-            var winner = playerData.First(p => p.Player.ID == winningPlayerId);
-            game.UI.ShowWinner(winner);
-            currentPlayer.Player.IsCurrentPlayer = false;
-            currentPlayer = null;
-            game.UI.SetPlayerTurn(null);
         }
 
         public void SetCurrency(NetworkGamePlayerHex player, int credits)
@@ -107,6 +96,20 @@ namespace Aspekt.Hex
             }
             currentPlayerActionPoints = 0;
             RpcSetPlayerActions((Int16)player.Player.ID, (Int16)MaxActionPoints);
+        }
+
+        public bool IsTechAvailable(Technology tech, int playerId)
+        {
+            var player = GetPlayerFromId(playerId);
+            return player.TechnologyData.HasTechnology(tech);
+        }
+
+        public bool IsTechAvailable(List<Technology> tech, int playerId)
+        {
+            var player = GetPlayerFromId(playerId);
+            if (player == null) return false;
+
+            return player.TechnologyData.HasTechnologies(tech);
         }
 
         public PlayerData GetPlayerData(NetworkGamePlayerHex player)
@@ -152,6 +155,16 @@ namespace Aspekt.Hex
             credits += homeCells.Sum(c => 2); // TODO set credits per round for home base cells
     
             RpcSetCurrency((Int16)data.Player.ID, credits);
+        }
+
+        [ClientRpc]
+        public void RpcGameWon(Int16 winningPlayerId)
+        {
+            var winner = playerData.First(p => p.Player.ID == winningPlayerId);
+            game.UI.ShowWinner(winner);
+            currentPlayer.Player.IsCurrentPlayer = false;
+            currentPlayer = null;
+            game.UI.SetPlayerTurn(null);
         }
         
         [ClientRpc]

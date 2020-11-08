@@ -9,23 +9,24 @@ namespace Aspekt.Hex
     {
         public override bool CanCreate(Cells.CellTypes cellType)
         {
-            return cellType == Cells.CellTypes.Training || cellType == Cells.CellTypes.Income;
+            return cellType == Cells.CellTypes.Training
+                   || cellType == Cells.CellTypes.Income
+                   || cellType == Cells.CellTypes.Blacksmith;
         }
 
         public void ActionBuildTraining()
         {
-            foreach (var observer in EventObservers)
-            {
-                observer.IndicateBuildCell(Cells.CellTypes.Training, this);
-            }
+            EventObservers.ForEach(o => o.IndicateBuildCell(Cells.CellTypes.Training, this));
         }
 
         public void ActionBuildFarm()
         {
-            foreach (var observer in EventObservers)
-            {
-                observer.IndicateBuildCell(Cells.CellTypes.Income, this);
-            }
+            EventObservers.ForEach(o => o.IndicateBuildCell(Cells.CellTypes.Income, this));
+        }
+
+        public void ActionBuildBlacksmith()
+        {
+            EventObservers.ForEach(o => o.IndicateBuildCell(Cells.CellTypes.Blacksmith, this));
         }
     }
 }

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Aspekt.Hex.Actions;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
@@ -8,31 +10,19 @@ namespace Aspekt.Hex
     {
         public override bool CanCreate(Cells.CellTypes cellType)
         {
-            // TODO check can create in networking
-            return cellType == Cells.CellTypes.MeleeUnit || cellType == Cells.CellTypes.UnitT2;
-        }
-
-        public void ActionUpgradeArmor()
-        {
-            foreach (var observer in EventObservers)
-            {
-                observer.IndicateBuildCell(Cells.CellTypes.MeleeUnit, this);
-            }
+            return false;
         }
         
-        public void ActionUpgradeWeapons()
+        public void ActionUpgrade(ActionDefinition action)
         {
-            foreach (var observer in EventObservers)
+            if (action is UpgradeAction upgradeAction)
             {
-                observer.IndicateBuildCell(Cells.CellTypes.MeleeUnit, this);
+                var tech = upgradeAction.GetNextTech();
+                EventObservers.ForEach(o => o.TryPurchaseTech(tech));
             }
-        }
-        
-        public void ActionUpgradeShields()
-        {
-            foreach (var observer in EventObservers)
+            else
             {
-                observer.IndicateBuildCell(Cells.CellTypes.MeleeUnit, this);
+                Debug.LogError("unexpected blacksmith action: " + action.name);
             }
         }
     }

@@ -1647,7 +1647,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config:
-    StartingCredits: 10
+    startingCredits: 50
+    techConfig:
+      techGroups:
+      - group: 2
+        details:
+        - title: Armor 1
+          cost: 1
+          description: +2 hp to all units
+          technology: 3110
+          requiredTech: 
+        - title: Armor 2
+          cost: 2
+          description: +2 hp to all units (again)
+          technology: 3111
+          requiredTech: 
+        - title: Armor 3
+          cost: 3
+          description: +2 hp to all units (once again)
+          technology: 3112
+          requiredTech: 
   ui: {fileID: 1328235041}
 --- !u!4 &322388668
 Transform:
@@ -1679,6 +1698,8 @@ MonoBehaviour:
   training: {fileID: 1312393799163408318, guid: 1e8f7e0b158b67f4db0523ec6c6c8535,
     type: 3}
   income: {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
+  blacksmith: {fileID: 9196783149601408105, guid: 6eda4cb626c73354eb0a612f89828650,
+    type: 3}
   unit1: {fileID: 5206515829316234981, guid: 65b6ac6736929d84f9451dcd6599929d, type: 3}
   unit2: {fileID: -6404335694949812911, guid: 7a6128ca71b6aa24ea2dcbfa938a58cf, type: 3}
   meleeUnit: {fileID: 3856654945942102754, guid: a6461c4f62e2fd64893e91336eee2050,

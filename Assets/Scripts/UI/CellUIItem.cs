@@ -1,6 +1,7 @@
 using System;
 using Aspekt.Hex.Actions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -12,29 +13,34 @@ namespace Aspekt.Hex.UI
         [SerializeField] private Image spriteRenderer;
 #pragma warning restore 649
 
-        private EventTrigger.TriggerEvent onClickCallback;
+        private UnityEvent<ActionDefinition> onClickCallback;
         private Details details;
 
         [Serializable]
         public struct Details
         {
             public ActionDefinition definiton;
-            public EventTrigger.TriggerEvent callback;
+            public UnityEvent<ActionDefinition> callback;
 
             public bool IsValid()
             {
                 return definiton != null && callback != null;
             }
+
+            public bool CanDisplay() => definiton.CanDisplay();
+
+            public void Update() => definiton.Update();
         }
-        
-        public void ShowActions(Details details)
+
+        public void ShowAction(Details details)
         {
             if (!details.IsValid()) return;
             
             gameObject.SetActive(true);
 
             this.details = details;
-            spriteRenderer.sprite = details.definiton.icon;
+            details.Update();
+            spriteRenderer.sprite = details.definiton.GetIcon();
             onClickCallback = details.callback;
         }
 
