@@ -18,12 +18,17 @@ namespace Aspekt.Hex
             if (action is UpgradeAction upgradeAction)
             {
                 var tech = upgradeAction.GetNextTech();
-                EventObservers.ForEach(o => o.TryPurchaseTech(tech));
+                EventObservers.ForEach(o => o.AddTech(tech));
             }
             else
             {
                 Debug.LogError("unexpected blacksmith action: " + action.name);
             }
+        }
+
+        public override void OnTechAdded(Technology tech)
+        {
+            
         }
     }
 }

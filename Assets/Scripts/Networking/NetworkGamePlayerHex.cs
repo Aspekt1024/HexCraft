@@ -21,7 +21,7 @@ namespace Aspekt.Hex
         private NetworkManagerHex room;
         private GameManager game;
 
-        private UnitActions actions;
+        private PlayerActions actions;
         
         private readonly List<MonoBehaviour> uiObjectsInMouseover = new List<MonoBehaviour>();
 
@@ -41,7 +41,7 @@ namespace Aspekt.Hex
             if (hasAuthority)
             {
                 game.SetGamePlayer(this);
-                actions = new UnitActions(this, game);
+                actions = new PlayerActions(this, game);
             }
         }
         
@@ -116,10 +116,12 @@ namespace Aspekt.Hex
             actions.SetUnitAttack(unit);
         }
 
-        public void TryPurchaseTech(Technology tech)
+        public void AddTech(Technology tech)
         {
-            Debug.Log("Gameplayer: purchasing " + tech);
-            //game.Data.TryPurchaseTech(tech, ID);
+            if (game.Data.CanAddTech(tech, ID))
+            {
+                CmdAddTech((Int16)tech);
+            }
         }
 
         public void IndicateUnitMove(UnitCell unit)
@@ -183,6 +185,17 @@ namespace Aspekt.Hex
         {
             if (!IsCurrentPlayer) return;
             game.Data.NextTurn();
+        }
+        
+        [Command]
+        private void CmdAddTech(Int16 tech)
+        {
+            if (!game.IsCurrentPlayer(this)) return;
+            
+            if (Enum.IsDefined(typeof(Technology), (Int32)tech))
+            {
+                game.Data.AddTech((Technology)tech, ID);
+            }
         }
     }
 }

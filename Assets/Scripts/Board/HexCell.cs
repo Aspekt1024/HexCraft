@@ -121,6 +121,8 @@ namespace Aspekt.Hex
             SetCoordinates(coords);
         }
 
+        public virtual void OnTechAdded(Technology tech) { }
+
         private void ShowPlaced()
         {
             // TODO animate
@@ -145,6 +147,8 @@ namespace Aspekt.Hex
         protected virtual void OnInit() {}
 
         protected abstract void SetColor(Color color);
+
+        protected abstract void SetMaterial(Material material);
         
         private void ApplyHoloShader(Shader shader)
         {
@@ -154,9 +158,7 @@ namespace Aspekt.Hex
             };
             SetMaterial(material);
         }
-
-        protected abstract void SetMaterial(Material material);
-
+        
         private void SetMaterialFromColour(Cells.Colours colour)
         {
             switch (colour)

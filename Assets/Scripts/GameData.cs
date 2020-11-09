@@ -66,6 +66,23 @@ namespace Aspekt.Hex
             state = GameStates.Started;
         }
 
+        public bool CanAddTech(Technology tech, int playerId)
+        {
+            var data = GetPlayerFromId(playerId);
+            return Config.techConfig.CanAddTech(tech, data);
+        }
+
+        public void AddTech(Technology tech, int playerId)
+        {
+            var data = GetPlayerFromId(playerId);
+            var techData = Config.GetTechDetails(tech);
+            if (Config.techConfig.CanAddTech(techData, data))
+            {
+                SetCurrency(data.Player, data.Credits - techData.cost);
+                RpcAddTech((Int16)tech, (Int16)playerId);
+            }
+        }
+
         public void SetCurrency(NetworkGamePlayerHex player, int credits)
         {
             RpcSetCurrency((Int16)player.ID, credits);
@@ -79,11 +96,11 @@ namespace Aspekt.Hex
         public void AddActionPoints(int actionPoints)
         {
             currentPlayerActionPoints += actionPoints;
-            RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayerActionPoints));
             if (currentPlayerActionPoints >= MaxActionPoints)
             {
                 NextTurn();
             }
+            RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayerActionPoints));
         }
         
         public void NextTurn()
@@ -206,6 +223,20 @@ namespace Aspekt.Hex
         {
             var data = GetPlayerFromId(playerId);
             game.UI.SetPlayerActionCount(data, MaxActionPoints - currentPlayerActionPoints);
+        }
+
+        [ClientRpc]
+        private void RpcAddTech(Int16 techId, Int16 playerId)
+        {
+            var data = GetPlayerFromId(playerId);
+            var tech = (Technology) techId;
+            data.TechnologyAchieved(tech);
+
+            var playerCells = game.Cells.AllCells.Where(c => c.Owner.ID == playerId);
+            foreach (var cell in playerCells)
+            {
+                cell.OnTechAdded(tech);
+            }
         }
 
         private PlayerData GetPlayerFromId(int id)

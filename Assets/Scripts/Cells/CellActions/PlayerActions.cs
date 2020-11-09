@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class UnitActions : IInputObserver, IUnitActionObserver
+    public class PlayerActions : IInputObserver, IUnitActionObserver
     {
         private readonly CellIndicator indicator;
         private readonly GameManager game;
@@ -30,7 +30,7 @@ namespace Aspekt.Hex
 
         private HexCoordinates currentCoords;
         
-        public UnitActions(NetworkGamePlayerHex player, GameManager game)
+        public PlayerActions(NetworkGamePlayerHex player, GameManager game)
         {
             this.player = player;
             this.game = game;

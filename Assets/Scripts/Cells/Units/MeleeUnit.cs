@@ -83,26 +83,82 @@ namespace Aspekt.Hex
         public void SetMount3() => SetMountLevel(3);
         
 #endregion Debug and Test
+
+        public override void OnTechAdded(Technology tech)
+        {
+            switch (tech)
+            {
+                case Technology.UpgradeWeapons1:
+                    SetWeaponLevel(1);
+                    break;
+                case Technology.UpgradeWeapons2:
+                    SetWeaponLevel(2);
+                    break;
+                case Technology.UpgradeWeapons3:
+                    SetWeaponLevel(3);
+                    break;
+                case Technology.UpgradeArmor1:
+                    SetArmorLevel(1);
+                    break;
+                case Technology.UpgradeArmor2:
+                    SetArmorLevel(2);
+                    break;
+                case Technology.UpgradeArmor3:
+                    SetArmorLevel(3);
+                    break;
+                case Technology.UpgradeWarMount1:
+                    SetMountLevel(1);
+                    break;
+                case Technology.UpgradeWarMount2:
+                    SetMountLevel(2);
+                    break;
+                case Technology.UpgradeWarMount3:
+                    SetMountLevel(3);
+                    break;
+                case Technology.UpgradeShields1:
+                    SetShieldLevel(1);
+                    break;
+                case Technology.UpgradeShields2:
+                    SetShieldLevel(2);
+                    break;
+                case Technology.UpgradeShields3:
+                    SetShieldLevel(3);
+                    break;
+            }
+        }
         
-        public void SetArmorLevel(int level)
+        protected override void SetMaterial(Material material)
+        {
+            CellMaterial = material;
+            groundUnitModel.SetMaterial(material);
+            mountedUnitModel.SetMaterial(material);
+        }
+
+        protected override void SetColor(Color color)
+        {
+            groundUnitModel.SetColor(color);
+            mountedUnitModel.SetColor(color);
+        }
+
+        private void SetArmorLevel(int level)
         {
             armorLevel = level;
             currentModel.SetArmor(level);
         }
 
-        public void SetWeaponLevel(int level)
+        private void SetWeaponLevel(int level)
         {
             weaponLevel = level;
             currentModel.SetWeapon(level);
         }
 
-        public void SetShieldLevel(int level)
+        private void SetShieldLevel(int level)
         {
             shieldLevel = level;
             currentModel.SetShield(level);
         }
 
-        public void SetMountLevel(int level)
+        private void SetMountLevel(int level)
         {
             if (level == 0)
             {
@@ -142,19 +198,6 @@ namespace Aspekt.Hex
             currentModel.SetArmor(armorLevel);
             currentModel.SetWeapon(weaponLevel);
             currentModel.SetShield(shieldLevel);
-        }
-
-        protected override void SetMaterial(Material material)
-        {
-            CellMaterial = material;
-            groundUnitModel.SetMaterial(material);
-            mountedUnitModel.SetMaterial(material);
-        }
-
-        protected override void SetColor(Color color)
-        {
-            groundUnitModel.SetColor(color);
-            mountedUnitModel.SetColor(color);
         }
     }
 }

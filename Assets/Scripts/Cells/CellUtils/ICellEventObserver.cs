@@ -9,7 +9,7 @@ namespace Aspekt.Hex
 
         void IndicateUnitMove(UnitCell unit);
         void IndicateUnitAttack(UnitCell unit);
-        void TryPurchaseTech(Technology tech);
+        void AddTech(Technology tech);
     }
 
     public interface ICellLifecycleObserver
