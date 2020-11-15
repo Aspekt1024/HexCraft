@@ -16,6 +16,9 @@ namespace Aspekt.Hex.UI.Control
         [SerializeField] private List<CellUIItem> cellActions;
 #pragma warning restore 649
 
+        private HexCell currentCell;
+        private NetworkGamePlayerHex queryingPlayer;
+
         private void Awake()
         {
             ClearDetails();
@@ -29,33 +32,47 @@ namespace Aspekt.Hex.UI.Control
             }
         }
 
+        public void Refresh()
+        {
+            if (currentCell == null || queryingPlayer == null) return;
+            ShowCellDetails(currentCell, queryingPlayer);
+        }
+
         public void SetCellDetails(HexCell cell, NetworkGamePlayerHex queryingPlayer)
         {
+            this.queryingPlayer = queryingPlayer;
             if (cell == null)
             {
                 ClearDetails();
             }
             else
             {
-                cellName.text = cell.DisplayName;
-                health.text = "HP: " + cell.CurrentHP + " / " + cell.MaxHP;
-                tier.text = "Tier 1";
-                owner.text = "Owned by " + cell.Owner.DisplayName;
+                ShowCellDetails(cell, queryingPlayer);
+            }
+        }
 
-                if (cell.PlayerId == queryingPlayer.ID)
-                {
-                    ShowCellActions(cell);
-                }
-                else
-                {
-                    HideCellActions();
-                }
+        private void ShowCellDetails(HexCell cell, NetworkGamePlayerHex queryingPlayer)
+        {
+            currentCell = cell;
+            
+            cellName.text = cell.DisplayName;
+            health.text = "HP: " + cell.CurrentHP + " / " + cell.MaxHP;
+            tier.text = "Tier 1";
+            owner.text = "Owned by " + cell.Owner.DisplayName;
+
+            if (cell.PlayerId == queryingPlayer.ID)
+            {
+                ShowCellActions(cell);
+            }
+            else
+            {
+                HideCellActions();
             }
         }
 
         private void ShowCellActions(HexCell cell)
         {
-            var availableActions = cell.Actions.Where(a => a.CanDisplay()).ToArray();
+            var availableActions = cell.Actions.Where(a => a.CanDisplay(queryingPlayer.ID)).ToArray();
             for (int i = 0; i < availableActions.Length; i++)
             {
                 if (i >= cellActions.Count)
@@ -65,13 +82,15 @@ namespace Aspekt.Hex.UI.Control
                 }
                 
                 var action = availableActions[i];
-                cellActions[i].ShowAction(action);
+                cellActions[i].ShowAction(action, queryingPlayer.ID);
             }
             HideCellActions(availableActions.Length);
         }
 
         private void ClearDetails()
         {
+            currentCell = null;
+            
             cellName.text = "";
             health.text = "";
             tier.text = "";

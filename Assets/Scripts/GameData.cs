@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aspekt.Hex.Config;
 using Mirror;
+using UnityEngine;
 
 namespace Aspekt.Hex
 {
     /// <summary>
     /// Game data is owned by the server and distributed to all clients
     /// </summary>
-    public class GameData : NetworkBehaviour
+    public class GameData : NetworkBehaviour, ICellLifecycleObserver
     {
         private GameManager game;
         private NetworkManagerHex room;
@@ -59,6 +61,7 @@ namespace Aspekt.Hex
         {
             this.game = game;
             Config = config;
+            playerData.ForEach(d => d.Init(config));
         }
 
         public void SetGameStarted()
@@ -72,14 +75,34 @@ namespace Aspekt.Hex
             return Config.techConfig.CanAddTech(tech, data);
         }
 
+        public bool CanRemoveTech(Technology tech, int playerId)
+        {
+            var cells = game.Cells.AllCells.Where(c => c.Owner.ID == playerId);
+            return Config.techConfig.CanRemoveTech(tech, cells);
+        }
+
         public void AddTech(Technology tech, int playerId)
         {
             var data = GetPlayerFromId(playerId);
+            if (Config.techConfig.IsBuildingTech(tech))
+            {
+                RpcAddTech((Int16)tech, (Int16)playerId);
+                return;
+            }
+            
             var techData = Config.GetTechDetails(tech);
             if (Config.techConfig.CanAddTech(techData, data))
             {
                 SetCurrency(data.Player, data.Credits - techData.cost);
                 RpcAddTech((Int16)tech, (Int16)playerId);
+            }
+        }
+
+        public void RemoveTech(Technology tech, int playerId)
+        {
+            if (CanRemoveTech(tech, playerId))
+            {
+                RpcRemoveTech((Int16) tech, (Int16) playerId);
             }
         }
 
@@ -132,6 +155,12 @@ namespace Aspekt.Hex
         public PlayerData GetPlayerData(NetworkGamePlayerHex player)
         {
             return playerData.First(p => p.Player.ID == player.ID);
+        }
+
+        public Technology GetCurrentLevelTech(TechGroups techGroup, int playerId)
+        {
+            var player = GetPlayerFromId(playerId);
+            return player.TechnologyData.GetTechLevel(techGroup);
         }
 
         private PlayerData SetNextPlayer()
@@ -237,11 +266,43 @@ namespace Aspekt.Hex
             {
                 cell.OnTechAdded(tech);
             }
+            
+            game.UI.Refresh();
+        }
+
+        [ClientRpc]
+        private void RpcRemoveTech(Int16 techId, Int16 playerId)
+        {
+            var data = GetPlayerFromId(playerId);
+            var tech = (Technology) techId;
+
+            var playerCells = game.Cells.AllCells.Where(c => c.Owner.ID == playerId);
+            foreach (var cell in playerCells)
+            {
+                cell.OnTechRemoved(tech);
+            }
+            
+            game.UI.Refresh();
         }
 
         private PlayerData GetPlayerFromId(int id)
         {
             return playerData.FirstOrDefault(data => data.Player.ID == id);
+        }
+
+        public void OnCellCreated(HexCell cell)
+        {
+            if (IsCurrentPlayer(cell.Owner))
+            {
+                var data = GetPlayerFromId(cell.PlayerId);
+                data.Player.AddTech(cell.Technology);
+            }
+        }
+
+        public void OnCellRemoved(HexCell cell)
+        {
+            var data = GetPlayerFromId(cell.PlayerId);
+            data.Player.RemoveTech(cell.Technology);
         }
     }
 }

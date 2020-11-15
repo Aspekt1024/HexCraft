@@ -15,6 +15,7 @@ namespace Aspekt.Hex
     public interface ICellLifecycleObserver
     {
         void OnCellCreated(HexCell cell);
+        void OnCellRemoved(HexCell cell);
     }
 
     public interface ICellHealthObserver

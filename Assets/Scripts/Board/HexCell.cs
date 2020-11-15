@@ -50,6 +50,8 @@ namespace Aspekt.Hex
             new Vector3(0f, 0f, OuterRadius), 
         };
         
+        public abstract Technology Technology { get; }
+        
         protected readonly List<ICellEventObserver> EventObservers = new List<ICellEventObserver>();
         private readonly List<ICellHealthObserver> healthObservers = new List<ICellHealthObserver>();
 
@@ -70,15 +72,13 @@ namespace Aspekt.Hex
             OnInit();
         }
         
-        public void RegisterEventObserver(ICellEventObserver observer)
-        {
-            EventObservers.Add(observer);
-        }
+        public abstract void SetupTech(GameData data, int playerId);
+        
+        public void RegisterEventObserver(ICellEventObserver observer) => EventObservers.Add(observer);
+        public void UnregisterEventObserver(ICellEventObserver observer) => EventObservers.Remove(observer);
 
-        public void RegisterHealthObserver(ICellHealthObserver observer)
-        {
-            healthObservers.Add(observer);
-        }
+        public void RegisterHealthObserver(ICellHealthObserver observer) => healthObservers.Add(observer);
+        public void UnregisterHealthObserver(ICellHealthObserver observer) => healthObservers.Remove(observer);
 
         public void Place(HexCoordinates coords)
         {
@@ -122,6 +122,7 @@ namespace Aspekt.Hex
         }
 
         public virtual void OnTechAdded(Technology tech) { }
+        public virtual void OnTechRemoved(Technology tech) { }
 
         private void ShowPlaced()
         {

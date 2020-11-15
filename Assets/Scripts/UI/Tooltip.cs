@@ -15,6 +15,7 @@ namespace Aspekt.Hex.UI
         [SerializeField] private GameObject actionsObject;
         [SerializeField] private TextMeshProUGUI actionText;
         [SerializeField] private TextMeshProUGUI description;
+        [SerializeField] private TextMeshProUGUI requirements;
 #pragma warning restore 649
 
         private bool isEnabled;
@@ -22,6 +23,8 @@ namespace Aspekt.Hex.UI
         private float timeEntered;
         private float timeExited;
         private bool isShowTriggered;
+
+        private NetworkGamePlayerHex player;
 
         private const float ShowHideDelay = 0.2f;
 
@@ -85,6 +88,11 @@ namespace Aspekt.Hex.UI
             FadeDuration = 0.3f;
         }
 
+        public void SetPlayer(NetworkGamePlayerHex player)
+        {
+            this.player = player;
+        }
+
         public void Tick()
         {
             if (!isEnabled) return;
@@ -99,7 +107,7 @@ namespace Aspekt.Hex.UI
             }
             else if (Time.unscaledTime > timeEntered + ShowHideDelay)
             {
-                ShowTooltip(current);
+                ShowTooltip(current, player.ID);
             }
         }
 
@@ -152,13 +160,16 @@ namespace Aspekt.Hex.UI
             base.Show();
         }
 
-        private void ShowTooltip(TooltipElement item)
+        private void ShowTooltip(TooltipElement item, int playerId)
         {
-            var tooltipDetails = item.GetTooltipDetails();
+            if (isShowTriggered) return;
+            
+            var tooltipDetails = item.GetTooltipDetails(playerId);
             SetTitle(tooltipDetails);
             SetCost(tooltipDetails);
             SetActions(tooltipDetails);
             SetDescription(tooltipDetails);
+            SetRequirements(tooltipDetails);
             Show();
         }
 
@@ -222,6 +233,19 @@ namespace Aspekt.Hex.UI
             }
 
             description.text = descriptionText;
+        }
+
+        private void SetRequirements(Details details)
+        {
+            if (string.IsNullOrWhiteSpace(details.RequirementsText))
+            {
+                requirements.gameObject.SetActive(false);
+            }
+            else
+            {
+                requirements.gameObject.SetActive(true);
+                requirements.text = details.RequirementsText;
+            }
         }
     }
 }

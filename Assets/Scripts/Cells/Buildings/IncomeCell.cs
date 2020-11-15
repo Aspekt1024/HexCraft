@@ -6,6 +6,8 @@ namespace Aspekt.Hex
 {
     public class IncomeCell : BuildingCell
     {
+        public override Technology Technology { get; } = Technology.Farm;
+        
         [Header("Income Settings")]
         public int CreditsPerRound = 1;
         

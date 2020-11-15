@@ -20,7 +20,7 @@ namespace Aspekt.Hex.UI
             observers.Add(observer);
         }
 
-        public abstract Tooltip.Details GetTooltipDetails();
+        public abstract Tooltip.Details GetTooltipDetails(int playerId);
 
         public void OnPointerEnter(PointerEventData eventData)
         {

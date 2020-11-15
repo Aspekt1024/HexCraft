@@ -2,7 +2,6 @@ using System;
 using Aspekt.Hex.Actions;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Aspekt.Hex.UI
@@ -27,19 +26,19 @@ namespace Aspekt.Hex.UI
                 return definiton != null && callback != null;
             }
 
-            public bool CanDisplay() => definiton.CanDisplay();
+            public bool CanDisplay(int playerId) => definiton.CanDisplay(playerId);
 
-            public void Update() => definiton.Update();
+            public void Update(int playerId) => definiton.Refresh(playerId);
         }
 
-        public void ShowAction(Details details)
+        public void ShowAction(Details details, int playerId)
         {
             if (!details.IsValid()) return;
             
             gameObject.SetActive(true);
 
             this.details = details;
-            details.Update();
+            details.Update(playerId);
             spriteRenderer.sprite = details.definiton.GetIcon();
             onClickCallback = details.callback;
         }
@@ -49,9 +48,9 @@ namespace Aspekt.Hex.UI
             onClickCallback?.Invoke(null);
         }
 
-        public override Tooltip.Details GetTooltipDetails()
+        public override Tooltip.Details GetTooltipDetails(int playerId)
         {
-            return details.definiton.GetTooltipDetails();
+            return details.definiton.GetTooltipDetails(playerId);
         }
     }
 }

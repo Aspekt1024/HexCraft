@@ -19,6 +19,11 @@ namespace Aspekt.Hex
             public GameObject helm;
         }
 
+        private void Awake()
+        {
+            Debug.Log(name +  " has renderers " + renderers.Length);
+        }
+
         public void SetEnabled()
         {
             gameObject.SetActive(true);

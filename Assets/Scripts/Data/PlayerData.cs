@@ -5,7 +5,8 @@ namespace Aspekt.Hex
     public class PlayerData
     {
         public readonly NetworkGamePlayerHex Player;
-        public readonly TechnologyData TechnologyData;
+        
+        public  TechnologyData TechnologyData;
 
         public int TurnNumber;
         public int Credits;
@@ -20,10 +21,15 @@ namespace Aspekt.Hex
         public PlayerData(NetworkGamePlayerHex player)
         {
             Player = player;
-            TechnologyData = new TechnologyData();
+        }
+
+        public void Init(GameConfig config)
+        {
+            TechnologyData = new TechnologyData(config.techConfig);
         }
 
         public void RegisterTechObserver(ITechObserver observer) => techObservers.Add(observer);
+        public void UnregisterTechObserver(ITechObserver observer) => techObservers.Remove(observer);
 
         public void TechnologyAchieved(Technology tech)
         {

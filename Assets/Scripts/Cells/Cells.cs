@@ -31,8 +31,6 @@ namespace Aspekt.Hex
         [SerializeField] private BlacksmithCell blacksmith;
         
         [Header("Units")]
-        [SerializeField] private HexCell unit1;
-        [SerializeField] private HexCell unit2;
         [SerializeField] private HexCell meleeUnit;
 
         [Header("Display")]
@@ -67,9 +65,9 @@ namespace Aspekt.Hex
             cellLifecycleObservers.Add(observer);
         }
 
-        public HexCell CreateIndicator(CellTypes type)
+        public HexCell CreateIndicator(CellTypes type, int playerId)
         {
-            return CreateCell(type);
+            return CreateCell(type, playerId);
         }
 
         public void ShowPath(List<Vector3> path)
@@ -86,7 +84,7 @@ namespace Aspekt.Hex
 
         public HexCell Create(CellTypes type, NetworkGamePlayerHex owner)
         {
-            var cell = CreateCell(type);
+            var cell = CreateCell(type, owner.ID);
             if (cell == null) return cell;
             
             cell.Init(this, data, owner);
@@ -127,6 +125,7 @@ namespace Aspekt.Hex
             var cell = AllCells.FirstOrDefault(c => c.Coordinates.Equals(coordinates));
             if (cell != null)
             {
+                cellLifecycleObservers.ForEach(o => o.OnCellRemoved(cell));
                 AllCells.Remove(cell);
                 cell.Remove();
             }
@@ -193,10 +192,13 @@ namespace Aspekt.Hex
             return GetPrefab(type).Cost;
         }
 
-        private HexCell CreateCell(CellTypes type)
+        private HexCell CreateCell(CellTypes type, int playerId)
         {
             var cellPrefab = GetPrefab(type);
-            return cellPrefab == null ? null : Instantiate(cellPrefab);
+            if (cellPrefab == null) return null;
+            var cell = Instantiate(cellPrefab);
+            cell.SetupTech(data, playerId);
+            return cell;
         }
 
         private HexCell GetPrefab(CellTypes type)
@@ -213,10 +215,6 @@ namespace Aspekt.Hex
                     return meleeUnit;
                 case CellTypes.Blacksmith:
                     return blacksmith;
-                case CellTypes.UnitT1:
-                    return unit1;
-                case CellTypes.UnitT2:
-                    return unit2;
                 default:
                     Debug.LogError("invalid cell type: " + type);
                     return null;

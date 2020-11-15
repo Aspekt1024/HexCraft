@@ -8569,7 +8569,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7516333669382207236}
   - component: {fileID: 7516333669372565896}
-  - component: {fileID: 7516333669381920823}
   - component: {fileID: 1411488990733350500}
   m_Layer: 0
   m_Name: GroundModel
@@ -8616,38 +8615,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7516333669381920823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7516333669381920822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31f1b6102d2a42d189f427fd398c66b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 7516333669368276544}
-  - {fileID: 7516333669368371114}
-  - {fileID: 7516333669368269272}
-  - {fileID: 7516333669368293522}
-  - {fileID: 7516333669383941844}
-  - {fileID: 7516333669384408126}
-  - {fileID: 7516333669384427732}
-  - {fileID: 7516333669384425316}
-  armorSets:
-  - body: {fileID: 7516333669381956602}
-    helm: {fileID: 7516333669381910166}
-  - body: {fileID: 7516333669381946380}
-    helm: {fileID: 7516333669381925804}
-  - body: {fileID: 7516333669381947548}
-    helm: {fileID: 7516333669381960026}
-  - body: {fileID: 7516333669381937170}
-    helm: {fileID: 7516333669381925716}
-  weapons: []
-  shields: []
 --- !u!114 &1411488990733350500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8660,7 +8627,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1053ef2450014f918afcfad145ca67be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderers: []
+  renderers:
+  - {fileID: 7516333669368276544}
+  - {fileID: 7516333669368371114}
+  - {fileID: 7516333669368269272}
+  - {fileID: 7516333669368293522}
+  - {fileID: 7516333669383941844}
+  - {fileID: 7516333669384408126}
+  - {fileID: 7516333669384427732}
+  - {fileID: 7516333669384425316}
   armorSets:
   - body: {fileID: 7516333669381956602}
     helm: {fileID: 7516333669381910166}

@@ -47,6 +47,8 @@ namespace Aspekt.Hex.UI
             turnIndicator.RegisterSingleObserver(player);
             SetGameCursor(HexCursor.Default);
             SetUICursor(HexCursor.Default);
+
+            tooltip.SetPlayer(player);
             
             controlPanel.Init(tooltip);
             turnIndicator.Init(tooltip);
@@ -57,6 +59,11 @@ namespace Aspekt.Hex.UI
         private void Update()
         {
             tooltip.Tick();
+        }
+
+        public void Refresh()
+        {
+            controlPanel.Refresh();
         }
 
         public void ShowWinner(PlayerData winner)
@@ -182,6 +189,12 @@ namespace Aspekt.Hex.UI
         {
             // TODO show alert for created unit on side panel
             cell.RegisterHealthObserver(healthBars);
+        }
+
+        public void OnCellRemoved(HexCell cell)
+        {
+            // TODO show alert for created unit on side panel
+            cell.UnregisterHealthObserver(healthBars);
         }
 
         private IEnumerator GameWonSequence(PlayerData winner)

@@ -21,6 +21,11 @@ namespace Aspekt.Hex.UI
         {
             cellControl.Init(tooltip);
         }
+
+        public void Refresh()
+        {
+            cellControl.Refresh();
+        }
         
         public void RegisterSingleObserver(IEventReceiver observer)
         {

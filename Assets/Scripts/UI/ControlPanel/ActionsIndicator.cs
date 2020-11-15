@@ -13,7 +13,7 @@ namespace UI.ControlPanel
             numActionsRemaining = numActions;
         }
         
-        public override Tooltip.Details GetTooltipDetails()
+        public override Tooltip.Details GetTooltipDetails(int playerId)
         {
             return new Tooltip.Details(
                 GetTitle(),

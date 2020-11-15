@@ -28,7 +28,7 @@ namespace Aspekt.Hex
             Clear();
             
             ui.SetGameCursor(HexCursor.None);
-            projectedCell = cells.CreateIndicator(type);
+            projectedCell = cells.CreateIndicator(type, playerID);
             projectedCell.DisplayAsIndicator(cells.HoloShader, cells.GetColour(playerID));
 
             var colour = new Color(0f, 1f, 0f, 0.5f);

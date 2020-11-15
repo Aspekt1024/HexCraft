@@ -9,24 +9,22 @@ namespace Aspekt.Hex.Actions
     {
         public Sprite icon;
 
-        public virtual bool CanDisplay() => true;
+        public virtual bool CanDisplay(int playerId) => true;
         
         /// <summary>
         /// Update the action definition before displaying 
         /// </summary>
-        public virtual void Update() {}
+        public virtual void Refresh(int playerId) {}
         
-        protected abstract bool IsRequirementsMet();
+        protected abstract bool IsRequirementsMet(int playerId);
         protected abstract Tooltip.Details GetTooltipRequirementsMet();
         protected abstract Tooltip.Details GetTooltipRequirementsNotMet();
 
         protected  GameData Data;
-        protected int PlayerId;
         
         public void Init(GameData data, int playerId)
         {
             Data = data;
-            PlayerId = playerId;
         }
 
         public virtual Sprite GetIcon()
@@ -34,16 +32,16 @@ namespace Aspekt.Hex.Actions
             return icon;
         }
 
-        public Tooltip.Details GetTooltipDetails()
+        public Tooltip.Details GetTooltipDetails(int playerId)
         {
-            return IsRequirementsMet()
+            return IsRequirementsMet(playerId)
                 ? GetTooltipRequirementsMet()
                 : GetTooltipRequirementsNotMet();
         }
 
-        protected bool IsTechAvailable(List<Technology> tech)
+        protected bool IsTechAvailable(List<Technology> tech, int playerId)
         {
-            return Data.IsTechAvailable(tech, PlayerId);
+            return Data.IsTechAvailable(tech, playerId);
         }
 
         protected string GenerateRequirementsText(List<Technology> requiredTech)
@@ -58,7 +56,7 @@ namespace Aspekt.Hex.Actions
                 requirementsText += GetHumanReadableTechName(technology);
             }
 
-            return "<color=red> Requires" + requirementsText + ".</color>";
+            return "<color=red> Requires " + requirementsText + ".</color>";
         }
 
         private string GetHumanReadableTechName(Technology tech)

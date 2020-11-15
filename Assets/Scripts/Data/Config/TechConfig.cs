@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aspekt.Hex.Config
 {
@@ -10,6 +11,15 @@ namespace Aspekt.Hex.Config
         
         private readonly Dictionary<Technology, TechDetails> techDict = new Dictionary<Technology, TechDetails>();
 
+        private readonly HashSet<Technology> buildingTech = new HashSet<Technology>
+        {
+            Technology.Farm,
+            Technology.Barracks,
+            Technology.Blacksmith,
+        };
+
+        public bool IsBuildingTech(Technology tech) => buildingTech.Contains(tech);
+        
         public TechDetails GetDetails(Technology tech)
         {
             if (techDict.ContainsKey(tech))
@@ -33,6 +43,8 @@ namespace Aspekt.Hex.Config
 
         public bool CanAddTech(Technology tech, PlayerData data)
         {
+            if (buildingTech.Contains(tech)) return true;
+            
             var techData = GetDetails(tech);
             return CanAddTech(techData, data);
         }
@@ -45,6 +57,11 @@ namespace Aspekt.Hex.Config
             if (!data.TechnologyData.HasTechnologies(techData.requiredTech)) return false;
             
             return data.Credits >= techData.cost;
+        }
+
+        public bool CanRemoveTech(Technology tech, IEnumerable<HexCell> playerOwnedCells)
+        {
+            return playerOwnedCells.All(c => c.Technology != tech);
         }
     }
 

@@ -2,6 +2,8 @@ namespace Aspekt.Hex
 {
     public enum Technology
     {
+        None = 0,
+        
         Barracks = 1000,
         Blacksmith = 1100,
         Farm = 2000,

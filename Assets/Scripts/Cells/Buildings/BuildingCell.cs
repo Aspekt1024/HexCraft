@@ -7,7 +7,11 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private Renderer[] renderers;
 #pragma warning disable 649
-        
+
+        public override void SetupTech(GameData data, int playerId)
+        {
+        }
+
         protected override void SetMaterial(Material material)
         {
             CellMaterial = material;

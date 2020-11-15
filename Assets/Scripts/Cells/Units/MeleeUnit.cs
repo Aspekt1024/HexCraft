@@ -5,6 +5,8 @@ namespace Aspekt.Hex
 {
     public class MeleeUnit : UnitCell
     {
+        public override Technology Technology { get; } = Technology.None;
+        
 #pragma warning disable 649
         [SerializeField] private GroundUnitModel groundUnitModel;
         [SerializeField] private MountedUnitModel mountedUnitModel;
@@ -21,17 +23,12 @@ namespace Aspekt.Hex
             SetModel(groundUnitModel);
         }
 
-        protected override void OnInit()
+        public override void SetupTech(GameData data, int playerId)
         {
-            armorLevel = 0;
-            weaponLevel = 0;
-            shieldLevel = 0;
-            var mountLevel = 0;
-            
-            SetArmorLevel(armorLevel);
-            SetWeaponLevel(weaponLevel);
-            SetShieldLevel(shieldLevel);
-            SetMountLevel(mountLevel);
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeArmor, playerId));
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeShields, playerId));
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeWeapons, playerId));
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeWarMount, playerId));
         }
 
 #region Debug and Test

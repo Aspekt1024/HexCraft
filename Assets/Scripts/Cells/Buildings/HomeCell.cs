@@ -7,6 +7,8 @@ namespace Aspekt.Hex
 {
     public class HomeCell : BuildingCell
     {
+        public override Technology Technology { get; } = Technology.None;
+        
         public override bool CanCreate(Cells.CellTypes cellType)
         {
             return cellType == Cells.CellTypes.Training
@@ -27,6 +29,11 @@ namespace Aspekt.Hex
         public void ActionBuildBlacksmith()
         {
             EventObservers.ForEach(o => o.IndicateBuildCell(Cells.CellTypes.Blacksmith, this));
+        }
+
+        public override void OnTechAdded(Technology tech)
+        {
+            base.OnTechAdded(tech);
         }
     }
 }

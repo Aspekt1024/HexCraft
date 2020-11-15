@@ -26,7 +26,7 @@ namespace Aspekt.Hex.Actions
                 "You cannot perform this action right now.");
         }
 
-        protected override bool IsRequirementsMet()
+        protected override bool IsRequirementsMet(int playerId)
         {
             // TODO return is player turn
             return true;

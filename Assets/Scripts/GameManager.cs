@@ -85,6 +85,8 @@ namespace Aspekt.Hex
             
             Camera.ScrollTo(grid.GetStartLocation(gamePlayer.ID));
             
+            Cells.RegisterCellLifecycleObserver(Data);
+            
             Debug.Log("Game started");
         }
 

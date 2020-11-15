@@ -123,6 +123,14 @@ namespace Aspekt.Hex
                 CmdAddTech((Int16)tech);
             }
         }
+        
+        public void RemoveTech(Technology tech)
+        {
+            if (game.Data.CanRemoveTech(tech, ID))
+            {
+                CmdRemoveTech((Int16)tech);
+            }
+        }
 
         public void IndicateUnitMove(UnitCell unit)
         {
@@ -195,6 +203,15 @@ namespace Aspekt.Hex
             if (Enum.IsDefined(typeof(Technology), (Int32)tech))
             {
                 game.Data.AddTech((Technology)tech, ID);
+            }
+        }
+
+        [Command]
+        private void CmdRemoveTech(Int16 tech)
+        {
+            if (Enum.IsDefined(typeof(Technology), (Int32) tech))
+            {
+                game.Data.RemoveTech((Technology) tech, ID);
             }
         }
     }
