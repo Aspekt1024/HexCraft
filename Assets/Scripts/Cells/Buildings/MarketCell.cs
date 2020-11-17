@@ -2,21 +2,13 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class IncomeCell : BuildingCell, IProductionGenerator
+    public class MarketCell : BuildingCell
     {
-        public override Technology Technology { get; } = Technology.Farm;
+        public override Technology Technology { get; } = Technology.Market;
         
-        [Header("Income Settings")]
-        public int production = 1;
-
         public override bool CanCreate(Cells.CellTypes cellType)
         {
             return false;
-        }
-
-        public int GetProduction()
-        {
-            return production;
         }
 
         public override void OnTechAdded(Technology tech)

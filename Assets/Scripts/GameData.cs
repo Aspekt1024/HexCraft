@@ -209,7 +209,7 @@ namespace Aspekt.Hex
             var supplies = data.CurrencyData.Supplies;
             supplies += suppliers.Sum(c => c.GetSupplies());
 
-            var isMarketPresent = false;
+            var isMarketPresent = game.Cells.AllCells.Any(c => c.cellType == Cells.CellTypes.Market);
             if (isMarketPresent)
             {
                 supplies += data.CurrencyData.MaxProduction - data.CurrencyData.UtilisedProduction;

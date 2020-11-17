@@ -14,6 +14,7 @@ namespace Aspekt.Hex
             Training = 1200,
             Income = 1300,
             Blacksmith = 1400,
+            Market = 1500,
             MeleeUnit = 2000,
         }
 
@@ -29,6 +30,7 @@ namespace Aspekt.Hex
         [SerializeField] private TrainingCell training;
         [SerializeField] private IncomeCell income;
         [SerializeField] private BlacksmithCell blacksmith;
+        [SerializeField] private MarketCell market;
         
         [Header("Units")]
         [SerializeField] private HexCell meleeUnit;
@@ -208,6 +210,8 @@ namespace Aspekt.Hex
                     return meleeUnit;
                 case CellTypes.Blacksmith:
                     return blacksmith;
+                case CellTypes.Market:
+                    return market;
                 default:
                     Debug.LogError("invalid cell type: " + type);
                     return null;

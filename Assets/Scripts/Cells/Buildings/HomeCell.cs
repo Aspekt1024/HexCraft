@@ -17,7 +17,8 @@ namespace Aspekt.Hex
         {
             return cellType == Cells.CellTypes.Training
                    || cellType == Cells.CellTypes.Income
-                   || cellType == Cells.CellTypes.Blacksmith;
+                   || cellType == Cells.CellTypes.Blacksmith
+                   || cellType == Cells.CellTypes.Market;
         }
 
         public int GetSupplies()

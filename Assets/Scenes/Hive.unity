@@ -1655,21 +1655,21 @@ MonoBehaviour:
         - title: Armor 1
           cost:
             production: 0
-            supplies: 0
+            supplies: 5
           description: +2 hp to all units
           technology: 3110
           requiredTech: 
         - title: Armor 2
           cost:
             production: 0
-            supplies: 0
+            supplies: 7
           description: +2 hp to all units (again)
           technology: 3111
           requiredTech: 
         - title: Armor 3
           cost:
             production: 0
-            supplies: 0
+            supplies: 10
           description: +2 hp to all units (once again)
           technology: 3112
           requiredTech: 
@@ -1678,6 +1678,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 45c0aa3d5256b9e4ea688ad1b9f10d6f, type: 2}
       - {fileID: 11400000, guid: 23a5950c911e37c42a1052d366232dc5, type: 2}
       - {fileID: 11400000, guid: 5f7645336755b4c4491a1fedea6f473b, type: 2}
+      - {fileID: 11400000, guid: bb7a225fa371f29429738957bae9fb65, type: 2}
   ui: {fileID: 1328235041}
 --- !u!4 &322388668
 Transform:
@@ -1711,6 +1712,7 @@ MonoBehaviour:
   income: {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
   blacksmith: {fileID: 9196783149601408105, guid: 6eda4cb626c73354eb0a612f89828650,
     type: 3}
+  market: {fileID: 2081058377881746019, guid: 0c41338fc3bfab743a0bdddfd417640f, type: 3}
   meleeUnit: {fileID: 3856654945942102754, guid: a6461c4f62e2fd64893e91336eee2050,
     type: 3}
   pathIndicator: {fileID: 1324900828}
