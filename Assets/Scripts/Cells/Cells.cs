@@ -87,6 +87,8 @@ namespace Aspekt.Hex
             var cell = CreateCell(type, owner.ID);
             if (cell == null) return cell;
             
+            cell.SetupTech(data, owner.ID);
+            
             cell.Init(this, data, owner);
             AllCells.Add(cell);
             
@@ -187,21 +189,12 @@ namespace Aspekt.Hex
             return pathfinder.FindPath(unit.Coordinates, targetCoords, unit.MoveRange);
         }
         
-        public int GetCost(CellTypes type)
+        public Cost GetCost(CellTypes type)
         {
             return GetPrefab(type).Cost;
         }
 
-        private HexCell CreateCell(CellTypes type, int playerId)
-        {
-            var cellPrefab = GetPrefab(type);
-            if (cellPrefab == null) return null;
-            var cell = Instantiate(cellPrefab);
-            cell.SetupTech(data, playerId);
-            return cell;
-        }
-
-        private HexCell GetPrefab(CellTypes type)
+        public HexCell GetPrefab(CellTypes type)
         {
             switch (type)
             {
@@ -219,6 +212,14 @@ namespace Aspekt.Hex
                     Debug.LogError("invalid cell type: " + type);
                     return null;
             }
+        }
+
+        private HexCell CreateCell(CellTypes type, int playerId)
+        {
+            var cellPrefab = GetPrefab(type);
+            if (cellPrefab == null) return null;
+            var cell = Instantiate(cellPrefab);
+            return cell;
         }
 
         public List<HexCoordinates> GetAttackableCells(HexCell cell, int range)

@@ -7,9 +7,11 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class HomeCell : BuildingCell
+    public class HomeCell : BuildingCell, ISuppliesGenerator, IProductionGenerator
     {
         public override Technology Technology { get; } = Technology.None;
+        public int production = 1;
+        public int suppliesPerRound = 2;
         
         public override bool CanCreate(Cells.CellTypes cellType)
         {
@@ -18,9 +20,14 @@ namespace Aspekt.Hex
                    || cellType == Cells.CellTypes.Blacksmith;
         }
 
-        public override void OnTechAdded(Technology tech)
+        public int GetSupplies()
         {
-            base.OnTechAdded(tech);
+            return suppliesPerRound;
+        }
+
+        public int GetProduction()
+        {
+            return production;
         }
     }
 }

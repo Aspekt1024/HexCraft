@@ -4,10 +4,6 @@ namespace Aspekt.Hex
 {
     public static class CellsExtensions
     {
-        public static IncomeCell[] GetIncomeCells(this Cells cells, int playerId)
-        {
-            return cells.GetCells<IncomeCell>(playerId);
-        }
 
         public static HomeCell[] GetHomeCells(this Cells cells, int playerId)
         {

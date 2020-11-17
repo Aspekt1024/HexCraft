@@ -6,7 +6,7 @@ namespace Aspekt.Hex
     [Serializable]
     public class GameConfig
     {
-        public int startingCredits = 5;
+        public int startingSupply = 5;
 
         public TechConfig techConfig;
 

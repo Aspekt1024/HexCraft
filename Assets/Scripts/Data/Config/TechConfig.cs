@@ -58,7 +58,7 @@ namespace Aspekt.Hex.Config
             if (data.TechnologyData.HasTechnology(techData.technology)) return false;
             if (!data.TechnologyData.HasTechnologies(techData.requiredTech)) return false;
             
-            return data.Credits >= techData.cost;
+            return data.CurrencyData.CanAfford(techData.cost);
         }
 
         public bool CanRemoveTech(Technology tech, IEnumerable<HexCell> playerOwnedCells)
@@ -78,7 +78,7 @@ namespace Aspekt.Hex.Config
     public class TechDetails
     {
         public string title;
-        public int cost;
+        public Cost cost;
         public string description;
         public Technology technology;
         public List<Technology> requiredTech;

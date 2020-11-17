@@ -57,7 +57,9 @@ MonoBehaviour:
   cellType: 1300
   DisplayName: Farm
   PlacementRadius: 2
-  Cost: 10
+  Cost:
+    production: 0
+    supplies: 7
   MaxHP: 2
   BasicDescription: Generates 1 food per round, at the start of your turn.
   Coordinates:
@@ -67,7 +69,7 @@ MonoBehaviour:
   Owner: {fileID: 0}
   renderers:
   - {fileID: 4694660904767215729}
-  CreditsPerRound: 1
+  production: 1
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1647,23 +1647,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config:
-    startingCredits: 50
+    startingSupply: 50
     techConfig:
       techGroups:
       - group: 2
         details:
         - title: Armor 1
-          cost: 1
+          cost:
+            production: 0
+            supplies: 0
           description: +2 hp to all units
           technology: 3110
           requiredTech: 
         - title: Armor 2
-          cost: 2
+          cost:
+            production: 0
+            supplies: 0
           description: +2 hp to all units (again)
           technology: 3111
           requiredTech: 
         - title: Armor 3
-          cost: 3
+          cost:
+            production: 0
+            supplies: 0
           description: +2 hp to all units (once again)
           technology: 3112
           requiredTech: 

@@ -119,17 +119,19 @@ namespace Aspekt.Hex
 
         public void AddTech(Technology tech)
         {
+            if (!isServer) return;
             if (game.Data.CanAddTech(tech, ID))
             {
-                CmdAddTech((Int16)tech);
+                game.Data.AddTech(tech, ID);
             }
         }
         
         public void RemoveTech(Technology tech)
         {
+            if (!isServer) return;
             if (game.Data.CanRemoveTech(tech, ID))
             {
-                CmdRemoveTech((Int16)tech);
+                game.Data.RemoveTech(tech, ID);
             }
         }
         
@@ -188,26 +190,6 @@ namespace Aspekt.Hex
         {
             if (!IsCurrentPlayer) return;
             game.Data.NextTurn();
-        }
-        
-        [Command]
-        private void CmdAddTech(Int16 tech)
-        {
-            if (!game.IsCurrentPlayer(this)) return;
-            
-            if (Enum.IsDefined(typeof(Technology), (Int32)tech))
-            {
-                game.Data.AddTech((Technology)tech, ID);
-            }
-        }
-
-        [Command]
-        private void CmdRemoveTech(Int16 tech)
-        {
-            if (Enum.IsDefined(typeof(Technology), (Int32) tech))
-            {
-                game.Data.RemoveTech((Technology) tech, ID);
-            }
         }
     }
 }

@@ -6,10 +6,10 @@ namespace Aspekt.Hex
     {
         public readonly NetworkGamePlayerHex Player;
         
-        public  TechnologyData TechnologyData;
+        public TechnologyData TechnologyData;
+        public CurrencyData CurrencyData;
 
         public int TurnNumber;
-        public int Credits;
 
         public interface ITechObserver
         {
@@ -26,6 +26,7 @@ namespace Aspekt.Hex
         public void Init(GameConfig config)
         {
             TechnologyData = new TechnologyData(config.techConfig);
+            CurrencyData = new CurrencyData(this);
         }
 
         public void RegisterTechObserver(ITechObserver observer) => techObservers.Add(observer);

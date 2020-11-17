@@ -95,7 +95,7 @@ namespace Aspekt.Hex
             foreach (var player in room.GamePlayers)
             {
                 grid.SetStartingLocation(player);
-                Data.SetCurrency(player, config.startingCredits);
+                Data.OnSuppliesChanged(player, config.startingSupply);
             }
 
             UI.UpdatePlayerInfo(room.GamePlayers);
@@ -113,12 +113,12 @@ namespace Aspekt.Hex
             var playerData = Data.GetPlayerData(player);
             var cost = Cells.GetCost(type);
             
-            if (playerData.Credits < cost) return;
+            if (!playerData.CurrencyData.CanAfford(cost)) return;
             if (!playerData.TechnologyData.HasTechnologyForCell(type)) return;
 
             if (grid.TryPlace(x, z, player.ID, type))
             {
-                Data.ModifyCurrency(playerData, -cost);
+                playerData.CurrencyData.Purchase(cost);
                 Data.AddActionPoints(1);
             }
         }

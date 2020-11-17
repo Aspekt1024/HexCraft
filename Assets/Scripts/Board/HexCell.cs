@@ -23,7 +23,7 @@ namespace Aspekt.Hex
         public Cells.CellTypes cellType = Cells.CellTypes.None;
         public string DisplayName = "Cell";
         public int PlacementRadius = 2;
-        public int Cost = 2;
+        public Cost Cost;
         public int MaxHP = 1;
         public string BasicDescription = "";
         

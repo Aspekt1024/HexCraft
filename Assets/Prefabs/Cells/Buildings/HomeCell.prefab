@@ -60,7 +60,9 @@ MonoBehaviour:
   cellType: 1000
   DisplayName: Town Hall
   PlacementRadius: 2
-  Cost: 15
+  Cost:
+    production: 0
+    supplies: 250
   MaxHP: 3
   BasicDescription: Protect this building, or you lose!
   Coordinates:
@@ -70,6 +72,8 @@ MonoBehaviour:
   Owner: {fileID: 0}
   renderers:
   - {fileID: 8061839451840137656}
+  production: 1
+  suppliesPerRound: 2
 --- !u!1001 &8061839451838108120
 PrefabInstance:
   m_ObjectHideFlags: 0

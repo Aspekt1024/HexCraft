@@ -58,7 +58,9 @@ MonoBehaviour:
   cellType: 1200
   DisplayName: Barracks
   PlacementRadius: 5
-  Cost: 7
+  Cost:
+    production: 0
+    supplies: 5
   MaxHP: 2
   BasicDescription: Trains ground units.
   Coordinates:

@@ -53,8 +53,9 @@ namespace Aspekt.Hex.Actions
         {
             return new Tooltip.Details(
                 currentLevelTechDetails.title, 
-                currentLevelTechDetails.cost, 0, 0, 
-                1,
+                currentLevelTechDetails.cost.supplies,
+                currentLevelTechDetails.cost.production,
+                0, 0,
                 new[] {currentLevelTechDetails.description}
             );
         }

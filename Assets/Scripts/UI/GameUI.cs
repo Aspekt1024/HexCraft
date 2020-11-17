@@ -120,9 +120,9 @@ namespace Aspekt.Hex.UI
             turnIndicator.SetActionCount(data, actionCount);
         }
 
-        public void SetCurrency(int credits)
+        public void UpdateCurrency(CurrencyData currencyData)
         {
-            currency.SetCredits(credits);
+            currency.UpdateCurrency(currencyData);
         }
 
         public void ShowCellInfo(HexCell cell)

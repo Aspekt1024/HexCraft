@@ -19,8 +19,9 @@ namespace Aspekt.Hex.Actions
         {
             return new Tooltip.Details(
                 GetBuildTitle(),
-                prefab.Cost,
-                0, 0, 0,
+                prefab.Cost.supplies,
+                prefab.Cost.production,
+                0, 0,
                 new[] {prefab.BasicDescription});
         }
 

@@ -58,7 +58,9 @@ MonoBehaviour:
   cellType: 1400
   DisplayName: Blacksmith
   PlacementRadius: 2
-  Cost: 7
+  Cost:
+    production: 0
+    supplies: 10
   MaxHP: 5
   BasicDescription: Provides armor and weapon upgrades.
   Coordinates:

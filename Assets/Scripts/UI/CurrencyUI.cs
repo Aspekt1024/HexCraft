@@ -11,19 +11,12 @@ namespace Aspekt.Hex.UI
         [SerializeField] private TextMeshProUGUI currency3;
 #pragma warning restore 649
 
-        public void SetCredits(int amount)
+        public void UpdateCurrency(CurrencyData currencyData)
         {
-            currency1.text = amount.ToString();
-        }
-        
-        public void SetCredits2(int amount)
-        {
-            currency2.text = amount.ToString();
-        }
-        
-        public void SetCredits3(int amount)
-        {
-            currency3.text = amount.ToString();
+            currency1.text = currencyData.Supplies.ToString();
+            
+            var availableProduction = currencyData.MaxProduction - currencyData.UtilisedProduction;
+            currency2.text = availableProduction + " (" + currencyData.MaxProduction + ")";
         }
     }
 }

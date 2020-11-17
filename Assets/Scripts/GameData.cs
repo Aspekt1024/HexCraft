@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aspekt.Hex.Config;
 using Mirror;
-using UnityEngine;
 
 namespace Aspekt.Hex
 {
     /// <summary>
     /// Game data is owned by the server and distributed to all clients
     /// </summary>
-    public class GameData : NetworkBehaviour, ICellLifecycleObserver
+    public class GameData : NetworkBehaviour, ICellLifecycleObserver, CurrencyData.IObserver
     {
         private GameManager game;
         private NetworkManagerHex room;
@@ -61,7 +59,11 @@ namespace Aspekt.Hex
         {
             this.game = game;
             Config = config;
-            playerData.ForEach(d => d.Init(config));
+            playerData.ForEach(d =>
+            {
+                d.Init(config);
+                d.CurrencyData.RegisterObserver(this);
+            });
         }
 
         public void SetGameStarted()
@@ -93,7 +95,7 @@ namespace Aspekt.Hex
             var techData = Config.GetTechDetails(tech);
             if (Config.techConfig.CanAddTech(techData, data))
             {
-                SetCurrency(data.Player, data.Credits - techData.cost);
+                data.CurrencyData.Purchase(techData.cost);
                 RpcAddTech((Int16)tech, (Int16)playerId);
             }
         }
@@ -105,15 +107,20 @@ namespace Aspekt.Hex
                 RpcRemoveTech((Int16) tech, (Int16) playerId);
             }
         }
-
-        public void SetCurrency(NetworkGamePlayerHex player, int credits)
+        
+        public void OnMaxProductionChanged(NetworkGamePlayerHex player, int newProduction)
         {
-            RpcSetCurrency((Int16)player.ID, credits);
+            RpcSetMaxProduction((Int16)player.ID, (Int16)newProduction);
         }
 
-        public void ModifyCurrency(PlayerData data, int change)
+        public void OnProductionUtilisationChanged(NetworkGamePlayerHex player, int newUtilisation)
         {
-            RpcSetCurrency((Int16)data.Player.ID, data.Credits + change);
+            RpcSetProductionUtilisation((Int16)player.ID, (Int16)newUtilisation);
+        }
+
+        public void OnSuppliesChanged(NetworkGamePlayerHex player, int newSupplies)
+        {
+            RpcSetSupplies((Int16)player.ID, (Int16)newSupplies);
         }
 
         public void AddActionPoints(int actionPoints)
@@ -193,14 +200,22 @@ namespace Aspekt.Hex
 
         private void GenerateIncome(PlayerData data)
         {
-            var incomeCells = game.Cells.GetIncomeCells(data.Player.ID);
-            var homeCells = game.Cells.GetHomeCells(data.Player.ID);
+            var suppliers = game.Cells.AllCells
+                .Where(c => c.Owner.ID == data.Player.ID)
+                .OfType<ISuppliesGenerator>();
+            
+            // TODO market
 
-            var credits = data.Credits;
-            credits += incomeCells.Sum(c => c.CreditsPerRound);
-            credits += homeCells.Sum(c => 2); // TODO set credits per round for home base cells
+            var supplies = data.CurrencyData.Supplies;
+            supplies += suppliers.Sum(c => c.GetSupplies());
+
+            var isMarketPresent = false;
+            if (isMarketPresent)
+            {
+                supplies += data.CurrencyData.MaxProduction - data.CurrencyData.UtilisedProduction;
+            }
     
-            RpcSetCurrency((Int16)data.Player.ID, credits);
+            RpcSetSupplies((Int16)data.Player.ID, (Int16)supplies);
         }
 
         [ClientRpc]
@@ -232,18 +247,35 @@ namespace Aspekt.Hex
         }
 
         [ClientRpc]
-        private void RpcSetCurrency(Int16 playerId, int credits)
+        private void RpcSetProductionUtilisation(Int16 playerId, int newUtilisation)
         {
-            foreach (var player in playerData)
+            var player = GetPlayerFromId(playerId);
+            player.CurrencyData.UtilisedProduction = newUtilisation;
+            if (player.Player.hasAuthority)
             {
-                if (player.Player.ID == playerId)
-                {
-                    player.Credits = credits;
-                    if (player.Player.hasAuthority)
-                    {
-                        game.UI.SetCurrency(credits);
-                    }
-                }
+                game.UI.UpdateCurrency(player.CurrencyData);
+            }
+        }
+
+        [ClientRpc]
+        private void RpcSetMaxProduction(Int16 playerId, Int16 newProduction)
+        {
+            var player = GetPlayerFromId(playerId);
+            player.CurrencyData.MaxProduction = newProduction;
+            if (player.Player.hasAuthority)
+            {
+                game.UI.UpdateCurrency(player.CurrencyData);
+            }
+        }
+
+        [ClientRpc]
+        private void RpcSetSupplies(Int16 playerId, Int16 newSupplies)
+        {
+            var player = GetPlayerFromId(playerId);
+            player.CurrencyData.Supplies = newSupplies;
+            if (player.Player.hasAuthority)
+            {
+                game.UI.UpdateCurrency(player.CurrencyData);
             }
         }
 
@@ -292,10 +324,20 @@ namespace Aspekt.Hex
 
         public void OnCellCreated(HexCell cell)
         {
+            var data = GetPlayerFromId(cell.PlayerId);
+            
             if (IsCurrentPlayer(cell.Owner))
             {
-                var data = GetPlayerFromId(cell.PlayerId);
                 data.Player.AddTech(cell.Technology);
+            }
+
+            if (isServer)
+            {
+                if (cell is IProductionGenerator producer)
+                {
+                    var prod = producer.GetProduction();
+                    data.CurrencyData.ModifyMaxProduction(prod);
+                }
             }
         }
 
@@ -303,6 +345,15 @@ namespace Aspekt.Hex
         {
             var data = GetPlayerFromId(cell.PlayerId);
             data.Player.RemoveTech(cell.Technology);
+
+            if (isServer)
+            {
+                if (cell is IProductionGenerator producer)
+                {
+                    var prod = producer.GetProduction();
+                    data.CurrencyData.ModifyMaxProduction(-prod);
+                }
+            }
         }
     }
 }
