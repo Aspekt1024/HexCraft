@@ -1,4 +1,5 @@
 using System;
+using Aspekt.Hex.Actions;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
@@ -125,14 +126,30 @@ namespace Aspekt.Hex
             indicator.ShowBuild(type, player.ID, originator);
         }
 
-        public void SetUnitMove(UnitCell movingUnit)
+        public void SetUnitAction(UnitCell unitCell, UnitAction unitAction)
+        {
+            switch (unitAction.actionType)
+            {
+                case UnitActions.Move:
+                    SetUnitMove(unitCell);
+                    break;
+                case UnitActions.Attack:
+                    SetUnitAttack(unitCell);
+                    break;
+                default:
+                    Debug.Log("invalid unit action: " + unitAction.actionType);
+                    break;
+            }
+        }
+
+        private void SetUnitMove(UnitCell movingUnit)
         {
             unit = movingUnit;
             state = States.Moving;
             indicator.ShowMovementGrid(unit.Coordinates, unit.MoveRange);
         }
 
-        public void SetUnitAttack(UnitCell attackingUnit)
+        private void SetUnitAttack(UnitCell attackingUnit)
         {
             unit = attackingUnit;
             state = States.Attacking;

@@ -10,7 +10,7 @@ namespace Aspekt.Hex.Actions
         public HexCell prefab;
         public List<Technology> techRequirements;
 
-        protected override bool IsRequirementsMet(int playerId)
+        public override bool IsRequirementsMet(int playerId)
         {
             return IsTechAvailable(techRequirements, playerId);
         }

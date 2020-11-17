@@ -1,3 +1,4 @@
+using Aspekt.Hex.Actions;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -10,6 +11,25 @@ namespace Aspekt.Hex
 
         public override void SetupTech(GameData data, int playerId)
         {
+        }
+
+        public override void OnActionClicked(ActionDefinition actionDefinition)
+        {
+            switch (actionDefinition)
+            {
+                case BuildAction buildAction:
+                    EventObservers.ForEach(o => o.IndicateBuildCell(buildAction, this));
+                    break;
+                case UpgradeAction upgradeAction:
+                {
+                    var tech = upgradeAction.GetNextTech();
+                    EventObservers.ForEach(o => o.AddTech(tech));
+                    break;
+                }
+                default:
+                    Debug.LogError("only build and upgrade actions are defined for building cells");
+                    break;
+            }
         }
 
         protected override void SetMaterial(Material material)

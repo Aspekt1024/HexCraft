@@ -10,15 +10,7 @@ namespace Aspekt.Hex
         
         public override bool CanCreate(Cells.CellTypes cellType)
         {
-            return cellType == Cells.CellTypes.MeleeUnit || cellType == Cells.CellTypes.UnitT2;
-        }
-
-        public void ActionTrainMeleeUnit()
-        {
-            foreach (var observer in EventObservers)
-            {
-                observer.IndicateBuildCell(Cells.CellTypes.MeleeUnit, this);
-            }
+            return cellType == Cells.CellTypes.MeleeUnit;
         }
     }
 }

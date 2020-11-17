@@ -82,7 +82,7 @@ namespace Aspekt.Hex.UI.Control
                 }
                 
                 var action = availableActions[i];
-                cellActions[i].ShowAction(action, queryingPlayer.ID);
+                cellActions[i].ShowAction(action, queryingPlayer.ID, cell.OnActionClicked);
             }
             HideCellActions(availableActions.Length);
         }

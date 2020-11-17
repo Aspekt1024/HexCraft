@@ -16,7 +16,8 @@ namespace Aspekt.Hex.Actions
         /// </summary>
         public virtual void Refresh(int playerId) {}
         
-        protected abstract bool IsRequirementsMet(int playerId);
+        public abstract bool IsRequirementsMet(int playerId);
+        
         protected abstract Tooltip.Details GetTooltipRequirementsMet();
         protected abstract Tooltip.Details GetTooltipRequirementsNotMet();
 

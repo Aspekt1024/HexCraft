@@ -3,12 +3,17 @@ using Aspekt.Hex.Actions;
 
 namespace Aspekt.Hex
 {
+    public enum UnitActions
+    {
+        None = 0,
+        Move = 1000,
+        Attack = 2000,
+    }
+    
     public interface ICellEventObserver
     {
-        void IndicateBuildCell(Cells.CellTypes type, HexCell originator);
-
-        void IndicateUnitMove(UnitCell unit);
-        void IndicateUnitAttack(UnitCell unit);
+        void IndicateBuildCell(BuildAction buildAction, HexCell originator);
+        void IndicateUnitAction(UnitCell unit, UnitAction unitAction);
         void AddTech(Technology tech);
     }
 

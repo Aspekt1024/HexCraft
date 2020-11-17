@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aspekt.Hex.Actions;
 using Aspekt.Hex.UI;
 using Mirror;
 using UnityEngine;
@@ -104,16 +105,16 @@ namespace Aspekt.Hex
             }
         }
 
-        public void IndicateBuildCell(Cells.CellTypes type, HexCell originator)
+        public void IndicateBuildCell(BuildAction buildAction, HexCell originator)
         {
-            if (!IsCurrentPlayer) return;
-            actions.SetBuild(originator, type);
+            if (!IsCurrentPlayer || !buildAction.IsRequirementsMet(originator.PlayerId)) return;
+            actions.SetBuild(originator, buildAction.prefab.cellType);
         }
 
-        public void IndicateUnitAttack(UnitCell unit)
+        public void IndicateUnitAction(UnitCell unit, UnitAction unitAction)
         {
             if (!IsCurrentPlayer) return;
-            actions.SetUnitAttack(unit);
+            actions.SetUnitAction(unit, unitAction);
         }
 
         public void AddTech(Technology tech)
@@ -130,12 +131,6 @@ namespace Aspekt.Hex
             {
                 CmdRemoveTech((Int16)tech);
             }
-        }
-
-        public void IndicateUnitMove(UnitCell unit)
-        {
-            if (!IsCurrentPlayer) return;
-            actions.SetUnitMove(unit);
         }
         
         [Command]

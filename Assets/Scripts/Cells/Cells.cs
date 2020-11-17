@@ -8,13 +8,13 @@ namespace Aspekt.Hex
     {
         public enum CellTypes
         {
+            None = 0,
+            
             Base = 1000,
             Training = 1200,
             Income = 1300,
             Blacksmith = 1400,
             MeleeUnit = 2000,
-            UnitT1 = 2010,
-            UnitT2 = 2020,
         }
 
         public enum Colours

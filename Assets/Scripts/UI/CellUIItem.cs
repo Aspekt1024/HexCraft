@@ -1,7 +1,6 @@
 using System;
 using Aspekt.Hex.Actions;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Aspekt.Hex.UI
@@ -12,45 +11,30 @@ namespace Aspekt.Hex.UI
         [SerializeField] private Image spriteRenderer;
 #pragma warning restore 649
 
-        private UnityEvent<ActionDefinition> onClickCallback;
-        private Details details;
+        private ActionDefinition actionDefinition;
+        private Action<ActionDefinition> actionCallback;
 
-        [Serializable]
-        public struct Details
+        public void ShowAction(ActionDefinition actionDefinition, int playerId, Action<ActionDefinition> actionCallback)
         {
-            public ActionDefinition definiton;
-            public UnityEvent<ActionDefinition> callback;
-
-            public bool IsValid()
-            {
-                return definiton != null && callback != null;
-            }
-
-            public bool CanDisplay(int playerId) => definiton.CanDisplay(playerId);
-
-            public void Update(int playerId) => definiton.Refresh(playerId);
-        }
-
-        public void ShowAction(Details details, int playerId)
-        {
-            if (!details.IsValid()) return;
+            if (actionDefinition == null) return;
             
             gameObject.SetActive(true);
 
-            this.details = details;
-            details.Update(playerId);
-            spriteRenderer.sprite = details.definiton.GetIcon();
-            onClickCallback = details.callback;
+            this.actionDefinition = actionDefinition;
+            this.actionCallback = actionCallback;
+            
+            actionDefinition.Refresh(playerId);
+            spriteRenderer.sprite = actionDefinition.GetIcon();
         }
 
         public void CellItemClicked()
         {
-            onClickCallback?.Invoke(null);
+            actionCallback?.Invoke(actionDefinition);
         }
 
         public override Tooltip.Details GetTooltipDetails(int playerId)
         {
-            return details.definiton.GetTooltipDetails(playerId);
+            return actionDefinition.GetTooltipDetails(playerId);
         }
     }
 }

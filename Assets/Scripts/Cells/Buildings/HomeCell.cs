@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Aspekt.Hex.Actions;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
@@ -14,21 +16,6 @@ namespace Aspekt.Hex
             return cellType == Cells.CellTypes.Training
                    || cellType == Cells.CellTypes.Income
                    || cellType == Cells.CellTypes.Blacksmith;
-        }
-
-        public void ActionBuildTraining()
-        {
-            EventObservers.ForEach(o => o.IndicateBuildCell(Cells.CellTypes.Training, this));
-        }
-
-        public void ActionBuildFarm()
-        {
-            EventObservers.ForEach(o => o.IndicateBuildCell(Cells.CellTypes.Income, this));
-        }
-
-        public void ActionBuildBlacksmith()
-        {
-            EventObservers.ForEach(o => o.IndicateBuildCell(Cells.CellTypes.Blacksmith, this));
         }
 
         public override void OnTechAdded(Technology tech)

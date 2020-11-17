@@ -44,7 +44,7 @@ namespace Aspekt.Hex.Actions
             return currentLevelTechDetails.technology;
         }
         
-        protected override bool IsRequirementsMet(int playerId)
+        public override bool IsRequirementsMet(int playerId)
         {
             return IsTechAvailable(currentLevelTechDetails.requiredTech, playerId);
         }

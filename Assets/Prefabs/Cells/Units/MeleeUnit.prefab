@@ -47,38 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - definiton: {fileID: 11400000, guid: 7ae43f96e0654834c9e5ad1b5c738dd2, type: 2}
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3856654945942102754}
-          m_TargetAssemblyTypeName: Aspekt.Hex.UnitCell, Assembly-CSharp
-          m_MethodName: ActionMove
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - definiton: {fileID: 11400000, guid: aa4a25d2f374b464a832c37f601abcb1, type: 2}
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3856654945942102754}
-          m_TargetAssemblyTypeName: Aspekt.Hex.UnitCell, Assembly-CSharp
-          m_MethodName: ActionAttack
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  - {fileID: 11400000, guid: 7ae43f96e0654834c9e5ad1b5c738dd2, type: 2}
+  - {fileID: 11400000, guid: aa4a25d2f374b464a832c37f601abcb1, type: 2}
   hexOutline: {fileID: 7172987457053707177}
   blackMaterial: {fileID: 2100000, guid: 54f19161a54e56442a8dd7f6239fc93b, type: 2}
   whiteMaterial: {fileID: 2100000, guid: cf1fa6c73dc509448863697c25254027, type: 2}
@@ -87,6 +57,7 @@ MonoBehaviour:
   greenMaterial: {fileID: 2100000, guid: f9ec407a080d408459742617c9dc6607, type: 2}
   yellowMaterial: {fileID: 2100000, guid: 26fed0ad2288580409bf94257121cd0f, type: 2}
   brownMaterial: {fileID: 2100000, guid: 32515cc96492c6d4ab732a997912d2e0, type: 2}
+  cellType: 2000
   DisplayName: Soldier
   PlacementRadius: 1
   Cost: 1

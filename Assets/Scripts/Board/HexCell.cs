@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Aspekt.Hex.UI;
+using Aspekt.Hex.Actions;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -8,7 +8,7 @@ namespace Aspekt.Hex
     public abstract class HexCell : MonoBehaviour
     {
 #pragma warning disable 649
-        [SerializeField] private CellUIItem.Details[] actions;
+        [SerializeField] private ActionDefinition[] actions;
         [SerializeField] private CellHexOutline hexOutline;
         [SerializeField] private Material blackMaterial;
         [SerializeField] private Material whiteMaterial;
@@ -18,8 +18,9 @@ namespace Aspekt.Hex
         [SerializeField] private Material yellowMaterial;
         [SerializeField] private Material brownMaterial;
 #pragma warning restore 649
-        
+
         [Header("Cell Settings")]
+        public Cells.CellTypes cellType = Cells.CellTypes.None;
         public string DisplayName = "Cell";
         public int PlacementRadius = 2;
         public int Cost = 2;
@@ -34,7 +35,7 @@ namespace Aspekt.Hex
         public int PlayerId;
         public NetworkGamePlayerHex Owner;
 
-        public CellUIItem.Details[] Actions => actions;
+        public ActionDefinition[] Actions => actions;
         
         public int CurrentHP { get; protected set; }
 
@@ -67,7 +68,7 @@ namespace Aspekt.Hex
             
             foreach (var action in actions)
             {
-                action.definiton.Init(data, PlayerId);
+                action.Init(data, PlayerId);
             }
             OnInit();
         }
@@ -145,6 +146,8 @@ namespace Aspekt.Hex
         public void SetUnselected() => hexOutline.SetUnselected();
 
         public abstract bool CanCreate(Cells.CellTypes cellType);
+        public abstract void OnActionClicked(ActionDefinition actionDefinition);
+        
         protected virtual void OnInit() {}
 
         protected abstract void SetColor(Color color);

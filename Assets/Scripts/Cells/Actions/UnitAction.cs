@@ -6,6 +6,7 @@ namespace Aspekt.Hex.Actions
     [CreateAssetMenu(menuName = "Hex/UnitAction")]
     public class UnitAction : ActionDefinition
     {
+        public UnitActions actionType;
         public string title;
         public string description;
         
@@ -26,7 +27,7 @@ namespace Aspekt.Hex.Actions
                 "You cannot perform this action right now.");
         }
 
-        protected override bool IsRequirementsMet(int playerId)
+        public override bool IsRequirementsMet(int playerId)
         {
             // TODO return is player turn
             return true;

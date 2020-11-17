@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Aspekt.Hex.Actions;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -37,6 +38,14 @@ namespace Aspekt.Hex
         }
 
         public override bool CanCreate(Cells.CellTypes cellType) => false;
+
+        public override void OnActionClicked(ActionDefinition actionDefinition)
+        {
+            if (actionDefinition is UnitAction unitAction)
+            {
+                EventObservers.ForEach(o => o.IndicateUnitAction(this, unitAction));
+            }
+        }
 
         public void RegisterActionObserver(IUnitActionObserver observer)
         {
@@ -169,22 +178,6 @@ namespace Aspekt.Hex
                 yield return null;
             }
             Destroy(gameObject);
-        }
-
-        public void ActionAttack()
-        {
-            foreach (var observer in EventObservers)
-            {
-                observer.IndicateUnitAttack(this);
-            }
-        }
-
-        public void ActionMove()
-        {
-            foreach (var observer in EventObservers)
-            {
-                observer.IndicateUnitMove(this);
-            }
         }
         
     }

@@ -14,19 +14,6 @@ namespace Aspekt.Hex
         {
             return false;
         }
-        
-        public void ActionUpgrade(ActionDefinition action)
-        {
-            if (action is UpgradeAction upgradeAction)
-            {
-                var tech = upgradeAction.GetNextTech();
-                EventObservers.ForEach(o => o.AddTech(tech));
-            }
-            else
-            {
-                Debug.LogError("unexpected blacksmith action: " + action.name);
-            }
-        }
 
         public override void OnTechAdded(Technology tech)
         {
