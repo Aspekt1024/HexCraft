@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Hex.Config;
+using UnityEngine;
 
 namespace Aspekt.Hex
 {
@@ -22,6 +23,17 @@ namespace Aspekt.Hex
         public bool HasTechnology(Technology tech)
         {
             return upgrades.Contains(tech);
+        }
+
+        public bool HasTechnologyForCell(Cells.CellTypes cellType)
+        {
+            var action = config.buildActions.FirstOrDefault(a => a.prefab.cellType == cellType);
+            if (action == null)
+            {
+                Debug.LogError("Failed to find build action for " + cellType);
+                return false;
+            }
+            return HasTechnologies(action.techRequirements);
         }
 
         public bool HasTechnologies(List<Technology> tech)

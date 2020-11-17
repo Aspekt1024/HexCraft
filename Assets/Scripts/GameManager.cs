@@ -114,6 +114,7 @@ namespace Aspekt.Hex
             var cost = Cells.GetCost(type);
             
             if (playerData.Credits < cost) return;
+            if (playerData.TechnologyData.HasTechnologyForCell(type))
 
             if (grid.TryPlace(x, z, player.ID, type))
             {

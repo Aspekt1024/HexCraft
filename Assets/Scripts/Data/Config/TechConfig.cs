@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aspekt.Hex.Actions;
 
 namespace Aspekt.Hex.Config
 {
@@ -8,6 +9,7 @@ namespace Aspekt.Hex.Config
     public class TechConfig
     {
         public TechGroup[] techGroups;
+        public BuildAction[] buildActions;
         
         private readonly Dictionary<Technology, TechDetails> techDict = new Dictionary<Technology, TechDetails>();
 
