@@ -49,7 +49,8 @@ namespace Aspekt.Hex.UI
             SetUICursor(HexCursor.Default);
 
             tooltip.SetPlayer(player);
-            
+
+            currency.RegisterObserver(tooltip);
             controlPanel.Init(tooltip);
             turnIndicator.Init(tooltip);
             

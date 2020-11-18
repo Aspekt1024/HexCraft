@@ -14,7 +14,7 @@ namespace Aspekt.Hex.Actions
         {
             return new Tooltip.Details(
                 title, 
-                0, 0, 0, 
+                new Cost(),
                 1,
                 new[] {description}
             );
@@ -27,10 +27,7 @@ namespace Aspekt.Hex.Actions
                 "You cannot perform this action right now.");
         }
 
-        public override bool IsRequirementsMet(int playerId)
-        {
-            // TODO return is player turn
-            return true;
-        }
+        public override bool CanAfford(int playerId) => true;
+        public override bool IsRequirementsMet(int playerId) => true;
     }
 }

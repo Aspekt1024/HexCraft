@@ -24,26 +24,17 @@ namespace Aspekt.Hex.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            foreach (var observer in observers)
-            {
-                observer.TooltipItemEnter(this);
-            }
+            observers.ForEach(o => o.TooltipItemEnter(this));
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            foreach (var observer in observers)
-            {
-                observer.TooltipItemExit(this);
-            }
+            observers.ForEach(o => o.TooltipItemExit(this));
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            foreach (var observer in observers)
-            {
-                observer.TooltipItemClicked(this);
-            }
+            observers.ForEach(o => o.TooltipItemClicked(this));
         }
     }
 }

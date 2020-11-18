@@ -11,6 +11,7 @@ namespace Aspekt.Hex
     public class NetworkGamePlayerHex : NetworkBehaviour, ICellEventObserver, ControlPanel.IEventReceiver, TurnIndicator.IEventReceiver
     {
         public bool IsReady { get; private set; }
+        public PlayerData PlayerData { get; private set; }
         
         [SyncVar(hook = nameof(HandleDisplayNameChanged))]
         private string displayName;
@@ -45,6 +46,8 @@ namespace Aspekt.Hex
                 actions = new PlayerActions(this, game);
             }
         }
+
+        public void SetPlayerData(PlayerData playerData) => PlayerData = playerData;
         
         public override void OnStopClient()
         {
@@ -107,7 +110,9 @@ namespace Aspekt.Hex
 
         public void IndicateBuildCell(BuildAction buildAction, HexCell originator)
         {
-            if (!IsCurrentPlayer || !buildAction.IsRequirementsMet(originator.PlayerId)) return;
+            if (!IsCurrentPlayer || originator.PlayerId != ID) return;
+            if (!buildAction.CanAfford(ID) || !buildAction.IsRequirementsMet(ID)) return;
+            
             actions.SetBuild(originator, buildAction.prefab.cellType);
         }
 

@@ -15,6 +15,8 @@ namespace Aspekt.Hex
         public int MaxProduction;
         public int UtilisedProduction;
         public int Supplies;
+
+        public int AvailableProduction => MaxProduction - UtilisedProduction;
         
         private readonly PlayerData playerData;
         

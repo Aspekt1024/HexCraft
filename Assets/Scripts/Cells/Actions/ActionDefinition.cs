@@ -15,13 +15,14 @@ namespace Aspekt.Hex.Actions
         /// Update the action definition before displaying 
         /// </summary>
         public virtual void Refresh(int playerId) {}
-        
+
+        public abstract bool CanAfford(int playerId);
         public abstract bool IsRequirementsMet(int playerId);
         
         protected abstract Tooltip.Details GetTooltipRequirementsMet();
         protected abstract Tooltip.Details GetTooltipRequirementsNotMet();
 
-        protected  GameData Data;
+        protected GameData Data;
         
         public void Init(GameData data, int playerId)
         {

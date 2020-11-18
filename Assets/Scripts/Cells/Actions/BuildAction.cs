@@ -10,6 +10,11 @@ namespace Aspekt.Hex.Actions
         public HexCell prefab;
         public List<Technology> techRequirements;
 
+        public override bool CanAfford(int playerId)
+        {
+            return Data.CanAfford(playerId, prefab.Cost);
+        }
+        
         public override bool IsRequirementsMet(int playerId)
         {
             return IsTechAvailable(techRequirements, playerId);
@@ -19,9 +24,8 @@ namespace Aspekt.Hex.Actions
         {
             return new Tooltip.Details(
                 GetBuildTitle(),
-                prefab.Cost.supplies,
-                prefab.Cost.production,
-                0, 0,
+                prefab.Cost,
+                0,
                 new[] {prefab.BasicDescription});
         }
 

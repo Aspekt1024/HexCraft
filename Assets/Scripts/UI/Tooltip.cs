@@ -10,8 +10,10 @@ namespace Aspekt.Hex.UI
 #pragma warning disable 649
         [SerializeField] private RectTransform content;
         [SerializeField] private TextMeshProUGUI title;
-        [SerializeField] private GameObject costObject;
-        [SerializeField] private TextMeshProUGUI costText;
+        [SerializeField] private GameObject suppliesObject;
+        [SerializeField] private TextMeshProUGUI suppliesText;
+        [SerializeField] private GameObject produceObject;
+        [SerializeField] private TextMeshProUGUI produceText;
         [SerializeField] private GameObject actionsObject;
         [SerializeField] private TextMeshProUGUI actionText;
         [SerializeField] private TextMeshProUGUI description;
@@ -32,9 +34,7 @@ namespace Aspekt.Hex.UI
         public struct Details
         {
             public readonly string Title;
-            public readonly int CostCurrency1;
-            public readonly int CostCurrency2;
-            public readonly int CostCurrency3;
+            public readonly Cost Cost;
             public readonly int ActionCost;
             public readonly string[] Description;
             public readonly string RequirementsText;
@@ -42,20 +42,16 @@ namespace Aspekt.Hex.UI
             public Details(string title, string[] description)
             {
                 Title = title;
-                CostCurrency1 = 0;
-                CostCurrency2 = 0;
-                CostCurrency3 = 0;
+                Cost = new Cost();
                 ActionCost = 0;
                 Description = description;
                 RequirementsText = "";
             }
             
-            public Details(string title, int cost1, int cost2, int cost3, int actionCost, string[] description)
+            public Details(string title, Cost cost, int actionCost, string[] description)
             {
                 Title = title;
-                CostCurrency1 = cost1;
-                CostCurrency2 = cost2;
-                CostCurrency3 = cost3;
+                Cost = cost;
                 ActionCost = actionCost;
                 Description = description;
                 RequirementsText = "";
@@ -65,9 +61,7 @@ namespace Aspekt.Hex.UI
             {
                 
                 Title = title;
-                CostCurrency1 = 0;
-                CostCurrency2 = 0;
-                CostCurrency3 = 0;
+                Cost = new Cost();
                 ActionCost = 0;
                 Description = new string[0];
                 RequirementsText = requirements;
@@ -188,14 +182,20 @@ namespace Aspekt.Hex.UI
 
         private void SetCost(Details details)
         {
-            if (details.CostCurrency1 == 0)
+            SetCostObject(suppliesObject, suppliesText, details.Cost.supplies, player.PlayerData.CurrencyData.Supplies);
+            SetCostObject(produceObject, produceText, details.Cost.production, player.PlayerData.CurrencyData.AvailableProduction);
+        }
+
+        private static void SetCostObject(GameObject obj, TextMeshProUGUI textObj, int cost, int budget)
+        {
+            if (cost == 0)
             {
-                costObject.SetActive(false);
+                obj.SetActive(false);
             }
             else
             {
-                costObject.SetActive(true);
-                costText.text = details.CostCurrency1.ToString();
+                obj.SetActive(true);
+                textObj.text = cost <= budget ? cost.ToString() : $"<color=red>{cost}</color>";
             }
         }
 

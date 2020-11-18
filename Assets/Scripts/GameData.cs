@@ -46,7 +46,9 @@ namespace Aspekt.Hex
         {
             foreach (var player in players)
             {
-                playerData.Add(new PlayerData(player));
+                var newPlayerData = new PlayerData(player);
+                playerData.Add(newPlayerData);
+                player.SetPlayerData(newPlayerData);
             }
         }
         
@@ -157,6 +159,12 @@ namespace Aspekt.Hex
             if (player == null) return false;
 
             return player.TechnologyData.HasTechnologies(tech);
+        }
+
+        public bool CanAfford(int playerId, Cost cost)
+        {
+            var player = GetPlayerFromId(playerId);
+            return player.CurrencyData.CanAfford(cost);
         }
 
         public PlayerData GetPlayerData(NetworkGamePlayerHex player)

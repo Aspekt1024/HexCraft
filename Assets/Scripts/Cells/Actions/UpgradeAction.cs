@@ -27,7 +27,12 @@ namespace Aspekt.Hex.Actions
         {
             GetCurrentLevelTechDetails(playerId);
         }
-        
+
+        public override bool CanAfford(int playerId)
+        {
+            return Data.CanAfford(playerId, currentLevelTechDetails.cost);
+        }
+
         public override Sprite GetIcon()
         {
             return currentLevelTech.icon;
@@ -53,9 +58,8 @@ namespace Aspekt.Hex.Actions
         {
             return new Tooltip.Details(
                 currentLevelTechDetails.title, 
-                currentLevelTechDetails.cost.supplies,
-                currentLevelTechDetails.cost.production,
-                0, 0,
+                currentLevelTechDetails.cost,
+                0,
                 new[] {currentLevelTechDetails.description}
             );
         }
