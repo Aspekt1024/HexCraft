@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -6,10 +7,31 @@ namespace Aspekt.Hex
     public class MeleeUnit : UnitCell
     {
         public override Technology Technology { get; } = Technology.None;
+
+        [Serializable]
+        public struct UpgradeStats
+        {
+            [Serializable]
+            public struct Upgrade
+            {
+                public Technology tech;
+                public int level;
+                public int value;    
+            }
+            
+            public TechGroups techGroup;
+            public Upgrade[] upgrades;
+
+            public bool IsTechGroup(Technology tech)
+            {
+                return upgrades.Any(u => u.tech == tech);
+            }
+        }
         
 #pragma warning disable 649
         [SerializeField] private GroundUnitModel groundUnitModel;
         [SerializeField] private MountedUnitModel mountedUnitModel;
+        [SerializeField] private UpgradeStats[] upgradeStats;
 #pragma warning restore 649
 
         private UnitModel currentModel;
@@ -83,43 +105,29 @@ namespace Aspekt.Hex
 
         public override void OnTechAdded(Technology tech)
         {
-            switch (tech)
+            var stats = upgradeStats.FirstOrDefault(s => s.IsTechGroup(tech));
+            if (stats.techGroup == TechGroups.Undefined) return;
+
+            var upgrade = stats.upgrades.FirstOrDefault(u => u.tech == tech);
+            if (upgrade.tech == Technology.None) return;
+            
+            switch (stats.techGroup)
             {
-                case Technology.UpgradeWeapons1:
-                    SetWeaponLevel(1);
+                case TechGroups.UpgradeWeapons:
+                    SetWeaponLevel(upgrade.level);
+                    Stats.Attack = upgrade.value;
                     break;
-                case Technology.UpgradeWeapons2:
-                    SetWeaponLevel(2);
+                case TechGroups.UpgradeArmor:
+                    SetArmorLevel(upgrade.level);
+                    Stats.Defense = upgrade.value;
                     break;
-                case Technology.UpgradeWeapons3:
-                    SetWeaponLevel(3);
+                case TechGroups.UpgradeWarMount:
+                    SetMountLevel(upgrade.level);
+                    Stats.Speed = upgrade.value;
                     break;
-                case Technology.UpgradeArmor1:
-                    SetArmorLevel(1);
-                    break;
-                case Technology.UpgradeArmor2:
-                    SetArmorLevel(2);
-                    break;
-                case Technology.UpgradeArmor3:
-                    SetArmorLevel(3);
-                    break;
-                case Technology.UpgradeWarMount1:
-                    SetMountLevel(1);
-                    break;
-                case Technology.UpgradeWarMount2:
-                    SetMountLevel(2);
-                    break;
-                case Technology.UpgradeWarMount3:
-                    SetMountLevel(3);
-                    break;
-                case Technology.UpgradeShields1:
-                    SetShieldLevel(1);
-                    break;
-                case Technology.UpgradeShields2:
-                    SetShieldLevel(2);
-                    break;
-                case Technology.UpgradeShields3:
-                    SetShieldLevel(3);
+                case TechGroups.UpgradeShields:
+                    SetShieldLevel(upgrade.level);
+                    Stats.Shield = upgrade.value;
                     break;
             }
         }

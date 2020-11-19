@@ -27,11 +27,11 @@ namespace Aspekt.Hex
 
     public enum TechGroups
     {
-        Buildings,
-        UpgradeWeapons,
-        UpgradeArmor,
-        UpgradeWarMount,
-        UpgradeShields,
-        Undefined
+        Undefined = 0,
+        Buildings = 1000,
+        UpgradeWeapons = 2000,
+        UpgradeArmor = 2100,
+        UpgradeWarMount = 2200,
+        UpgradeShields = 2300,
     }
 }

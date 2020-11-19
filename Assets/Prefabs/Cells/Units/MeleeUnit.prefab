@@ -75,6 +75,51 @@ MonoBehaviour:
   AttackDamage: 1
   groundUnitModel: {fileID: 1411488990733350500}
   mountedUnitModel: {fileID: 5490442777878340513}
+  upgradeStats:
+  - techGroup: 2000
+    upgrades:
+    - tech: 3010
+      level: 1
+      value: 2
+    - tech: 3011
+      level: 2
+      value: 3
+    - tech: 3012
+      level: 3
+      value: 5
+  - techGroup: 2100
+    upgrades:
+    - tech: 3110
+      level: 1
+      value: 1
+    - tech: 3111
+      level: 2
+      value: 2
+    - tech: 3012
+      level: 3
+      value: 3
+  - techGroup: 2200
+    upgrades:
+    - tech: 3210
+      level: 1
+      value: 2
+    - tech: 3211
+      level: 2
+      value: 3
+    - tech: 3212
+      level: 3
+      value: 4
+  - techGroup: 2300
+    upgrades:
+    - tech: 3310
+      level: 1
+      value: 20
+    - tech: 3311
+      level: 2
+      value: 40
+    - tech: 3312
+      level: 3
+      value: 60
 --- !u!1 &5490442777878331624
 GameObject:
   m_ObjectHideFlags: 0

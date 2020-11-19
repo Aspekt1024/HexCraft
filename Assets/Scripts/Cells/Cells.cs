@@ -69,7 +69,9 @@ namespace Aspekt.Hex
 
         public HexCell CreateIndicator(CellTypes type, int playerId)
         {
-            return CreateCell(type, playerId);
+            var cell = CreateCell(type, playerId);
+            cell.SetupTech(data, playerId);
+            return cell;
         }
 
         public void ShowPath(List<Vector3> path)
