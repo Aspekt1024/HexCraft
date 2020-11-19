@@ -9,10 +9,7 @@ namespace Aspekt.Hex.UI.Control
     public class CellControl : MonoBehaviour
     {
 #pragma warning disable 649
-        [SerializeField] private TextMeshProUGUI cellName;
-        [SerializeField] private TextMeshProUGUI health;
-        [SerializeField] private TextMeshProUGUI tier;
-        [SerializeField] private TextMeshProUGUI owner;
+        [SerializeField] private CellDetails cellDetails;
         [SerializeField] private List<CellUIItem> cellActions;
 #pragma warning restore 649
 
@@ -26,6 +23,8 @@ namespace Aspekt.Hex.UI.Control
 
         public void Init(Tooltip tooltip)
         {
+            cellDetails.Init(tooltip);
+            
             foreach (var actionItem in cellActions)
             {
                 actionItem.RegisterObserver(tooltip);
@@ -54,11 +53,7 @@ namespace Aspekt.Hex.UI.Control
         private void ShowCellDetails(HexCell cell, NetworkGamePlayerHex queryingPlayer)
         {
             currentCell = cell;
-            
-            cellName.text = cell.DisplayName;
-            health.text = "HP: " + cell.CurrentHP + " / " + cell.MaxHP;
-            tier.text = "Tier 1";
-            owner.text = "Owned by " + cell.Owner.DisplayName;
+            cellDetails.DisplayCellDetails(cell);
 
             if (cell.PlayerId == queryingPlayer.ID)
             {
@@ -90,11 +85,8 @@ namespace Aspekt.Hex.UI.Control
         private void ClearDetails()
         {
             currentCell = null;
-            
-            cellName.text = "";
-            health.text = "";
-            tier.text = "";
-            owner.text = "";
+
+            cellDetails.Clear();
             
             HideCellActions();
         }

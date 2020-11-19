@@ -14,6 +14,16 @@ namespace Aspekt.Hex
         public int AttackRange;
         public int AttackDamage;
 
+        public struct UnitStats
+        {
+            public int Attack;
+            public int Defense;
+            public int Speed;
+            public int Shield;
+        }
+
+        protected UnitStats Stats;
+
         public bool HasMoved { get; private set; }
         public bool HasAttacked { get; private set; }
         
@@ -27,6 +37,7 @@ namespace Aspekt.Hex
         private void Start()
         {
             Model.LookAt(transform.position + Vector3.back);
+            Stats = new UnitStats();
         }
         
         protected Animator Anim;
@@ -36,6 +47,8 @@ namespace Aspekt.Hex
             // Must be done here instead of Start
             Anim = GetComponentInChildren<Animator>();
         }
+
+        public UnitStats GetStats() => Stats;
 
         public override bool CanCreate(Cells.CellTypes cellType) => false;
 

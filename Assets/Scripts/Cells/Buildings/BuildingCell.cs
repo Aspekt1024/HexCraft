@@ -8,6 +8,16 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private Renderer[] renderers;
 #pragma warning disable 649
+        
+        public struct BuildingStats
+        {
+            public int Supplies;
+            public int Production;
+        }
+
+        protected BuildingStats Stats;
+
+        public BuildingStats GetStats() => Stats;
 
         public override void SetupTech(GameData data, int playerId)
         {

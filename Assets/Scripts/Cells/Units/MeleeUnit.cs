@@ -139,24 +139,28 @@ namespace Aspekt.Hex
 
         private void SetArmorLevel(int level)
         {
+            Stats.Defense = level;
             armorLevel = level;
             currentModel.SetArmor(level);
         }
 
         private void SetWeaponLevel(int level)
         {
+            Stats.Attack = level;
             weaponLevel = level;
             currentModel.SetWeapon(level);
         }
 
         private void SetShieldLevel(int level)
         {
+            Stats.Shield = level;
             shieldLevel = level;
             currentModel.SetShield(level);
         }
 
         private void SetMountLevel(int level)
         {
+            Stats.Speed = level;
             if (level == 0)
             {
                 SetModel(groundUnitModel);

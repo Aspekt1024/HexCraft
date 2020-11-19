@@ -14,6 +14,11 @@ namespace Aspekt.Hex
             return false;
         }
 
+        protected override void OnInit()
+        {
+            Stats.Production = production;
+        }
+
         public int GetProduction()
         {
             return production;

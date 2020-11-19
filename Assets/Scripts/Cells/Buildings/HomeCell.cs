@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Aspekt.Hex.Actions;
-using Aspekt.Hex.UI;
-using UnityEngine;
 
 namespace Aspekt.Hex
 {
@@ -19,6 +13,12 @@ namespace Aspekt.Hex
                    || cellType == Cells.CellTypes.Income
                    || cellType == Cells.CellTypes.Blacksmith
                    || cellType == Cells.CellTypes.Market;
+        }
+
+        protected override void OnInit()
+        {
+            Stats.Production = production;
+            Stats.Supplies = suppliesPerRound;
         }
 
         public int GetSupplies()
