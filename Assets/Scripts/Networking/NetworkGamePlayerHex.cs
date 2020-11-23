@@ -124,19 +124,35 @@ namespace Aspekt.Hex
 
         public void AddTech(Technology tech)
         {
-            if (!isServer) return;
+            Debug.Log(ID + " add " + tech);
+            if (!hasAuthority || !IsCurrentPlayer) return;
+            Debug.Log("current player");
             if (game.Data.CanAddTech(tech, ID))
             {
-                game.Data.AddTech(tech, ID);
+                Debug.Log("cmd");
+                CmdAddTech((Int16)tech);
             }
         }
         
         public void RemoveTech(Technology tech)
         {
-            if (!isServer) return;
+            if (!hasAuthority || !IsCurrentPlayer) return;
             if (game.Data.CanRemoveTech(tech, ID))
             {
                 game.Data.RemoveTech(tech, ID);
+            }
+        }
+
+        [Command]
+        private void CmdAddTech(Int16 techId)
+        {
+            if (Enum.IsDefined(typeof(Technology), (Int32) techId))
+            {
+                var tech = (Technology) techId;
+                if (game.Data.CanAddTech(tech, ID))
+                {
+                    game.Data.AddTech(tech, ID);
+                }
             }
         }
         

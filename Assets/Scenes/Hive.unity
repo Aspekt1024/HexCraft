@@ -249,53 +249,9 @@ MonoBehaviour:
   config:
     startingSupply: 50
     techConfig:
-      techGroups:
-      - group: 2100
-        details:
-        - title: Armor 1
-          cost:
-            production: 0
-            supplies: 5
-          description: +2 hp to all units
-          technology: 3110
-          requiredTech: 
-        - title: Armor 2
-          cost:
-            production: 0
-            supplies: 7
-          description: +2 hp to all units (again)
-          technology: 3111
-          requiredTech: 
-        - title: Armor 3
-          cost:
-            production: 0
-            supplies: 10
-          description: +2 hp to all units (once again)
-          technology: 3112
-          requiredTech: 
-      - group: 2000
-        details:
-        - title: Weapon 1
-          cost:
-            production: 0
-            supplies: 5
-          description: +1 attack
-          technology: 3010
-          requiredTech: 
-        - title: Weapon 2
-          cost:
-            production: 0
-            supplies: 7
-          description: +1 attack
-          technology: 3011
-          requiredTech: 
-        - title: Weapon 3
-          cost:
-            production: 0
-            supplies: 10
-          description: +2 attack
-          technology: 3012
-          requiredTech: 
+      upgrades:
+      - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}
+      - {fileID: 11400000, guid: 7e3d351021ccc484d8f476e1470fd220, type: 2}
       buildActions:
       - {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}
       - {fileID: 11400000, guid: 45c0aa3d5256b9e4ea688ad1b9f10d6f, type: 2}

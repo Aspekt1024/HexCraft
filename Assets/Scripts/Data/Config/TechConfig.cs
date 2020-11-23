@@ -8,10 +8,10 @@ namespace Aspekt.Hex.Config
     [Serializable]
     public class TechConfig
     {
-        public TechGroup[] techGroups;
+        public UpgradeAction[] upgrades;
         public BuildAction[] buildActions;
         
-        private readonly Dictionary<Technology, TechDetails> techDict = new Dictionary<Technology, TechDetails>();
+        private readonly Dictionary<Technology, UpgradeAction.UpgradeDetails> techDict = new Dictionary<Technology, UpgradeAction.UpgradeDetails>();
 
         private readonly HashSet<Technology> buildingTech = new HashSet<Technology>
         {
@@ -22,25 +22,25 @@ namespace Aspekt.Hex.Config
 
         public bool IsBuildingTech(Technology tech) => buildingTech.Contains(tech);
         
-        public TechDetails GetDetails(Technology tech)
+        public UpgradeAction.UpgradeDetails GetDetails(Technology tech)
         {
             if (techDict.ContainsKey(tech))
             {
                 return techDict[tech];
             }
             
-            foreach (var group in techGroups)
+            foreach (var upgradeGroup in upgrades)
             {
-                foreach (var detail in group.details)
+                foreach (var detail in upgradeGroup.upgradeDetails)
                 {
-                    if (detail.technology == tech)
+                    if (detail.tech == tech)
                     {
                         techDict.Add(tech, detail);
                         return detail;
                     }
                 }
             }
-            return null;
+            return new UpgradeAction.UpgradeDetails{ tech = Technology.None };
         }
 
         public bool CanAddTech(Technology tech, PlayerData data)
@@ -51,14 +51,14 @@ namespace Aspekt.Hex.Config
             return CanAddTech(techData, data);
         }
 
-        public bool CanAddTech(TechDetails techData, PlayerData data)
+        public bool CanAddTech(UpgradeAction.UpgradeDetails details, PlayerData data)
         {
-            if (data == null || techData == null) return false;
+            if (data == null || details.tech == Technology.None) return false;
 
-            if (data.TechnologyData.HasTechnology(techData.technology)) return false;
-            if (!data.TechnologyData.HasTechnologies(techData.requiredTech)) return false;
+            if (data.TechnologyData.HasTechnology(details.tech)) return false;
+            if (!data.TechnologyData.HasTechnologies(details.requiredTech)) return false;
             
-            return data.CurrencyData.CanAfford(techData.cost);
+            return data.CurrencyData.CanAfford(details.cost);
         }
 
         public bool CanRemoveTech(Technology tech, IEnumerable<HexCell> playerOwnedCells)
@@ -66,22 +66,4 @@ namespace Aspekt.Hex.Config
             return playerOwnedCells.All(c => c.Technology != tech);
         }
     }
-
-    [Serializable]
-    public class TechGroup
-    {
-        public TechGroups group;
-        public TechDetails[] details;
-    }
-    
-    [Serializable]
-    public class TechDetails
-    {
-        public string title;
-        public Cost cost;
-        public string description;
-        public Technology technology;
-        public List<Technology> requiredTech;
-    }
-    
 }

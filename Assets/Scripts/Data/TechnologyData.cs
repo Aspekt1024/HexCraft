@@ -13,6 +13,7 @@ namespace Aspekt.Hex
         public TechnologyData(TechConfig config)
         {
             this.config = config;
+            upgrades.Add(Technology.None);
         }
         
         public void AddTechnology(Technology tech)
@@ -43,15 +44,15 @@ namespace Aspekt.Hex
 
         public Technology GetTechLevel(TechGroups techGroup)
         {
-            foreach (var groupData in config.techGroups)
+            foreach (var groupData in config.upgrades)
             {
                 if (groupData.group != techGroup) continue;
                 
-                for (int i = groupData.details.Length - 1; i >= 0; i--)
+                for (int i = groupData.upgradeDetails.Length - 1; i >= 0; i--)
                 {
-                    if (HasTechnology(groupData.details[i].technology))
+                    if (HasTechnology(groupData.upgradeDetails[i].tech))
                     {
-                        return groupData.details[i].technology;
+                        return groupData.upgradeDetails[i].tech;
                     }
                 }
             }

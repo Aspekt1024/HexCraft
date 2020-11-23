@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using UnityEngine;
 
 namespace Aspekt.Hex
 {
@@ -94,7 +95,7 @@ namespace Aspekt.Hex
                 return;
             }
             
-            var techData = Config.GetTechDetails(tech);
+            var techData = Config.GetUpgradeDetails(tech);
             if (Config.techConfig.CanAddTech(techData, data))
             {
                 data.CurrencyData.Purchase(techData.cost);
@@ -332,15 +333,13 @@ namespace Aspekt.Hex
 
         public void OnCellCreated(HexCell cell)
         {
+            Debug.Log("cell created: " + cell.DisplayName + " : " + cell.Owner.ID);
             var data = GetPlayerFromId(cell.PlayerId);
-            
-            if (IsCurrentPlayer(cell.Owner))
-            {
-                data.Player.AddTech(cell.Technology);
-            }
 
             if (isServer)
             {
+                RpcAddTech((Int16)cell.Technology, (Int16)cell.PlayerId);
+                
                 if (cell is IProductionGenerator producer)
                 {
                     var prod = producer.GetProduction();
