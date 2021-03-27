@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildMarket
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 21c4a8515a327db4a89489131daee51d, type: 3}
+  icon: {fileID: 21300000, guid: c5526b55002afa44eadf671e8d0e2970, type: 3}
   prefab: {fileID: 2081058377881746019, guid: 0c41338fc3bfab743a0bdddfd417640f, type: 3}
   techRequirements: d0070000

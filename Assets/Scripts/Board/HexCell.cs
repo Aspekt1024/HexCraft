@@ -81,6 +81,8 @@ namespace Aspekt.Hex
         public void RegisterHealthObserver(ICellHealthObserver observer) => healthObservers.Add(observer);
         public void UnregisterHealthObserver(ICellHealthObserver observer) => healthObservers.Remove(observer);
 
+        public abstract float GetDamageMitigation();
+
         public void Place(HexCoordinates coords)
         {
             IsPlaced = true;

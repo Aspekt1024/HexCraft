@@ -21,7 +21,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 5
-    description: +2 hp to all units
+    description: +3 hp to all units
     requiredTech: 
   - tech: 3111
     icon: {fileID: 21300000, guid: fc6468be32c0f5449bef5dee3059a6f6, type: 3}
@@ -29,7 +29,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 7
-    description: +2 hp to all units
+    description: +3 hp to all units
     requiredTech: 
   - tech: 3112
     icon: {fileID: 21300000, guid: 0010e352a9b1abc4ebab3f3235c95e0b, type: 3}
@@ -37,5 +37,5 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 10
-    description: +3 hp to all units
+    description: +4 hp to all units
     requiredTech: 

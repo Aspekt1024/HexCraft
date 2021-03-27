@@ -21,7 +21,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 7
-    description: +2 defense to all units
+    description: Reduces unit damage taken by 20%
     requiredTech: 
   - tech: 3311
     icon: {fileID: 21300000, guid: 7cdfac7a7246d274c8b983fd664158c9, type: 3}
@@ -29,7 +29,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 9
-    description: +2 defense to all units
+    description: Reduces unit damage taken by a further 20% (additive)
     requiredTech: 
   - tech: 3312
     icon: {fileID: 21300000, guid: dc90b2c236cbacf47b20a1294efdf59d, type: 3}
@@ -37,5 +37,5 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 15
-    description: +3 defense to all units
+    description: Reduces unit damage taken by a further 20% (additive)
     requiredTech: 

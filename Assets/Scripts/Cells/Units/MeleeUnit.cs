@@ -160,6 +160,11 @@ namespace Aspekt.Hex
         {
             armorLevel = upgrade.level;
             Stats.Defense = upgrade.value;
+
+            var lostHP = MaxHP - CurrentHP;
+            MaxHP = upgrade.value;
+            CurrentHP = MaxHP - lostHP;
+            
             currentModel.SetArmor(upgrade.level);
         }
 
@@ -196,6 +201,10 @@ namespace Aspekt.Hex
         private void SetModel(UnitModel model)
         {
             Model = model.transform;
+            if (currentModel != null)
+            {
+                Model.rotation = currentModel.transform.rotation;
+            }
             currentModel = model;
             Anim = currentModel.GetComponent<Animator>();
             

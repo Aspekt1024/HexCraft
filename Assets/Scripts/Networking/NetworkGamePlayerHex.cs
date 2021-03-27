@@ -124,12 +124,9 @@ namespace Aspekt.Hex
 
         public void AddTech(Technology tech)
         {
-            Debug.Log(ID + " add " + tech);
             if (!hasAuthority || !IsCurrentPlayer) return;
-            Debug.Log("current player");
             if (game.Data.CanAddTech(tech, ID))
             {
-                Debug.Log("cmd");
                 CmdAddTech((Int16)tech);
             }
         }

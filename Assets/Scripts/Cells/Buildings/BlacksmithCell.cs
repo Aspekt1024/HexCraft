@@ -1,9 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using Aspekt.Hex.Actions;
-using Aspekt.Hex.UI;
-using UnityEngine;
-
 namespace Aspekt.Hex
 {
     public class BlacksmithCell : BuildingCell

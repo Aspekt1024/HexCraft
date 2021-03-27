@@ -60,7 +60,7 @@ MonoBehaviour:
   Cost:
     production: 0
     supplies: 5
-  MaxHP: 2
+  MaxHP: 8
   BasicDescription: Trades leftover production for supplies.
   Coordinates:
     x: 0

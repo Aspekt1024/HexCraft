@@ -10,7 +10,8 @@ namespace Aspekt.Hex
         
         public override bool CanCreate(Cells.CellTypes cellType)
         {
-            return cellType == Cells.CellTypes.MeleeUnit;
+            return cellType == Cells.CellTypes.MeleeUnit
+                || cellType == Cells.CellTypes.Stables;
         }
     }
 }

@@ -64,7 +64,7 @@ MonoBehaviour:
   Cost:
     production: 0
     supplies: 250
-  MaxHP: 3
+  MaxHP: 25
   BasicDescription: Protect this building, or you lose!
   Coordinates:
     x: 0

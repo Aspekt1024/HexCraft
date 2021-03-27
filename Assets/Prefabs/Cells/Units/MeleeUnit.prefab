@@ -77,30 +77,30 @@ MonoBehaviour:
     upgrades:
     - tech: 0
       level: 0
-      value: 1
+      value: 4
     - tech: 3010
       level: 1
-      value: 2
+      value: 6
     - tech: 3011
       level: 2
-      value: 3
+      value: 9
     - tech: 3012
       level: 3
-      value: 5
+      value: 12
   - techGroup: 2100
     upgrades:
     - tech: 0
       level: 0
-      value: 0
+      value: 6
     - tech: 3110
       level: 1
-      value: 1
+      value: 9
     - tech: 3111
       level: 2
-      value: 2
+      value: 12
     - tech: 3112
       level: 3
-      value: 3
+      value: 16
   - techGroup: 2200
     upgrades:
     - tech: 0
@@ -122,13 +122,13 @@ MonoBehaviour:
       value: 0
     - tech: 3310
       level: 1
-      value: 2
+      value: 20
     - tech: 3311
       level: 2
-      value: 4
+      value: 40
     - tech: 3312
       level: 3
-      value: 7
+      value: 60
 --- !u!1 &5490442777878331624
 GameObject:
   m_ObjectHideFlags: 0

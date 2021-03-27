@@ -29,7 +29,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 9
-    description: +2 attack to all units
+    description: +3 attack to all units
     requiredTech: 
   - tech: 3012
     icon: {fileID: 21300000, guid: 28a02df1369b7fd4eab040459b0cc450, type: 3}

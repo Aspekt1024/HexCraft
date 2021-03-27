@@ -105,6 +105,11 @@ namespace Aspekt.Hex
             }
         }
 
+        public override float GetDamageMitigation()
+        {
+            return Stats.Shield / 100f;
+        }
+
         private IEnumerator MoveRoutine(List<Vector3> path)
         {
             var tf = transform;

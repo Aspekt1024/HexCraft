@@ -42,6 +42,8 @@ namespace Aspekt.Hex
             }
         }
 
+        public override float GetDamageMitigation() => 0f;
+
         protected override void SetMaterial(Material material)
         {
             CellMaterial = material;

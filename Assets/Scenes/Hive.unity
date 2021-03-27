@@ -252,12 +252,15 @@ MonoBehaviour:
       upgrades:
       - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}
       - {fileID: 11400000, guid: 7e3d351021ccc484d8f476e1470fd220, type: 2}
+      - {fileID: 11400000, guid: 36ae8acea533cac4698f2a822efe6b9b, type: 2}
+      - {fileID: 11400000, guid: 658806b098c927946a298331029bd744, type: 2}
       buildActions:
       - {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}
       - {fileID: 11400000, guid: 45c0aa3d5256b9e4ea688ad1b9f10d6f, type: 2}
       - {fileID: 11400000, guid: 23a5950c911e37c42a1052d366232dc5, type: 2}
       - {fileID: 11400000, guid: 5f7645336755b4c4491a1fedea6f473b, type: 2}
       - {fileID: 11400000, guid: bb7a225fa371f29429738957bae9fb65, type: 2}
+      - {fileID: 11400000, guid: 13de6652590a7964fa4c07ec1211cb28, type: 2}
   ui: {fileID: 1328235041}
 --- !u!4 &322388668
 Transform:
@@ -290,6 +293,8 @@ MonoBehaviour:
     type: 3}
   income: {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
   blacksmith: {fileID: 9196783149601408105, guid: 6eda4cb626c73354eb0a612f89828650,
+    type: 3}
+  stables: {fileID: -6701571572801982158, guid: 3773372c4a09d7646bbece41e6e3655b,
     type: 3}
   market: {fileID: 2081058377881746019, guid: 0c41338fc3bfab743a0bdddfd417640f, type: 3}
   meleeUnit: {fileID: 3856654945942102754, guid: a6461c4f62e2fd64893e91336eee2050,

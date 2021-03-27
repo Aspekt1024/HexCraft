@@ -13,10 +13,29 @@ MonoBehaviour:
   m_Name: UpgradeWarMount
   m_EditorClassIdentifier: 
   icon: {fileID: 21300006, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  group: 2200
   upgradeDetails:
-  - icon: {fileID: 21300006, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
-    tech: 3210
-  - icon: {fileID: 21300202, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
-    tech: 3211
-  - icon: {fileID: 21300060, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
-    tech: 3212
+  - tech: 3210
+    icon: {fileID: 21300000, guid: 612de0209bd07a54f85dc0854cd56dac, type: 3}
+    title: Husbandry
+    cost:
+      production: 1
+      supplies: 10
+    description: Gives units horses to move faster
+    requiredTech: 
+  - tech: 3211
+    icon: {fileID: 21300000, guid: 9e95c96935782fe4b923243a27f2db04, type: 3}
+    title: Horse Training
+    cost:
+      production: 2
+      supplies: 15
+    description: Train horses to move faster
+    requiredTech: 
+  - tech: 3212
+    icon: {fileID: 21300000, guid: 110b3159672f1c3448cf3e664eff8167, type: 3}
+    title: War Horses
+    cost:
+      production: 2
+      supplies: 25
+    description: Horses are ready for battle and move faster
+    requiredTech: 

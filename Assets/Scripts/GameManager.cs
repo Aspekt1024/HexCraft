@@ -148,11 +148,14 @@ namespace Aspekt.Hex
             var attackerStats = attacker.GetStats();
             var isKillingBlow = target.CurrentHP <= attackerStats.Attack;
             
+            var damageMultiplier = Mathf.Max(1f - target.GetDamageMitigation(), 0f);
+            var damage = Mathf.RoundToInt(attackerStats.Attack * damageMultiplier);
+            
             grid.RpcAttack((Int16)attacker.Coordinates.X,
                 (Int16)attacker.Coordinates.Z,
                 (Int16)target.Coordinates.X,
                 (Int16)target.Coordinates.Z,
-                (Int16)attackerStats.Attack);
+                (Int16)damage);
             
             if (isKillingBlow)
             {
