@@ -132,7 +132,10 @@ namespace Aspekt.Hex
             {
                 NextTurn();
             }
-            RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayer.ActionPointsUsed));
+            else
+            {
+                RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayer.ActionPointsUsed));
+            }
         }
         
         public void NextTurn()
