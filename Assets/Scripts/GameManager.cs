@@ -145,13 +145,14 @@ namespace Aspekt.Hex
 
         public void AttackCell(UnitCell attacker, HexCell target)
         {
-            var isKillingBlow = target.CurrentHP <= attacker.AttackDamage;
+            var attackerStats = attacker.GetStats();
+            var isKillingBlow = target.CurrentHP <= attackerStats.Attack;
             
             grid.RpcAttack((Int16)attacker.Coordinates.X,
                 (Int16)attacker.Coordinates.Z,
                 (Int16)target.Coordinates.X,
                 (Int16)target.Coordinates.Z,
-                (Int16)attacker.AttackDamage);
+                (Int16)attackerStats.Attack);
             
             if (isKillingBlow)
             {

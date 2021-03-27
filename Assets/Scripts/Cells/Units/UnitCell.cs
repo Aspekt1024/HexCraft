@@ -8,11 +8,6 @@ namespace Aspekt.Hex
     public abstract class UnitCell : HexCell
     {
         protected Transform Model;
-        
-        [Header("Unit Settings")]
-        public int MoveRange;
-        public int AttackRange;
-        public int AttackDamage;
 
         public struct UnitStats
         {
@@ -20,6 +15,7 @@ namespace Aspekt.Hex
             public int Defense;
             public int Speed;
             public int Shield;
+            public int Range;
         }
 
         protected UnitStats Stats = new UnitStats();
@@ -95,6 +91,7 @@ namespace Aspekt.Hex
         public override void Remove()
         {
             StartCoroutine(DeathRoutine());
+            unitActionObservers.ForEach(o => o.OnUnitRemoved(this));
         }
         
         public override void TakeDamage(UnitCell attacker, int damage)
@@ -142,7 +139,7 @@ namespace Aspekt.Hex
         private Vector3 GetMoveVelocity(Vector3 velocity, Vector3 currentPos, Vector3 targetPos, bool isLastPoint)
         {
             var currentSpeed = velocity.magnitude;
-            float maxSpeed = 3f * Mathf.Sqrt(MoveRange);
+            float maxSpeed = 3f * Mathf.Sqrt(Stats.Speed);
             
             var distVector = (targetPos - currentPos).normalized;
 
@@ -179,8 +176,10 @@ namespace Aspekt.Hex
         private IEnumerator DeathRoutine()
         {
             yield return new WaitForSeconds(0.3f);
+            
             Anim.SetTrigger(AnimDeathTrigger);
             yield return new WaitForSeconds(2f);
+            
             const float duration = 2f;
             float timer = 0f;
             while (timer < duration)

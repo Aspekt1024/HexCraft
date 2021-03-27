@@ -353,7 +353,7 @@ namespace Aspekt.Hex
         public void OnCellRemoved(HexCell cell)
         {
             var data = GetPlayerFromId(cell.PlayerId);
-            data.Player.RemoveTech(cell.Technology);
+            data.Player.OnCellRemoved(cell);
 
             if (isServer)
             {

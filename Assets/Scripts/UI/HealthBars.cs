@@ -51,5 +51,17 @@ namespace Aspekt.Hex.UI
                 linkedBars.Remove(cellId);
             }
         }
+
+        public void OnCellRemoved(HexCell cell)
+        {
+            var cellId = cell.GetInstanceID();
+            if (!linkedBars.ContainsKey(cellId))
+            {
+                var bar = GetFreeHealthBar();
+                linkedBars.Add(cell.GetInstanceID(), bar);
+            }
+            
+            linkedBars[cellId].DepleteHealth(cell.transform);
+        }
     }
 }

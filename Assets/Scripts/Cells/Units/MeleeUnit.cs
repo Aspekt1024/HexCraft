@@ -67,6 +67,8 @@ namespace Aspekt.Hex
             SetArmor(GetUpgradeForLevel(TechGroups.UpgradeArmor, 0));
             SetWeapon(GetUpgradeForLevel(TechGroups.UpgradeWeapons, 0));
             SetShield(GetUpgradeForLevel(TechGroups.UpgradeShields, 0));
+
+            Stats.Range = 1;
         }
         
         private UpgradeStats.Upgrade GetUpgradeForLevel(TechGroups group, int level)

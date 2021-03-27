@@ -146,14 +146,14 @@ namespace Aspekt.Hex
         {
             unit = movingUnit;
             state = States.Moving;
-            indicator.ShowMovementGrid(unit.Coordinates, unit.MoveRange);
+            indicator.ShowMovementGrid(unit.Coordinates, unit.GetStats().Speed);
         }
 
         private void SetUnitAttack(UnitCell attackingUnit)
         {
             unit = attackingUnit;
             state = States.Attacking;
-            indicator.ShowAttackRange(unit.Coordinates, unit.AttackRange);
+            indicator.ShowAttackRange(unit.Coordinates, unit.GetStats().Range);
         }
 
         public void OnFinishedMove(UnitCell unit)
@@ -172,6 +172,16 @@ namespace Aspekt.Hex
             }
         }
 
+        public void OnUnitRemoved(UnitCell unit)
+        {
+            if (unit == this.unit)
+            {
+                this.unit = null;
+                indicator.Clear();
+                state = States.None;
+            }
+        }
+
         private void SetOwnUnitSelected(UnitCell unit)
         {
             this.unit = unit;
@@ -183,17 +193,17 @@ namespace Aspekt.Hex
         private void RefreshOwnUnitActions()
         {
             if (!game.IsCurrentPlayer(player)) return;
-
+            
             state = States.OwnUnitSelected;
             
             if (!unit.HasMoved)
             {
-                indicator.ShowMovementGrid(unit.Coordinates, unit.MoveRange);
+                indicator.ShowMovementGrid(unit.Coordinates, unit.GetStats().Speed);
             }
 
             if (!unit.HasAttacked)
             {
-                indicator.ShowAttackableCells(unit, unit.AttackRange, false);
+                indicator.ShowAttackableCells(unit, unit.GetStats().Range, false);
             }
             
             indicator.UpdateUnitCursor(unit, currentCoords);

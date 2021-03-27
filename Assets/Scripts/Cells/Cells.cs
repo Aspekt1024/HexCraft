@@ -179,7 +179,7 @@ namespace Aspekt.Hex
             if (attackingUnit == null || attackingUnit.PlayerId != playerId) return false;
             if (target == null || target.PlayerId == playerId) return false;
             
-            return unit.AttackRange >= HexCoordinates.Distance(attackingUnit.Coordinates, target.Coordinates);
+            return unit.GetStats().Range >= HexCoordinates.Distance(attackingUnit.Coordinates, target.Coordinates);
         }
 
         public List<Vector3> GetPathWithValidityCheck(HexCell cell, HexCoordinates targetCoords, int playerId)
@@ -190,7 +190,7 @@ namespace Aspekt.Hex
 
         public List<Vector3> GetPath(UnitCell unit, HexCoordinates targetCoords)
         {
-            return pathfinder.FindPath(unit.Coordinates, targetCoords, unit.MoveRange);
+            return pathfinder.FindPath(unit.Coordinates, targetCoords, unit.GetStats().Speed);
         }
         
         public Cost GetCost(CellTypes type)

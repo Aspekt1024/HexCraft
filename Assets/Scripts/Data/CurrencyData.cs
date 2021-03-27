@@ -63,5 +63,14 @@ namespace Aspekt.Hex
                 observers.ForEach(o => o.OnSuppliesChanged(playerData.Player, newSupplies));
             }
         }
+
+        public void RefundLostCell(Cost cost)
+        {
+            if (cost.production > 0)
+            {
+                var newUtilisation = UtilisedProduction - cost.production;
+                observers.ForEach(o => o.OnProductionUtilisationChanged(playerData.Player, newUtilisation));
+            }
+        }
     }
 }

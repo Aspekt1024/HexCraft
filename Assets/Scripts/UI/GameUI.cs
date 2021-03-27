@@ -194,7 +194,8 @@ namespace Aspekt.Hex.UI
 
         public void OnCellRemoved(HexCell cell)
         {
-            // TODO show alert for created unit on side panel
+            // TODO show alert for removed unit on side panel
+            healthBars.OnCellRemoved(cell);
             cell.UnregisterHealthObserver(healthBars);
         }
 

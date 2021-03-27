@@ -70,9 +70,6 @@ MonoBehaviour:
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
-  MoveRange: 1
-  AttackRange: 1
-  AttackDamage: 1
   groundUnitModel: {fileID: 1411488990733350500}
   mountedUnitModel: {fileID: 5490442777878340513}
   upgradeStats:
@@ -98,10 +95,10 @@ MonoBehaviour:
     - tech: 3110
       level: 1
       value: 1
-    - tech: 3011
+    - tech: 3111
       level: 2
       value: 2
-    - tech: 3012
+    - tech: 3112
       level: 3
       value: 3
   - techGroup: 2200

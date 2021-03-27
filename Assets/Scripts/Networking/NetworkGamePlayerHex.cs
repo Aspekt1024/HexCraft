@@ -133,8 +133,15 @@ namespace Aspekt.Hex
                 CmdAddTech((Int16)tech);
             }
         }
+
+        public void OnCellRemoved(HexCell cell)
+        {
+            RemoveTech(cell.Technology);
+            var cost = game.Cells.GetCost(cell.cellType);
+            PlayerData.CurrencyData.RefundLostCell(cost);
+        }
         
-        public void RemoveTech(Technology tech)
+        private void RemoveTech(Technology tech)
         {
             if (!hasAuthority || !IsCurrentPlayer) return;
             if (game.Data.CanRemoveTech(tech, ID))

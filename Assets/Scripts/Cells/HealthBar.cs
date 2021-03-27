@@ -30,6 +30,7 @@ namespace Aspekt.Hex
             base.Awake();
             tf = transform;
             mainCam = FindObjectOfType<HexCamera>();
+            health.fillAmount = 1f;
         }
 
         public void RegisterObserver(IObserver observer)
@@ -44,6 +45,11 @@ namespace Aspekt.Hex
             
             if (setHealthRoutine != null) StopCoroutine(setHealthRoutine);
             setHealthRoutine = StartCoroutine(SetHealthRoutine(prevPercent, newPercent));
+        }
+
+        public void DepleteHealth(Transform cellTf)
+        {
+            SetHealth(cellTf, health.fillAmount, 0f);
         }
 
         private void LateUpdate()
@@ -76,6 +82,7 @@ namespace Aspekt.Hex
             yield return new WaitForSeconds(0.5f);
             Hide();
             yield return new WaitForSeconds(0.5f);
+            observer.OnHealthbarHidden(this);
             gameObject.SetActive(false);
         }
     }

@@ -32,5 +32,6 @@ namespace Aspekt.Hex
     {
         void OnFinishedMove(UnitCell unit);
         void OnFinishedAttack(UnitCell unit);
+        void OnUnitRemoved(UnitCell unit);
     }
 }
