@@ -17,7 +17,6 @@ namespace Aspekt.Hex
         private readonly List<PlayerData> playerData = new List<PlayerData>();
         
         private PlayerData currentPlayer;
-        private int currentPlayerActionPoints;
         private const int MaxActionPoints = 4;
 
         private enum GameStates
@@ -128,12 +127,12 @@ namespace Aspekt.Hex
 
         public void AddActionPoints(int actionPoints)
         {
-            currentPlayerActionPoints += actionPoints;
-            if (currentPlayerActionPoints >= MaxActionPoints)
+            currentPlayer.ActionPointsUsed += actionPoints;
+            if (currentPlayer.ActionPointsUsed >= MaxActionPoints)
             {
                 NextTurn();
             }
-            RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayerActionPoints));
+            RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayer.ActionPointsUsed));
         }
         
         public void NextTurn()
@@ -144,7 +143,7 @@ namespace Aspekt.Hex
             {
                 GenerateIncome(player);
             }
-            currentPlayerActionPoints = 0;
+            player.ActionPointsUsed = 0;
             RpcSetPlayerActions((Int16)player.Player.ID, (Int16)MaxActionPoints);
         }
 
@@ -292,7 +291,7 @@ namespace Aspekt.Hex
         private void RpcSetPlayerActions(Int16 playerId, Int16 actionCount)
         {
             var data = GetPlayerFromId(playerId);
-            game.UI.SetPlayerActionCount(data, MaxActionPoints - currentPlayerActionPoints);
+            game.UI.SetPlayerActionCount(data, actionCount);
         }
 
         [ClientRpc]

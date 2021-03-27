@@ -10,6 +10,8 @@ namespace Aspekt.Hex
         public CurrencyData CurrencyData;
 
         public int TurnNumber;
+        
+        public int ActionPointsUsed { get; set; }
 
         public interface ITechObserver
         {
