@@ -77,7 +77,10 @@ namespace Aspekt.Hex
             StartCoroutine(AwaitNetworkedPlayerRoutine());
         }
 
-        public void StartGame()
+        /// <summary>
+        /// Called on the server once all players are ready
+        /// </summary>
+        public void StartGameServer()
         {
             SetupPlayers();
             Data.NextTurn();
@@ -87,7 +90,18 @@ namespace Aspekt.Hex
             
             Cells.RegisterCellLifecycleObserver(Data);
             
-            Debug.Log("Game started");
+            Debug.Log("Game started for server");
+
+            foreach (var player in room.GamePlayers)
+            {
+                player.RpcNotifyGameStart();
+            }
+        }
+
+        public void StartGameClient()
+        {
+            Camera.ScrollTo(grid.GetStartLocation(gamePlayer.ID));
+            Debug.Log("Game started for client");
         }
 
         private void SetupPlayers()

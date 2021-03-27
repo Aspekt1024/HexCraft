@@ -78,6 +78,9 @@ MonoBehaviour:
   upgradeStats:
   - techGroup: 2000
     upgrades:
+    - tech: 0
+      level: 0
+      value: 1
     - tech: 3010
       level: 1
       value: 2
@@ -89,10 +92,13 @@ MonoBehaviour:
       value: 5
   - techGroup: 2100
     upgrades:
+    - tech: 0
+      level: 0
+      value: 0
     - tech: 3110
       level: 1
       value: 1
-    - tech: 3111
+    - tech: 3011
       level: 2
       value: 2
     - tech: 3012
@@ -100,6 +106,9 @@ MonoBehaviour:
       value: 3
   - techGroup: 2200
     upgrades:
+    - tech: 0
+      level: 0
+      value: 1
     - tech: 3210
       level: 1
       value: 2
@@ -111,15 +120,18 @@ MonoBehaviour:
       value: 4
   - techGroup: 2300
     upgrades:
+    - tech: 0
+      level: 0
+      value: 0
     - tech: 3310
       level: 1
-      value: 20
+      value: 2
     - tech: 3311
       level: 2
-      value: 40
+      value: 4
     - tech: 3312
       level: 3
-      value: 60
+      value: 7
 --- !u!1 &5490442777878331624
 GameObject:
   m_ObjectHideFlags: 0

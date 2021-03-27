@@ -143,6 +143,12 @@ namespace Aspekt.Hex
             }
         }
 
+        [ClientRpc]
+        public void RpcNotifyGameStart()
+        {
+            game.StartGameClient();
+        }
+
         [Command]
         private void CmdAddTech(Int16 techId)
         {

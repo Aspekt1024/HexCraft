@@ -22,6 +22,11 @@ namespace Aspekt.Hex
             public TechGroups techGroup;
             public Upgrade[] upgrades;
 
+            public Upgrade GetUpgradeForLevel(int level)
+            {
+                return upgrades.FirstOrDefault(u => u.level == level);
+            }
+            
             public bool IsTechGroup(Technology tech)
             {
                 return upgrades.Any(u => u.tech == tech);
@@ -43,6 +48,7 @@ namespace Aspekt.Hex
         private void Awake()
         {
             SetModel(groundUnitModel);
+            Setup();
         }
 
         public override void SetupTech(GameData data, int playerId)
@@ -53,81 +59,84 @@ namespace Aspekt.Hex
             OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeWarMount, playerId));
         }
 
-#region Debug and Test
-
         [ContextMenu("setup")]
         public void Setup()
         {
             SetModel(groundUnitModel);
-            SetMount0();
-            SetArmor0();
-            SetWeapon0();
-            SetShield0();
+            SetMount(GetUpgradeForLevel(TechGroups.UpgradeWarMount, 0));
+            SetArmor(GetUpgradeForLevel(TechGroups.UpgradeArmor, 0));
+            SetWeapon(GetUpgradeForLevel(TechGroups.UpgradeWeapons, 0));
+            SetShield(GetUpgradeForLevel(TechGroups.UpgradeShields, 0));
+        }
+        
+        private UpgradeStats.Upgrade GetUpgradeForLevel(TechGroups group, int level)
+        {
+            var stats = upgradeStats.FirstOrDefault(s => s.techGroup == group);
+            if (stats.upgrades.Length <= level) return new UpgradeStats.Upgrade();
+            return stats.upgrades[level];
         }
 
+#region Debug and Test
+
         [ContextMenu("armor0")]
-        public void SetArmor0() => SetArmorLevel(0);
+        public void SetArmor0() => SetArmor(GetUpgradeForLevel(TechGroups.UpgradeArmor, 0));
         [ContextMenu("armor1")]
-        public void SetArmor1() => SetArmorLevel(1);
+        public void SetArmor1() => SetArmor(GetUpgradeForLevel(TechGroups.UpgradeArmor, 1));
         [ContextMenu("armor2")]
-        public void SetArmor2() => SetArmorLevel(2);
+        public void SetArmor2() => SetArmor(GetUpgradeForLevel(TechGroups.UpgradeArmor, 2));
         [ContextMenu("armor3")]
-        public void SetArmor3() => SetArmorLevel(3);
+        public void SetArmor3() => SetArmor(GetUpgradeForLevel(TechGroups.UpgradeArmor, 3));
         
         [ContextMenu("weapon0")]
-        public void SetWeapon0() => SetWeaponLevel(0);
+        public void SetWeapon0() => SetWeapon(GetUpgradeForLevel(TechGroups.UpgradeWeapons, 0));
         [ContextMenu("weapon1")]
-        public void SetWeapon1() => SetWeaponLevel(1);
+        public void SetWeapon1() => SetWeapon(GetUpgradeForLevel(TechGroups.UpgradeWeapons, 1));
         [ContextMenu("weapon2")]
-        public void SetWeapon2() => SetWeaponLevel(2);
+        public void SetWeapon2() => SetWeapon(GetUpgradeForLevel(TechGroups.UpgradeWeapons, 2));
         [ContextMenu("weapon3")]
-        public void SetWeapon3() => SetWeaponLevel(3);
-        
+        public void SetWeapon3() => SetWeapon(GetUpgradeForLevel(TechGroups.UpgradeWeapons, 3));
+
         [ContextMenu("shield0")]
-        public void SetShield0() => SetShieldLevel(0);
+        public void SetShield0() => SetShield(GetUpgradeForLevel(TechGroups.UpgradeShields, 0));
         [ContextMenu("shield1")]
-        public void SetShield1() => SetShieldLevel(1);
+        public void SetShield1() => SetShield(GetUpgradeForLevel(TechGroups.UpgradeShields, 1));
         [ContextMenu("shield2")]
-        public void SetShield2() => SetShieldLevel(2);
+        public void SetShield2() => SetShield(GetUpgradeForLevel(TechGroups.UpgradeShields, 2));
         [ContextMenu("shield3")]
-        public void SetShield3() => SetShieldLevel(3);
+        public void SetShield3() => SetShield(GetUpgradeForLevel(TechGroups.UpgradeShields, 3));
         
         [ContextMenu("mount0")]
-        public void SetMount0() => SetMountLevel(0);
+        public void SetMount0() => SetMount(GetUpgradeForLevel(TechGroups.UpgradeWarMount, 0));
         [ContextMenu("mount1")]
-        public void SetMount1() => SetMountLevel(1);
+        public void SetMount1() => SetMount(GetUpgradeForLevel(TechGroups.UpgradeWarMount, 1));
         [ContextMenu("mount2")]
-        public void SetMount2() => SetMountLevel(2);
+        public void SetMount2() => SetMount(GetUpgradeForLevel(TechGroups.UpgradeWarMount, 2));
         [ContextMenu("mount3")]
-        public void SetMount3() => SetMountLevel(3);
+        public void SetMount3() => SetMount(GetUpgradeForLevel(TechGroups.UpgradeWarMount, 3));
         
 #endregion Debug and Test
 
         public override void OnTechAdded(Technology tech)
         {
+            if (tech == Technology.None) return;
+            
             var stats = upgradeStats.FirstOrDefault(s => s.IsTechGroup(tech));
             if (stats.techGroup == TechGroups.Undefined) return;
-
-            var upgrade = stats.upgrades.FirstOrDefault(u => u.tech == tech);
-            if (upgrade.tech == Technology.None) return;
             
+            var upgrade = stats.upgrades.FirstOrDefault(u => u.tech == tech);
             switch (stats.techGroup)
             {
                 case TechGroups.UpgradeWeapons:
-                    SetWeaponLevel(upgrade.level);
-                    Stats.Attack = upgrade.value;
+                    SetWeapon(upgrade);
                     break;
                 case TechGroups.UpgradeArmor:
-                    SetArmorLevel(upgrade.level);
-                    Stats.Defense = upgrade.value;
+                    SetArmor(upgrade);
                     break;
                 case TechGroups.UpgradeWarMount:
-                    SetMountLevel(upgrade.level);
-                    Stats.Speed = upgrade.value;
+                    SetMount(upgrade);
                     break;
                 case TechGroups.UpgradeShields:
-                    SetShieldLevel(upgrade.level);
-                    Stats.Shield = upgrade.value;
+                    SetShield(upgrade);
                     break;
             }
         }
@@ -145,38 +154,38 @@ namespace Aspekt.Hex
             mountedUnitModel.SetColor(color);
         }
 
-        private void SetArmorLevel(int level)
+        private void SetArmor(UpgradeStats.Upgrade upgrade)
         {
-            Stats.Defense = level;
-            armorLevel = level;
-            currentModel.SetArmor(level);
+            armorLevel = upgrade.level;
+            Stats.Defense = upgrade.value;
+            currentModel.SetArmor(upgrade.level);
         }
 
-        private void SetWeaponLevel(int level)
+        private void SetWeapon(UpgradeStats.Upgrade upgrade)
         {
-            Stats.Attack = level;
-            weaponLevel = level;
-            currentModel.SetWeapon(level);
+            weaponLevel = upgrade.level;
+            Stats.Attack = upgrade.value;
+            currentModel.SetWeapon(upgrade.level);
         }
 
-        private void SetShieldLevel(int level)
+        private void SetShield(UpgradeStats.Upgrade upgrade)
         {
-            Stats.Shield = level;
-            shieldLevel = level;
-            currentModel.SetShield(level);
+            shieldLevel = upgrade.level;
+            Stats.Shield = upgrade.value;
+            currentModel.SetShield(upgrade.level);
         }
 
-        private void SetMountLevel(int level)
+        private void SetMount(UpgradeStats.Upgrade upgrade)
         {
-            Stats.Speed = level;
-            if (level == 0)
+            Stats.Speed = upgrade.value;
+            if (upgrade.level == 0)
             {
                 SetModel(groundUnitModel);
             }
             else
             {
                 SetModel(mountedUnitModel);
-                mountedUnitModel.SetMountLevel(level - 1);
+                mountedUnitModel.SetMountLevel(upgrade.level - 1);
             }
             
             SetEquipmentLevels();

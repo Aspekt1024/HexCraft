@@ -22,7 +22,7 @@ namespace Aspekt.Hex
             public int Shield;
         }
 
-        protected UnitStats Stats;
+        protected UnitStats Stats = new UnitStats();
 
         public bool HasMoved { get; private set; }
         public bool HasAttacked { get; private set; }
@@ -37,7 +37,6 @@ namespace Aspekt.Hex
         private void Start()
         {
             Model.LookAt(transform.position + Vector3.back);
-            Stats = new UnitStats();
         }
         
         protected Animator Anim;

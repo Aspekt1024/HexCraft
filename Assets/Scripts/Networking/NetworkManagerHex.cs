@@ -182,7 +182,7 @@ namespace Aspekt.Hex
         {
             if (GamePlayers.Count == minPlayers && GamePlayers.All(p => p.IsReady))
             {
-                Game.StartGame();
+                Game.StartGameServer();
             }
         }
 

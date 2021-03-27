@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db83faea0694f4e88eddb046f796505, type: 3}
+  m_Name: UpgradeShields
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 7cdfac7a7246d274c8b983fd664158c9, type: 3}
+  group: 2300
+  upgradeDetails:
+  - tech: 3310
+    icon: {fileID: 21300000, guid: d0a35722f9d973f47b5cab51eee42ef2, type: 3}
+    title: Basic Shield
+    cost:
+      production: 0
+      supplies: 7
+    description: +2 defense to all units
+    requiredTech: 
+  - tech: 3311
+    icon: {fileID: 21300000, guid: 7cdfac7a7246d274c8b983fd664158c9, type: 3}
+    title: Advanced Shields
+    cost:
+      production: 0
+      supplies: 9
+    description: +2 defense to all units
+    requiredTech: 
+  - tech: 3312
+    icon: {fileID: 21300000, guid: dc90b2c236cbacf47b20a1294efdf59d, type: 3}
+    title: Enchanted Shields
+    cost:
+      production: 0
+      supplies: 15
+    description: +3 defense to all units
+    requiredTech: 
