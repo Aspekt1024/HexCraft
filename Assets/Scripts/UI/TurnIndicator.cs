@@ -21,6 +21,7 @@ namespace Aspekt.Hex.UI
         [SerializeField] private TextMeshProUGUI actionsCount;
         [SerializeField] private TextMeshProUGUI actionsLabel;
         [SerializeField] private GameObject hourGlassObject;
+        [SerializeField] private GameObject endTurnObject;
         [SerializeField] private Button endTurnButton;
 #pragma warning restore 649
 
@@ -34,6 +35,8 @@ namespace Aspekt.Hex.UI
         {
             anim = GetComponent<Animator>();
             anim.Play(OpeningAnim, 0, 1f);
+            actionsCount.text = "";
+            actionsLabel.text = "";
         }
 
         public void Init(Tooltip tooltip)
@@ -65,20 +68,6 @@ namespace Aspekt.Hex.UI
             }
         }
 
-        public void SetActionCount(PlayerData data, int numActions)
-        {
-            if (data.Player.hasAuthority)
-            {
-                actionsCount.text = numActions.ToString();
-                actionsLabel.gameObject.SetActive(true);
-                actionsIndicator.SetTurnDetails(true, numActions);
-            }
-            else
-            {
-                actionsIndicator.SetTurnDetails(false, numActions);
-            }
-        }
-
         public void EndTurn()
         {
             observer.OnEndTurnClicked();
@@ -97,7 +86,11 @@ namespace Aspekt.Hex.UI
         private IEnumerator ShowOwnTurnRoutine(PlayerData data)
         {
             label.text = "Your turn";
+            
             hourGlassObject.SetActive(false);
+            endTurnObject.SetActive(true);
+            
+            actionsIndicator.SetAsCurrentPlayer(true);
             
             // TODO play animation (e.g. flash player turn)
             yield return new WaitForSeconds(1.5f);
@@ -111,9 +104,12 @@ namespace Aspekt.Hex.UI
         {
             actionsCount.text = "";
             label.text = "";
+            
             hourGlassObject.SetActive(true);
+            endTurnObject.SetActive(false);
+            
             endTurnButton.interactable = false;
-            actionsLabel.gameObject.SetActive(false);
+            actionsIndicator.SetAsCurrentPlayer(false);
             
             yield return new WaitForSeconds(1.5f);
             anim.Play(OpeningAnim, 0, 0f);

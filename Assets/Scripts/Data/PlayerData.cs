@@ -11,8 +11,6 @@ namespace Aspekt.Hex
 
         public int TurnNumber;
         
-        public int ActionPointsUsed { get; set; }
-
         public interface ITechObserver
         {
             void OnTechAdded(NetworkGamePlayerHex player, Technology tech);

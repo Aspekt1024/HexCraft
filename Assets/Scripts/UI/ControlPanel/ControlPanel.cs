@@ -33,7 +33,8 @@ namespace Aspekt.Hex.UI
         }
 
         public void SetCellSelected(HexCell cell, NetworkGamePlayerHex queryingPlayer) => cellControl.SetCellDetails(cell, queryingPlayer);
-
+        public void OnCellRemoved(HexCell cell) => cellControl.OnCellRemoved(cell);
+        
         public void OnPointerEnter(PointerEventData eventData)
         {
             observer?.SetCursorInUI(this, true);

@@ -5,12 +5,10 @@ namespace UI.ControlPanel
     public class ActionsIndicator : TooltipElement
     {
         private bool isCurrentPlayer;
-        private int numActionsRemaining;
-        
-        public void SetTurnDetails(bool isCurrentPlayer, int numActions)
+
+        public void SetAsCurrentPlayer(bool isCurrentPlayer)
         {
             this.isCurrentPlayer = isCurrentPlayer;
-            numActionsRemaining = numActions;
         }
         
         public override Tooltip.Details GetTooltipDetails(int playerId)
@@ -34,7 +32,6 @@ namespace UI.ControlPanel
             {
                 return new[]
                 {
-                    "You have " + numActionsRemaining + " actions remaining.",
                     "Click to end your turn now."
                 };
             }
@@ -42,7 +39,7 @@ namespace UI.ControlPanel
             {
                 return new[]
                 {
-                    "Your opponent is taking their turn."
+                    "Waiting for your opponent to finish their turn."
                 };
             }
         }

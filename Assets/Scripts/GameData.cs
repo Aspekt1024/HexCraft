@@ -17,7 +17,6 @@ namespace Aspekt.Hex
         private readonly List<PlayerData> playerData = new List<PlayerData>();
         
         private PlayerData currentPlayer;
-        private const int MaxActionPoints = 4;
 
         private enum GameStates
         {
@@ -124,19 +123,6 @@ namespace Aspekt.Hex
         {
             RpcSetSupplies((Int16)player.ID, (Int16)newSupplies);
         }
-
-        public void AddActionPoints(int actionPoints)
-        {
-            currentPlayer.ActionPointsUsed += actionPoints;
-            if (currentPlayer.ActionPointsUsed >= MaxActionPoints)
-            {
-                NextTurn();
-            }
-            else
-            {
-                RpcSetPlayerActions((Int16)currentPlayer.Player.ID, (Int16)(MaxActionPoints - currentPlayer.ActionPointsUsed));
-            }
-        }
         
         public void NextTurn()
         {
@@ -146,8 +132,6 @@ namespace Aspekt.Hex
             {
                 GenerateIncome(player);
             }
-            player.ActionPointsUsed = 0;
-            RpcSetPlayerActions((Int16)player.Player.ID, (Int16)MaxActionPoints);
         }
 
         public bool IsTechAvailable(Technology tech, int playerId)
@@ -288,13 +272,6 @@ namespace Aspekt.Hex
             {
                 game.UI.UpdateCurrency(player.CurrencyData);
             }
-        }
-
-        [ClientRpc]
-        private void RpcSetPlayerActions(Int16 playerId, Int16 actionCount)
-        {
-            var data = GetPlayerFromId(playerId);
-            game.UI.SetPlayerActionCount(data, actionCount);
         }
 
         [ClientRpc]

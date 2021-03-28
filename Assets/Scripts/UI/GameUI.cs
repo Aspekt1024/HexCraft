@@ -116,11 +116,6 @@ namespace Aspekt.Hex.UI
             turnIndicator.SetTurn(playerData);
         }
 
-        public void SetPlayerActionCount(PlayerData data, int actionCount)
-        {
-            turnIndicator.SetActionCount(data, actionCount);
-        }
-
         public void UpdateCurrency(CurrencyData currencyData)
         {
             currency.UpdateCurrency(currencyData);
@@ -196,6 +191,7 @@ namespace Aspekt.Hex.UI
         {
             // TODO show alert for removed unit on side panel
             healthBars.OnCellRemoved(cell);
+            controlPanel.OnCellRemoved(cell);
             cell.UnregisterHealthObserver(healthBars);
         }
 

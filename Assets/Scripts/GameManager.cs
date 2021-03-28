@@ -133,14 +133,12 @@ namespace Aspekt.Hex
             if (grid.TryPlace(x, z, player.ID, type))
             {
                 playerData.CurrencyData.Purchase(cost);
-                Data.AddActionPoints(1);
             }
         }
 
         public void MoveCell(HexCoordinates from, HexCoordinates to)
         {
             grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
-            Data.AddActionPoints(1);
         }
 
         public void AttackCell(UnitCell attacker, HexCell target)
@@ -170,8 +168,6 @@ namespace Aspekt.Hex
                     return;
                 }
             }
-            
-            Data.AddActionPoints(1);
         }
 
     #endregion Server Calls

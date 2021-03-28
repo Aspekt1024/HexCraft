@@ -48,6 +48,14 @@ namespace Aspekt.Hex.UI.Control
             }
         }
 
+        public void OnCellRemoved(HexCell cell)
+        {
+            if (cell == currentCell)
+            {
+                ClearDetails();
+            }
+        }
+
         private void ShowCellDetails(HexCell cell, NetworkGamePlayerHex queryingPlayer)
         {
             currentCell = cell;
