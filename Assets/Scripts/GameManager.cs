@@ -72,7 +72,7 @@ namespace Aspekt.Hex
             
             Data.Init(this, config);
             grid.Init(this);
-            Cells.Init(grid, Data);
+            Cells.Init(this, grid);
             
             StartCoroutine(AwaitNetworkedPlayerRoutine());
         }

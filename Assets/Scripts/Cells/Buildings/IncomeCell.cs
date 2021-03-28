@@ -6,6 +6,8 @@ namespace Aspekt.Hex
     {
         public override Technology Technology { get; } = Technology.Farm;
         
+        public Transform GetTransform() => transform;
+        
         [Header("Income Settings")]
         public int production = 1;
 

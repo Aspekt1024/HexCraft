@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 namespace Aspekt.Hex
 {
     public class HomeCell : BuildingCell, ISuppliesGenerator, IProductionGenerator
@@ -6,6 +8,8 @@ namespace Aspekt.Hex
         public override Technology Technology { get; } = Technology.None;
         public int production = 1;
         public int suppliesPerRound = 2;
+
+        public Transform GetTransform() => transform;
         
         public override bool CanCreate(Cells.CellTypes cellType)
         {
@@ -24,6 +28,11 @@ namespace Aspekt.Hex
         public int GetSupplies()
         {
             return suppliesPerRound;
+        }
+
+        public Transform getTransform()
+        {
+            throw new System.NotImplementedException();
         }
 
         public int GetProduction()

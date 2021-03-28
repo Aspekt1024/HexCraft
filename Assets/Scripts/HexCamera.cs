@@ -9,7 +9,13 @@ namespace Aspekt.Hex
         [SerializeField] private float scrollSpeed = 3f;
         [SerializeField] private float scrollFactor = 0.1f;
 
-        public Camera Camera { get; private set; }
+#pragma warning disable 649
+        [SerializeField] private Camera mainCamera;
+        [SerializeField] private Camera uiCamera;
+#pragma warning restore 649
+
+        public Camera MainCamera => mainCamera;
+        public Camera UICamera => uiCamera;
         
         private GameManager game;
 
@@ -23,7 +29,6 @@ namespace Aspekt.Hex
         
         private void Awake()
         {
-            Camera = GetComponent<Camera>();
             game = FindObjectOfType<GameManager>();
             currentZoom = 1f;
             

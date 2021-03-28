@@ -31,8 +31,9 @@ namespace Aspekt.Hex.UI
         [SerializeField] private Texture2D moveCursor;
         [SerializeField] private Texture2D invalidCursor;
 
-        [Header("Units")]
+        [Header("World")]
         [SerializeField] private HealthBars healthBars;
+        [SerializeField] private FloatingUI floatingUI;
 #pragma warning restore 649
 
         private NetworkGamePlayerHex player;
@@ -193,6 +194,11 @@ namespace Aspekt.Hex.UI
             healthBars.OnCellRemoved(cell);
             controlPanel.OnCellRemoved(cell);
             cell.UnregisterHealthObserver(healthBars);
+        }
+
+        public void ShowFloatingUI(Transform tf, Sprite icon, string text, FloatingUI.Style style = FloatingUI.Style.None)
+        {
+            floatingUI.Show(tf, icon, text, style);
         }
 
         private IEnumerator GameWonSequence(PlayerData winner)

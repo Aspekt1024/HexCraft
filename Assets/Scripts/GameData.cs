@@ -195,19 +195,26 @@ namespace Aspekt.Hex
 
         private void GenerateIncome(PlayerData data)
         {
-            var suppliers = game.Cells.AllCells
-                .Where(c => c.Owner.ID == data.Player.ID)
-                .OfType<ISuppliesGenerator>();
-            
-            // TODO market
-
+            var suppliers = game.Cells.GetSuppliers(data.Player.ID);
             var supplies = data.CurrencyData.Supplies;
             supplies += suppliers.Sum(c => c.GetSupplies());
-
-            var isMarketPresent = game.Cells.AllCells.Any(c => c.cellType == Cells.CellTypes.Market);
-            if (isMarketPresent)
+            
+            
+            var hasGeneratedFromMarket = false;
+            foreach (var supplier in suppliers)
             {
-                supplies += data.CurrencyData.MaxProduction - data.CurrencyData.UtilisedProduction;
+                if (supplier is MarketCell)
+                {
+                    if (!hasGeneratedFromMarket)
+                    {
+                        hasGeneratedFromMarket = true;
+                        supplies += supplier.GetSupplies();
+                    }
+                }
+                else
+                {
+                    supplies += supplier.GetSupplies();
+                }
             }
     
             RpcSetSupplies((Int16)data.Player.ID, (Int16)supplies);
@@ -238,7 +245,7 @@ namespace Aspekt.Hex
                 p.Player.UpdateCurrentPlayerStatus(isCurrentPlayer);
             }
             game.UI.SetPlayerTurn(currentPlayer);
-            game.Cells.OnNewTurn();
+            game.Cells.OnNewTurn(currentPlayer.Player.ID, currentPlayer.TurnNumber);
         }
 
         [ClientRpc]
@@ -293,7 +300,6 @@ namespace Aspekt.Hex
         [ClientRpc]
         private void RpcRemoveTech(Int16 techId, Int16 playerId)
         {
-            var data = GetPlayerFromId(playerId);
             var tech = (Technology) techId;
 
             var playerCells = game.Cells.AllCells.Where(c => c.Owner.ID == playerId);

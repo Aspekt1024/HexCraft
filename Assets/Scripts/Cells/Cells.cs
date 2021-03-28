@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -51,11 +52,14 @@ namespace Aspekt.Hex
         private CellPathfinder pathfinder;
         private HexGrid grid;
         private GameData data;
+        private GameManager game;
 
-        public void Init(HexGrid grid, GameData data)
+        public void Init(GameManager game, HexGrid grid)
         {
+            this.game = game;
             this.grid = grid;
-            this.data = data;
+            
+            data = game.Data;
             pathfinder = new CellPathfinder(this, grid);
         }
 
@@ -286,8 +290,11 @@ namespace Aspekt.Hex
             return coords;
         }
 
-        public void OnNewTurn()
+        public void OnNewTurn(int playerID, int turnNumber)
         {
+            var suppliers = GetSuppliers();
+            suppliers.ForEach(s => game.UI.ShowFloatingUI(s.GetTransform(), null, $"+{s.GetSupplies()}"));
+                
             foreach (var cell in AllCells)
             {
                 if (cell is UnitCell unit)
@@ -297,5 +304,29 @@ namespace Aspekt.Hex
             }
         }
 
+        public List<ISuppliesGenerator> GetSuppliers(int playerID)
+        {
+            var playerCells = game.Cells.AllCells.Where(c => c.Owner.ID == playerID).ToList();
+            var suppliers = new List<ISuppliesGenerator>();
+            var hasMarket = false;
+            foreach (var cell in playerCells)
+            {
+                if (!(cell is ISuppliesGenerator supplier)) continue;
+                if (cell is MarketCell)
+                {
+                    if (!hasMarket)
+                    {
+                        hasMarket = true;
+                        suppliers.Add(supplier);
+                    }
+                }
+                else
+                {
+                    suppliers.Add(supplier);
+                }
+            }
+
+            return suppliers;
+        }
     }
 }

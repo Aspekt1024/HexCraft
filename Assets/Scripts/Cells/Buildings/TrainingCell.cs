@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Aspekt.Hex.UI;
-using UnityEngine;
 
 namespace Aspekt.Hex
 {

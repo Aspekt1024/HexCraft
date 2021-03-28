@@ -56,12 +56,14 @@ namespace Aspekt.Hex
         protected readonly List<ICellEventObserver> EventObservers = new List<ICellEventObserver>();
         private readonly List<ICellHealthObserver> healthObservers = new List<ICellHealthObserver>();
 
+        protected GameData GameData;
         protected Cells CellData;
         
         protected Material CellMaterial;
 
         public void Init(Cells cells, GameData data, NetworkGamePlayerHex owner)
         {
+            GameData = data;
             CellData = cells;
             Owner = owner;
             PlayerId = Owner.ID;

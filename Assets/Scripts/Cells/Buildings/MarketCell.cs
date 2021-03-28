@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Aspekt.Hex
 {
-    public class MarketCell : BuildingCell
+    public class MarketCell : BuildingCell, ISuppliesGenerator
     {
         public override Technology Technology { get; } = Technology.Market;
         
@@ -20,5 +20,13 @@ namespace Aspekt.Hex
         {
             
         }
+
+        public int GetSupplies()
+        {
+            var data = GameData.GetPlayerData(Owner);
+            return data.CurrencyData.MaxProduction - data.CurrencyData.UtilisedProduction;
+        }
+
+        public Transform GetTransform() => transform;
     }
 }

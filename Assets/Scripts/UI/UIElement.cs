@@ -53,6 +53,8 @@ namespace Aspekt.Hex.UI
             hideRoutine = StartCoroutine(HideRoutine());
         }
 
+        protected virtual void OnHidden() {}
+
         private IEnumerator ShowRoutine()
         {
             state = States.TransitionToVisible;
@@ -95,6 +97,7 @@ namespace Aspekt.Hex.UI
             group.interactable = false;
             group.blocksRaycasts = false;
             gameObject.SetActive(false);
+            OnHidden();
         }
 
         private void ClearRoutines()
