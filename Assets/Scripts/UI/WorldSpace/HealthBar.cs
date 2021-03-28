@@ -20,8 +20,6 @@ namespace Aspekt.Hex
         private IObserver observer;
 
         private Transform tf;
-        private HexCamera mainCam;
-        private Transform cellTf;
 
         private Coroutine setHealthRoutine;
 
@@ -29,7 +27,6 @@ namespace Aspekt.Hex
         {
             base.Awake();
             tf = transform;
-            mainCam = FindObjectOfType<HexCamera>();
             health.fillAmount = 1f;
         }
 
@@ -40,8 +37,11 @@ namespace Aspekt.Hex
 
         public void SetHealth(Transform cellTf, float prevPercent, float newPercent)
         {
-            this.cellTf = cellTf;
             Show();
+            tf.SetParent(cellTf);
+            
+            tf.localScale = Vector3.one;
+            tf.position = cellTf.position + Vector3.forward * 0.8f + Vector3.up * 1.3f;
             
             if (setHealthRoutine != null) StopCoroutine(setHealthRoutine);
             setHealthRoutine = StartCoroutine(SetHealthRoutine(prevPercent, newPercent));
@@ -50,13 +50,6 @@ namespace Aspekt.Hex
         public void DepleteHealth(Transform cellTf)
         {
             SetHealth(cellTf, health.fillAmount, 0f);
-        }
-
-        private void LateUpdate()
-        {
-            if (cellTf == null) return;
-            var pos = cellTf.position + Vector3.forward * 1f;
-            tf.position = mainCam.Camera.WorldToScreenPoint(pos);
         }
 
         private IEnumerator SetHealthRoutine(float prevPercent, float newPercent)

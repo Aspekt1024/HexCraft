@@ -62,6 +62,7 @@ namespace Aspekt.Hex.UI
             }
             
             linkedBars[cellId].DepleteHealth(cell.transform);
+            linkedBars[cellId].transform.SetParent(transform);
         }
     }
 }
