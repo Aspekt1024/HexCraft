@@ -12,9 +12,14 @@ namespace Aspekt.Hex.UI
         }
         
 #pragma warning disable 649
-        [SerializeField] private TextMeshProUGUI text;
+        [SerializeField] private TextMeshProUGUI normalText;
+        [SerializeField] private TextMeshProUGUI combatText;
         [SerializeField] private Image image;
         [SerializeField] private Animator animator;
+
+        [Header("Icons")]
+        [SerializeField] private Sprite suppliesIcon;
+        [SerializeField] private Sprite produceIcon;
 #pragma warning restore 649
 
         private IObserver observer;
@@ -22,11 +27,18 @@ namespace Aspekt.Hex.UI
 
         public void RegisterObserver(IObserver observer) => this.observer = observer;
 
-        public void Begin(Transform targetTf, Sprite icon, string textString, FloatingUI.Style style = FloatingUI.Style.None)
+        public void Begin(Transform targetTf, string textString, FloatingUI.Style style = FloatingUI.Style.None, Sprite icon = null)
         {
-            
             image.sprite = icon;
-            image.gameObject.SetActive(icon != null);
+            if (style == FloatingUI.Style.Produce)
+            {
+                image.sprite = produceIcon;
+            }
+            else if (style == FloatingUI.Style.Supplies)
+            {
+                image.sprite = suppliesIcon;
+            }
+            image.gameObject.SetActive(image.sprite != null);
 
             SetText(textString, style);
             
@@ -62,15 +74,21 @@ namespace Aspekt.Hex.UI
             if (string.IsNullOrEmpty(textString))
             {
                 // TODO turn all text off
-                text.gameObject.SetActive(false);
+                normalText.gameObject.SetActive(false);
                 return;
             }
             
-            // TODO style
-            if (style == FloatingUI.Style.None)
+            if (style == FloatingUI.Style.None || style == FloatingUI.Style.Produce || style == FloatingUI.Style.Supplies)
             {
-                text.text = textString;
-                text.gameObject.SetActive(true);
+                normalText.text = textString;
+                normalText.gameObject.SetActive(true);
+                combatText.gameObject.SetActive(false);
+            }
+            else if (style == FloatingUI.Style.Combat)
+            {
+                combatText.text = textString;
+                normalText.gameObject.SetActive(false);
+                combatText.gameObject.SetActive(true);
             }
         }
     }

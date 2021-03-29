@@ -196,9 +196,9 @@ namespace Aspekt.Hex.UI
             cell.UnregisterHealthObserver(healthBars);
         }
 
-        public void ShowFloatingUI(Transform tf, Sprite icon, string text, FloatingUI.Style style = FloatingUI.Style.None)
+        public void ShowFloatingUI(Transform tf, string text, FloatingUI.Style style = FloatingUI.Style.None, Sprite icon = null)
         {
-            floatingUI.Show(tf, icon, text, style);
+            floatingUI.Show(tf, text, style, icon);
         }
 
         private IEnumerator GameWonSequence(PlayerData winner)

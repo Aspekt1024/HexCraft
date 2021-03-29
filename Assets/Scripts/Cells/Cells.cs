@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Aspekt.Hex.UI;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
@@ -290,10 +291,13 @@ namespace Aspekt.Hex
             return coords;
         }
 
-        public void OnNewTurn(int playerID, int turnNumber)
+        public void OnNewTurn(PlayerData playerData)
         {
-            var suppliers = GetSuppliers();
-            suppliers.ForEach(s => game.UI.ShowFloatingUI(s.GetTransform(), null, $"+{s.GetSupplies()}"));
+            if (playerData.Player.hasAuthority && playerData.TurnNumber > 1)
+            {
+                var suppliers = GetSuppliers(playerData.Player.ID);
+                suppliers.ForEach(s => game.UI.ShowFloatingUI(s.GetTransform(), $"+{s.GetSupplies()}", FloatingUI.Style.Supplies));
+            }
                 
             foreach (var cell in AllCells)
             {

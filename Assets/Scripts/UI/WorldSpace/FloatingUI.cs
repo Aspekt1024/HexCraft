@@ -10,6 +10,8 @@ namespace Aspekt.Hex.UI
         {
             None = 0,
             Combat = 100,
+            Produce = 500,
+            Supplies = 600,
         }
         
 #pragma warning disable 649
@@ -19,10 +21,10 @@ namespace Aspekt.Hex.UI
         private readonly List<FloatingUIElement> freeElements = new List<FloatingUIElement>();
         private readonly List<FloatingUIElement> activeElements = new List<FloatingUIElement>();
         
-        public void Show(Transform tf, Sprite icon, string text, Style style = Style.None)
+        public void Show(Transform tf, string text, Style style = Style.None, Sprite icon = null)
         {
             var element = GetFreeElement();
-            element.Begin(tf, icon, text, style);
+            element.Begin(tf, text, style, icon);
         }
 
         private FloatingUIElement GetFreeElement()

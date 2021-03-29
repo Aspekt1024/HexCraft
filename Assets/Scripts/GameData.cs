@@ -190,7 +190,7 @@ namespace Aspekt.Hex
             
             playerData[playerIndex].Player.IsCurrentPlayer = true;
             playerData[playerIndex].TurnNumber++;
-            RpcSetCurrentPlayer((Int16)playerData[playerIndex].Player.ID);
+            RpcSetCurrentPlayer((Int16)playerData[playerIndex].Player.ID, (Int16)playerData[playerIndex].TurnNumber);
         }
 
         private void GenerateIncome(PlayerData data)
@@ -231,9 +231,10 @@ namespace Aspekt.Hex
         }
         
         [ClientRpc]
-        private void RpcSetCurrentPlayer(Int16 playerId)
+        private void RpcSetCurrentPlayer(Int16 playerId, Int16 turnNumber)
         {
             currentPlayer = playerData.First(p => p.Player.ID == playerId);
+            currentPlayer.TurnNumber = turnNumber;
             foreach (var p in playerData)
             {
                 var isCurrentPlayer = p.Player.ID == playerId;
@@ -245,7 +246,7 @@ namespace Aspekt.Hex
                 p.Player.UpdateCurrentPlayerStatus(isCurrentPlayer);
             }
             game.UI.SetPlayerTurn(currentPlayer);
-            game.Cells.OnNewTurn(currentPlayer.Player.ID, currentPlayer.TurnNumber);
+            game.Cells.OnNewTurn(currentPlayer);
         }
 
         [ClientRpc]
