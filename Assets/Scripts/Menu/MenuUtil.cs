@@ -18,7 +18,7 @@ namespace Aspekt.Hex.Menu
         public static bool IsValidIPAddress(string ipAddress)
         {
             if (ipAddress == "localhost") return true;
-            var ipRegex = new Regex("^(\\d{1,3}\\.){4}$");
+            var ipRegex = new Regex("^(\\d{1,3}\\.){3}\\d{1,3}$");
             return ipRegex.IsMatch(ipAddress);
         }
 
