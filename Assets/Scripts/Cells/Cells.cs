@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Hex.UI;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
 namespace Aspekt.Hex
