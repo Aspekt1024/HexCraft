@@ -131,9 +131,10 @@ namespace Aspekt.Hex
                     tf.position = pos;
                     yield return null;
                 }
-
             }
+            
             transform.position = target;
+            Anim.SetFloat(AnimMoveSpeed, 0f);
             
             foreach (var observer in unitActionObservers)
             {
