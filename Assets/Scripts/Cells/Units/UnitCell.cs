@@ -45,8 +45,6 @@ namespace Aspekt.Hex
 
         public UnitStats GetStats() => Stats;
 
-        public override bool CanCreate(Cells.CellTypes cellType) => false;
-
         public override void OnActionClicked(ActionDefinition actionDefinition)
         {
             if (actionDefinition is UnitAction unitAction)

@@ -7,11 +7,6 @@ namespace Aspekt.Hex
         public override Technology Technology { get; } = Technology.Market;
         
         public Transform GetTransform() => transform;
-        
-        public override bool CanCreate(Cells.CellTypes cellType)
-        {
-            return false;
-        }
 
         public override void OnTechAdded(Technology tech)
         {

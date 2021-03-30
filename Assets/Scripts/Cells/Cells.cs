@@ -150,7 +150,7 @@ namespace Aspekt.Hex
 
         public List<HexCoordinates> GetValidPlacement(CellTypes type, HexCell origin, bool omitNonEmpty)
         {
-            var radius = GetPrefab(type).PlacementRadius;
+            var radius = origin.GetPlacementRadius(type);
             if (radius > 0)
             {
                 return GetSurroundingCells(origin.Coordinates, radius, omitNonEmpty);
@@ -168,8 +168,8 @@ namespace Aspekt.Hex
             {
                 if (cell.PlayerId == playerId && cell.CanCreate(type))
                 {
-                    var cellPrefab = GetPrefab(type);
-                    if (PlacementRules.IsValidPlacementDistance(cellPrefab.PlacementRadius, cellCoords, cell.Coordinates))
+                    var radius = cell.GetPlacementRadius(type);
+                    if (PlacementRules.IsValidPlacementDistance(radius, cellCoords, cell.Coordinates))
                     {
                         return true;
                     }

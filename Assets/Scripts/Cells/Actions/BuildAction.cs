@@ -8,6 +8,7 @@ namespace Aspekt.Hex.Actions
     public class BuildAction : ActionDefinition
     {
         public HexCell prefab;
+        public int placementRadius = 1;
         public List<Technology> techRequirements;
 
         public override bool CanAfford(int playerId)

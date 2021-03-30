@@ -56,10 +56,9 @@ MonoBehaviour:
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
   cellType: 1300
   DisplayName: Farm
-  PlacementRadius: 2
   Cost:
     production: 0
-    supplies: 7
+    supplies: 10
   MaxHP: 2
   BasicDescription: Generates 1 food per round, at the start of your turn.
   Coordinates:
@@ -69,7 +68,7 @@ MonoBehaviour:
   Owner: {fileID: 0}
   renderers:
   - {fileID: 4694660904767215729}
-  production: 1
+  production: 3
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0

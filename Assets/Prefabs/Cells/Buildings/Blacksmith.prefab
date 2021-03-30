@@ -59,7 +59,7 @@ MonoBehaviour:
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
   cellType: 1400
   DisplayName: Blacksmith
-  PlacementRadius: 2
+  PlacementRadius: 1
   Cost:
     production: 0
     supplies: 10

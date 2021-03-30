@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config:
-    startingSupply: 50
+    startingSupply: 15
     techConfig:
       upgrades:
       - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}

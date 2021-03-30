@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3157f0c1632448beafaa72c1db86586c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: []
+  actions:
+  - {fileID: 11400000, guid: 23a5950c911e37c42a1052d366232dc5, type: 2}
   hexOutline: {fileID: 8217559798967141292}
   blackMaterial: {fileID: 2100000, guid: 19e5e5a2c659faf49a059ec9fc3e642d, type: 2}
   whiteMaterial: {fileID: 2100000, guid: 0c68c1882ddd40b4ebf2fa7eae477af0, type: 2}
@@ -56,7 +57,7 @@ MonoBehaviour:
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
   cellType: 1500
   DisplayName: Market
-  PlacementRadius: 3
+  PlacementRadius: 1
   Cost:
     production: 0
     supplies: 5

@@ -22,7 +22,6 @@ namespace Aspekt.Hex
         [Header("Cell Settings")]
         public Cells.CellTypes cellType = Cells.CellTypes.None;
         public string DisplayName = "Cell";
-        public int PlacementRadius = 2;
         public Cost Cost;
         public int MaxHP = 1;
         public string BasicDescription = "";
@@ -149,7 +148,30 @@ namespace Aspekt.Hex
         public void SetSelected() => hexOutline.SetSelected();
         public void SetUnselected() => hexOutline.SetUnselected();
 
-        public abstract bool CanCreate(Cells.CellTypes cellType);
+        public bool CanCreate(Cells.CellTypes cellType)
+        {
+            foreach (var action in Actions)
+            {
+                if (action is BuildAction buildAction && buildAction.prefab.cellType == cellType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public int GetPlacementRadius(Cells.CellTypes cellType)
+        {
+            foreach (var action in Actions)
+            {
+                if (action is BuildAction buildAction && buildAction.prefab.cellType == cellType)
+                {
+                    return buildAction.placementRadius;
+                }
+            }
+            return 0;
+        }
+        
         public abstract void OnActionClicked(ActionDefinition actionDefinition);
         
         protected virtual void OnInit() {}

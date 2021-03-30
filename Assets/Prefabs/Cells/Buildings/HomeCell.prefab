@@ -46,10 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 11400000, guid: 23a5950c911e37c42a1052d366232dc5, type: 2}
-  - {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}
-  - {fileID: 11400000, guid: 45c0aa3d5256b9e4ea688ad1b9f10d6f, type: 2}
   - {fileID: 11400000, guid: bb7a225fa371f29429738957bae9fb65, type: 2}
+  - {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}
   hexOutline: {fileID: 1105101854328856294}
   blackMaterial: {fileID: 2100000, guid: 19e5e5a2c659faf49a059ec9fc3e642d, type: 2}
   whiteMaterial: {fileID: 2100000, guid: 0c68c1882ddd40b4ebf2fa7eae477af0, type: 2}
@@ -60,7 +58,6 @@ MonoBehaviour:
   brownMaterial: {fileID: 2100000, guid: a7b844ebfbdd09b4e8a009a9e2c59db4, type: 2}
   cellType: 1000
   DisplayName: Town Hall
-  PlacementRadius: 2
   Cost:
     production: 0
     supplies: 250

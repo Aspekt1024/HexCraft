@@ -48,6 +48,7 @@ MonoBehaviour:
   actions:
   - {fileID: 11400000, guid: 5f7645336755b4c4491a1fedea6f473b, type: 2}
   - {fileID: 11400000, guid: 13de6652590a7964fa4c07ec1211cb28, type: 2}
+  - {fileID: 11400000, guid: 45c0aa3d5256b9e4ea688ad1b9f10d6f, type: 2}
   hexOutline: {fileID: 6301690519140048039}
   blackMaterial: {fileID: 2100000, guid: 19e5e5a2c659faf49a059ec9fc3e642d, type: 2}
   whiteMaterial: {fileID: 2100000, guid: 0c68c1882ddd40b4ebf2fa7eae477af0, type: 2}

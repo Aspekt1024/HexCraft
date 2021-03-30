@@ -11,11 +11,6 @@ namespace Aspekt.Hex
         [Header("Income Settings")]
         public int production = 1;
 
-        public override bool CanCreate(Cells.CellTypes cellType)
-        {
-            return false;
-        }
-
         protected override void OnInit()
         {
             Stats.Production = production;
