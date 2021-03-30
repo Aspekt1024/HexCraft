@@ -6,6 +6,8 @@ namespace Aspekt.Hex
     {
         public override Technology Technology { get; } = Technology.Market;
         
+        public Transform GetTransform() => transform;
+        
         public override bool CanCreate(Cells.CellTypes cellType)
         {
             return false;
@@ -27,6 +29,5 @@ namespace Aspekt.Hex
             return data.CurrencyData.MaxProduction - data.CurrencyData.UtilisedProduction;
         }
 
-        public Transform GetTransform() => transform;
     }
 }

@@ -30,11 +30,6 @@ namespace Aspekt.Hex
             return suppliesPerRound;
         }
 
-        public Transform getTransform()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public int GetProduction()
         {
             return production;
