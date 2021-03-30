@@ -144,10 +144,11 @@ namespace Aspekt.Hex
         public void AttackCell(UnitCell attacker, HexCell target)
         {
             var attackerStats = attacker.GetStats();
-            var isKillingBlow = target.CurrentHP <= attackerStats.Attack;
             
             var damageMultiplier = Mathf.Max(1f - target.GetDamageMitigation(), 0f);
             var damage = Mathf.RoundToInt(attackerStats.Attack * damageMultiplier);
+            
+            var isKillingBlow = target.CurrentHP <= damage;
             
             grid.RpcAttack((Int16)attacker.Coordinates.X,
                 (Int16)attacker.Coordinates.Z,
