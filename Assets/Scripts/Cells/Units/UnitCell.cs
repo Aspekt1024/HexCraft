@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Aspekt.Hex.Actions;
 using UnityEngine;
 
@@ -7,6 +9,10 @@ namespace Aspekt.Hex
 {
     public abstract class UnitCell : HexCell
     {
+#pragma warning disable 649
+        [SerializeField] protected UpgradeStats[] upgradeStats;
+#pragma warning disable 649
+        
         protected Transform Model;
 
         public struct UnitStats
@@ -19,16 +25,49 @@ namespace Aspekt.Hex
         }
 
         protected UnitStats Stats = new UnitStats();
+        
+        [Serializable]
+        public struct UpgradeStats
+        {
+            [Serializable]
+            public struct Upgrade
+            {
+                public Technology tech;
+                public int level;
+                public int value;    
+            }
+            
+            public TechGroups techGroup;
+            public Upgrade[] upgrades;
+
+            public Upgrade GetUpgradeForLevel(int level)
+            {
+                return upgrades.FirstOrDefault(u => u.level == level);
+            }
+            
+            public bool IsTechGroup(Technology tech)
+            {
+                return upgrades.Any(u => u.tech == tech);
+            }
+        }
 
         public bool HasMoved { get; private set; }
         public bool HasAttacked { get; private set; }
         
         private static readonly int AnimMoveSpeed = Animator.StringToHash("moveSpeed");
         private static readonly int AnimAttackTrigger = Animator.StringToHash("attack");
+        private static readonly int AnimCastTrigger = Animator.StringToHash("cast");
         private static readonly int AnimDamagedTrigger = Animator.StringToHash("damaged");
         private static readonly int AnimDeathTrigger = Animator.StringToHash("dead");
 
         private readonly List<IUnitActionObserver> unitActionObservers = new List<IUnitActionObserver>();
+
+        protected enum AttackTypes
+        {
+            Melee, Spell
+        }
+
+        protected abstract AttackTypes AttackType { get; }
         
         private void Start()
         {
@@ -107,6 +146,13 @@ namespace Aspekt.Hex
         {
             return Stats.Shield / 100f;
         }
+        
+        protected UpgradeStats.Upgrade GetUpgradeForLevel(TechGroups group, int level)
+        {
+            var stats = upgradeStats.FirstOrDefault(s => s.techGroup == group);
+            if (stats.upgrades.Length <= level) return new UpgradeStats.Upgrade();
+            return stats.upgrades[level];
+        }
 
         private IEnumerator MoveRoutine(List<Vector3> path)
         {
@@ -167,7 +213,17 @@ namespace Aspekt.Hex
         private IEnumerator AttackRoutine(HexCell target, int damage)
         {
             Model.LookAt(target.transform);
-            Anim.SetTrigger(AnimAttackTrigger);
+            
+            switch (AttackType)
+            {
+                case AttackTypes.Melee:
+                    Anim.SetTrigger(AnimAttackTrigger);
+                    break;
+                case AttackTypes.Spell:
+                    Anim.SetTrigger(AnimCastTrigger);
+                    break;
+            }
+            
             yield return new WaitForSeconds(0.3f);
             target.TakeDamage(this, damage);
 

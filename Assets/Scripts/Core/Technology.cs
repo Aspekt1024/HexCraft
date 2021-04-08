@@ -23,15 +23,25 @@ namespace Aspekt.Hex
         UpgradeShields2 = 3311,
         UpgradeShields3 = 3312,
         
+        UpgradeMageArmor1 = 4010,
+        UpgradeMageArmor2 = 4011,
+        UpgradeMageArmor3 = 4012,
+        UpgradeMageSpell1 = 4110,
+        UpgradeMageSpell2 = 4111,
+        UpgradeMageSpell3 = 4112,
     }
 
     public enum TechGroups
     {
         Undefined = 0,
         Buildings = 1000,
+        
         UpgradeWeapons = 2000,
         UpgradeArmor = 2100,
         UpgradeWarMount = 2200,
         UpgradeShields = 2300,
+        
+        UpgradeMageArmor = 3000,
+        UpgradeMageSpell = 3100,
     }
 }

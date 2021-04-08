@@ -6,44 +6,20 @@ namespace Aspekt.Hex
 {
     public class MeleeUnit : UnitCell
     {
-        public override Technology Technology { get; } = Technology.None;
-
-        [Serializable]
-        public struct UpgradeStats
-        {
-            [Serializable]
-            public struct Upgrade
-            {
-                public Technology tech;
-                public int level;
-                public int value;    
-            }
-            
-            public TechGroups techGroup;
-            public Upgrade[] upgrades;
-
-            public Upgrade GetUpgradeForLevel(int level)
-            {
-                return upgrades.FirstOrDefault(u => u.level == level);
-            }
-            
-            public bool IsTechGroup(Technology tech)
-            {
-                return upgrades.Any(u => u.tech == tech);
-            }
-        }
         
 #pragma warning disable 649
         [SerializeField] private GroundUnitModel groundUnitModel;
         [SerializeField] private MountedUnitModel mountedUnitModel;
-        [SerializeField] private UpgradeStats[] upgradeStats;
 #pragma warning restore 649
-
+        
         private UnitModel currentModel;
 
         private int armorLevel;
         private int weaponLevel;
         private int shieldLevel;
+        
+        public override Technology Technology { get; } = Technology.None;
+        protected override AttackTypes AttackType => AttackTypes.Melee;
 
         private void Awake()
         {
@@ -69,13 +45,6 @@ namespace Aspekt.Hex
             SetShield(GetUpgradeForLevel(TechGroups.UpgradeShields, 0));
 
             Stats.Range = 1;
-        }
-        
-        private UpgradeStats.Upgrade GetUpgradeForLevel(TechGroups group, int level)
-        {
-            var stats = upgradeStats.FirstOrDefault(s => s.techGroup == group);
-            if (stats.upgrades.Length <= level) return new UpgradeStats.Upgrade();
-            return stats.upgrades[level];
         }
 
 #region Debug and Test

@@ -17,7 +17,9 @@ namespace Aspekt.Hex
             Blacksmith = 1400,
             Market = 1500,
             Stables = 1600,
+            
             MeleeUnit = 2000,
+            MageUnit = 2200,
         }
 
         public enum Colours
