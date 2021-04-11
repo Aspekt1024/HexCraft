@@ -1,6 +1,6 @@
 using System;
 using Aspekt.Hex.Actions;
-using Aspekt.Hex.UI;
+using Aspekt.Hex.Commands;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -284,6 +284,7 @@ namespace Aspekt.Hex
                 state = States.None;
                 indicator.Clear();
                 player.CmdMoveCell(
+                    (Int16) player.ID,
                     (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
                     (Int16) coords.X, (Int16) coords.Z);
             }
@@ -292,16 +293,24 @@ namespace Aspekt.Hex
 
         private bool AttackIfValid(UnitCell unit, HexCoordinates coords)
         {
-            if (unit.HasAttacked) return false;
+            if (!game.IsCurrentPlayer(player) || unit.HasAttacked) return false;
             var target = game.Cells.GetCellAtPosition(coords);
             var isValid = game.Cells.IsValidAttackTarget(unit, target, player.ID);
             if (isValid)
             {
                 state = States.None;
                 indicator.Clear();
+
+                var damage = ValidatedAttack.GetDamage(unit, target);
+                var validatedAttack = new ValidatedAttack(player.GetNewActionID(), unit, target, damage);
+                game.CommandValidator.RegisterAttack(validatedAttack);
+                
+                unit.ShowAttack(target, validatedAttack.OnAttackLanded);
                 player.CmdAttackCell(
-                    (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
-                    (Int16) coords.X, (Int16) coords.Z);
+                    (Int16) player.ID, validatedAttack.ID,
+                    (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z,
+                    (Int16) coords.X, (Int16) coords.Z
+                );
             }
             return isValid;
         }

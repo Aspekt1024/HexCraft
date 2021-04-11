@@ -30,10 +30,7 @@ namespace Aspekt.Hex
         
         public GameConfig Config { get; private set; }
 
-        public bool IsCurrentPlayer(NetworkGamePlayerHex player)
-        {
-            return currentPlayer != null && currentPlayer.Player.ID == player.ID;
-        }
+        public bool IsCurrentPlayer(int playerID) => currentPlayer != null && currentPlayer.Player.ID == playerID;
         
         public override void OnStartClient()
         {

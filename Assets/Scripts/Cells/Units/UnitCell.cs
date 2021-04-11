@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Hex.Actions;
+using Aspekt.Hex.Commands;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -119,27 +120,32 @@ namespace Aspekt.Hex
             StartCoroutine(MoveRoutine(path));
         }
         
-        public void ShowAttack(HexCell target, int damage)
+        public void ShowAttack(HexCell target, Action attackHitCallback)
         {
-            HasAttacked = true;
-            StartCoroutine(AttackRoutine(target, damage));
+            StartCoroutine(AttackRoutine(target, attackHitCallback));
         }
 
         public override void Remove()
         {
-            StartCoroutine(DeathRoutine());
+            // TODO if not already dead, show death routine
             unitActionObservers.ForEach(o => o.OnUnitRemoved(this));
+            Destroy(gameObject, 2f);
         }
         
-        public override void TakeDamage(UnitCell attacker, int damage)
+        public override float ShowDamage(UnitCell attacker, int damage)
         {
-            base.TakeDamage(attacker, damage);
-            
-            if (CurrentHP > 0)
+            var newHealthPercent = base.ShowDamage(attacker, damage);
+            if (newHealthPercent > 0)
             {
                 Model.LookAt(attacker.transform);
                 Anim.SetTrigger(AnimDamagedTrigger);
             }
+            else
+            {
+                StartCoroutine(DeathRoutine());
+            }
+
+            return newHealthPercent;
         }
 
         public override float GetDamageMitigation()
@@ -210,7 +216,7 @@ namespace Aspekt.Hex
             return distVector * currentSpeed;
         }
 
-        private IEnumerator AttackRoutine(HexCell target, int damage)
+        private IEnumerator AttackRoutine(HexCell target, Action attackHitCallback)
         {
             Model.LookAt(target.transform);
             
@@ -225,18 +231,17 @@ namespace Aspekt.Hex
             }
             
             yield return new WaitForSeconds(0.3f);
-            target.TakeDamage(this, damage);
+            attackHitCallback?.Invoke();
+        }
 
-            foreach (var observer in unitActionObservers)
-            {
-                observer.OnFinishedAttack(this);
-            }
+        public void AttackComplete()
+        {
+            HasAttacked = true;
+            unitActionObservers.ForEach(o => o.OnFinishedAttack(this));
         }
         
         private IEnumerator DeathRoutine()
         {
-            yield return new WaitForSeconds(0.3f);
-            
             Anim.SetTrigger(AnimDeathTrigger);
             yield return new WaitForSeconds(2f);
             
@@ -248,7 +253,6 @@ namespace Aspekt.Hex
                 transform.position += Vector3.down * (Time.deltaTime * 0.3f);
                 yield return null;
             }
-            Destroy(gameObject);
         }
         
     }

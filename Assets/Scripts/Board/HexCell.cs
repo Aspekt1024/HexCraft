@@ -94,16 +94,28 @@ namespace Aspekt.Hex
             ShowPlaced();
         }
 
-        public virtual void TakeDamage(UnitCell attacker, int damage)
+        /// <summary>
+        /// Removes health from the cell. This has no visible effect. <seealso cref="ShowDamage"/>
+        /// </summary>
+        public void RemoveHealth(int damage)
+        {
+            CurrentHP = Mathf.Max(CurrentHP - damage, 0);
+        }
+
+        /// <summary>
+        /// Shows the removal of health from an attacker, but does not apply it. <seealso cref="RemoveHealth"/>
+        /// </summary>
+        public virtual float ShowDamage(UnitCell attacker, int damage)
         {
             var prevHealthPercent = (float) CurrentHP / MaxHP;
-            CurrentHP = Mathf.Max(CurrentHP - damage, 0);
-            var newHealthPercent = (float) CurrentHP / MaxHP;
-
+            var newHealthPercent = (float) Mathf.Max(CurrentHP - damage, 0) / MaxHP;
+            
             foreach (var observer in healthObservers)
             {
                 observer.OnCellHealthChanged(this, prevHealthPercent, newHealthPercent);
             }
+
+            return newHealthPercent;
         }
 
         public void DisplayAsIndicator(Shader holoShader, Cells.Colours colour)
@@ -210,13 +222,7 @@ namespace Aspekt.Hex
 
         public virtual void Remove()
         {
-            StartCoroutine(RemoveRoutine());
-        }
-
-        private IEnumerator RemoveRoutine()
-        {
-            yield return new WaitForSeconds(1f);
-            Destroy(gameObject);
+            Destroy(gameObject, 4f);
         }
     }
 }

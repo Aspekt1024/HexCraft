@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Aspekt.Hex.Commands;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
@@ -17,12 +18,16 @@ namespace Aspekt.Hex
         public GameData Data { get; private set; }
         public Cells Cells { get; private set; }
         public HexCamera Camera { get; private set; }
+        public HexGrid Grid { get; private set; }
 
+        public readonly CommandValidator CommandValidator = new CommandValidator();
+        
         #region Networking
+
+        public int PlayerID => gamePlayer.ID;
 
         private NetworkManagerHex room;
         private NetworkGamePlayerHex gamePlayer;
-        private HexGrid grid;
 
         public struct Dependencies
         {
@@ -68,11 +73,11 @@ namespace Aspekt.Hex
 
             room = dependencies.NetworkManager;
             Data = dependencies.Data;
-            grid = dependencies.Grid;
+            Grid = dependencies.Grid;
             
             Data.Init(this, config);
-            grid.Init(this);
-            Cells.Init(this, grid);
+            Grid.Init(this);
+            Cells.Init(this, Grid);
             
             StartCoroutine(AwaitNetworkedPlayerRoutine());
         }
@@ -86,7 +91,7 @@ namespace Aspekt.Hex
             Data.NextTurn();
             Data.SetGameStarted();
             
-            Camera.ScrollTo(grid.GetStartLocation(gamePlayer.ID));
+            Camera.ScrollTo(Grid.GetStartLocation(gamePlayer.ID));
             
             Cells.RegisterCellLifecycleObserver(Data);
             
@@ -100,7 +105,7 @@ namespace Aspekt.Hex
 
         public void StartGameClient()
         {
-            Camera.ScrollTo(grid.GetStartLocation(gamePlayer.ID));
+            Camera.ScrollTo(Grid.GetStartLocation(gamePlayer.ID));
             Debug.Log("Game started for client");
         }
 
@@ -108,7 +113,7 @@ namespace Aspekt.Hex
         {
             foreach (var player in room.GamePlayers)
             {
-                grid.SetStartingLocation(player);
+                Grid.SetStartingLocation(player);
                 Data.OnSuppliesChanged(player, config.startingSupply);
             }
 
@@ -130,7 +135,7 @@ namespace Aspekt.Hex
             if (!playerData.CurrencyData.CanAfford(cost)) return;
             if (!playerData.TechnologyData.HasTechnologyForCell(type)) return;
 
-            if (grid.TryPlace(x, z, player.ID, type))
+            if (Grid.TryPlace(x, z, player.ID, type))
             {
                 playerData.CurrencyData.Purchase(cost);
             }
@@ -138,39 +143,21 @@ namespace Aspekt.Hex
 
         public void MoveCell(HexCoordinates from, HexCoordinates to)
         {
-            grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
+            Grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
         }
 
-        public void AttackCell(UnitCell attacker, HexCell target)
+        public void RemoveCell(int removedByPlayerID, HexCell cell)
         {
-            var attackerStats = attacker.GetStats();
+            var gameWon = CheckGameWon(cell);
             
-            var damageMultiplier = Mathf.Max(1f - target.GetDamageMitigation(), 0f);
-            var damage = Mathf.RoundToInt(attackerStats.Attack * damageMultiplier);
+            Grid.RpcRemoveCell((Int16) cell.Coordinates.X, (Int16) cell.Coordinates.Z);
             
-            var isKillingBlow = target.CurrentHP <= damage;
-            
-            grid.RpcAttack((Int16)attacker.Coordinates.X,
-                (Int16)attacker.Coordinates.Z,
-                (Int16)target.Coordinates.X,
-                (Int16)target.Coordinates.Z,
-                (Int16)damage);
-            
-            if (isKillingBlow)
+            if (gameWon)
             {
-                var player = room.GamePlayers.First(p => p.ID == attacker.PlayerId);
-                var gameWon = CheckGameWon(target);
-                
-                grid.RpcRemoveCell((Int16)target.Coordinates.X, (Int16)target.Coordinates.Z, (Int16)player.ID);
-
-                if (gameWon)
-                {
-                    Data.RpcGameWon((Int16)attacker.Owner.ID);
-                    return;
-                }
+                Data.RpcGameWon((Int16)removedByPlayerID);
             }
         }
-
+        
     #endregion Server Calls
 
         private bool CheckGameWon(HexCell lastDestroyedTarget)
@@ -180,7 +167,8 @@ namespace Aspekt.Hex
             return homeCells.All(c => c == lastDestroyedTarget);
         }
 
-        public bool IsCurrentPlayer(NetworkGamePlayerHex player) => Data.IsCurrentPlayer(player);
+        public bool IsCurrentPlayer(int playerID) => Data.IsCurrentPlayer(playerID);
+        public bool IsCurrentPlayer(NetworkGamePlayerHex player) => Data.IsCurrentPlayer(player.ID);
 
         private IEnumerator AwaitNetworkedPlayerRoutine()
         {
