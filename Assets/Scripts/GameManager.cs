@@ -20,7 +20,7 @@ namespace Aspekt.Hex
         public HexCamera Camera { get; private set; }
         public HexGrid Grid { get; private set; }
 
-        public readonly CommandValidator CommandValidator = new CommandValidator();
+        public CommandValidator CommandValidator;
         
         #region Networking
 
@@ -45,6 +45,8 @@ namespace Aspekt.Hex
         
         private void Awake()
         {
+            CommandValidator = new CommandValidator(this);
+            
             Cells = FindObjectOfType<Cells>();
             Cells.RegisterCellLifecycleObserver(UI);
 
@@ -141,30 +143,18 @@ namespace Aspekt.Hex
             }
         }
 
-        public void MoveCell(HexCoordinates from, HexCoordinates to)
+        public void MoveCell(HexCell cell, HexCoordinates to)
         {
-            Grid.RpcMoveCell((Int16)from.X, (Int16)from.Z, (Int16)to.X, (Int16)to.Z);
-        }
-
-        public void RemoveCell(int removedByPlayerID, HexCell cell)
-        {
-            var gameWon = CheckGameWon(cell);
-            
-            Grid.RpcRemoveCell((Int16) cell.Coordinates.X, (Int16) cell.Coordinates.Z);
-            
-            if (gameWon)
-            {
-                Data.RpcGameWon((Int16)removedByPlayerID);
-            }
+            Grid.RpcMoveCell((Int16)cell.ID, (Int16)to.X, (Int16)to.Z);
         }
         
     #endregion Server Calls
 
-        private bool CheckGameWon(HexCell lastDestroyedTarget)
+        public bool DestroyingCellWinsGame(HexCell destroyedCell)
         {
-            var owner = lastDestroyedTarget.Owner;
+            var owner = destroyedCell.Owner;
             var homeCells = Cells.GetHomeCells(owner.ID);
-            return homeCells.All(c => c == lastDestroyedTarget);
+            return homeCells.All(c => c == destroyedCell);
         }
 
         public bool IsCurrentPlayer(int playerID) => Data.IsCurrentPlayer(playerID);

@@ -53,7 +53,8 @@ namespace Aspekt.Hex
             var coords = new HexCoordinates(x, z);
             if (!cells.IsValidPlacement(type, coords, playerID)) return false;
             
-            RpcCreateCell(x, z, (Int16)playerID, (Int16)type);
+            var cellID = cells.GetUniqueCellID();
+            RpcCreateCell(x, z, (Int16)playerID, (Int16)type, (Int16)cellID);
             return true;
         }
 
@@ -70,7 +71,7 @@ namespace Aspekt.Hex
         }
 
         [ClientRpc]
-        private void RpcCreateCell(Int16 x, Int16 z, Int16 playerID, Int16 cellTypeIndex)
+        private void RpcCreateCell(Int16 x, Int16 z, Int16 playerID, Int16 cellTypeIndex, Int16 cellID)
         {
             if (!Enum.IsDefined(typeof(Cells.CellTypes), (Int32)cellTypeIndex))
             {
@@ -80,21 +81,14 @@ namespace Aspekt.Hex
             
             var coords = new HexCoordinates(x, z);
             var player = game.GetPlayerFromID(playerID);
-            var cell = cells.Create((Cells.CellTypes) cellTypeIndex, player);
-            cell.Place(coords);
+            var cell = cells.Create((Cells.CellTypes) cellTypeIndex, player, cellID);
+            cell.Place(cellID, coords);
         }
 
         [ClientRpc]
-        public void RpcRemoveCell(Int16 x, Int16 z)
+        public void RpcMoveCell(Int16 cellID, Int16 toX, Int16 toZ)
         {
-            var coords = new HexCoordinates(x, z);
-            cells.RemoveCell(coords);
-        }
-
-        [ClientRpc]
-        public void RpcMoveCell(Int16 fromX, Int16 fromZ, Int16 toX, Int16 toZ)
-        {
-            var cell = cells.GetCellAtPosition(new HexCoordinates(fromX, fromZ));
+            var cell = cells.GetCell(cellID);
             if (cell == null) return;
             
             var newCoords = new HexCoordinates(toX, toZ);
@@ -102,14 +96,14 @@ namespace Aspekt.Hex
         }
         
         [ClientRpc]
-        public void RpcAttack(Int16 playerID, Int16 actionID, Int16 attackerX, Int16 attackerZ, Int16 targetX, Int16 targetZ, Int16 damage)
+        public void RpcAttack(Int16 playerID, Int16 actionID, Int16 attackerID, Int16 targetID, Int16 damage, bool isDestroyed)
         {
-            var target = cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
-            var attacker = (UnitCell)cells.GetCellAtPosition(new HexCoordinates(attackerX, attackerZ));
+            var attacker = (UnitCell)cells.GetCell(attackerID);
+            var target = cells.GetCell(targetID);
 
             if (playerID == game.PlayerID)
             {
-                game.CommandValidator.OnAttackReceived(actionID, attacker, target, damage);
+                game.CommandValidator.OnAttackReceived(actionID, attacker, target, damage, isDestroyed);
             }
             else if (attacker != null && attacker is UnitCell attackingUnit)
             {
@@ -119,7 +113,11 @@ namespace Aspekt.Hex
                     {
                         target.ShowDamage(attacker, damage);
                         target.RemoveHealth(damage);
-                        attacker.AttackComplete(); 
+                        if (isDestroyed)
+                        {
+                            cells.RemoveCell(target);
+                        }
+                        attacker.AttackComplete();
                     }
                 );
             }

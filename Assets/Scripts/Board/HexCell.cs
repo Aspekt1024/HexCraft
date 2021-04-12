@@ -33,6 +33,7 @@ namespace Aspekt.Hex
         public HexCoordinates Coordinates;
         public int PlayerId;
         public NetworkGamePlayerHex Owner;
+        public int ID;
 
         public ActionDefinition[] Actions => actions;
         
@@ -84,8 +85,10 @@ namespace Aspekt.Hex
 
         public abstract float GetDamageMitigation();
 
-        public void Place(HexCoordinates coords)
+        public void Place(int ID, HexCoordinates coords)
         {
+            this.ID = ID;
+            
             IsPlaced = true;
             CurrentHP = MaxHP;
             

@@ -45,8 +45,10 @@ namespace Aspekt.Hex
         [SerializeField] private GameObject indicator;
         [SerializeField] private Shader holoShader;
 #pragma warning restore 649
-        
-        public List<HexCell> AllCells { get; } = new List<HexCell>();
+
+        public List<HexCell> AllCells => allCells.Values.ToList();
+        private readonly Dictionary<int, HexCell> allCells = new Dictionary<int, HexCell>();
+        private int lastCellIndex;
 
         private readonly List<ICellEventObserver> cellEventObservers = new List<ICellEventObserver>();
         private readonly List<ICellLifecycleObserver> cellLifecycleObservers = new List<ICellLifecycleObserver>();
@@ -75,9 +77,11 @@ namespace Aspekt.Hex
             cellLifecycleObservers.Add(observer);
         }
 
+        public int GetUniqueCellID() => lastCellIndex++;
+
         public HexCell CreateIndicator(CellTypes type, int playerId)
         {
-            var cell = CreateCell(type, playerId);
+            var cell = CreateCell(type);
             cell.SetupTech(data, playerId);
             return cell;
         }
@@ -94,15 +98,15 @@ namespace Aspekt.Hex
             return playerId == 1 ? Colours.Blue : Colours.Red;
         }
 
-        public HexCell Create(CellTypes type, NetworkGamePlayerHex owner)
+        public HexCell Create(CellTypes type, NetworkGamePlayerHex owner, int cellID)
         {
-            var cell = CreateCell(type, owner.ID);
+            var cell = CreateCell(type);
             if (cell == null) return cell;
             
             cell.SetupTech(data, owner.ID);
             
             cell.Init(this, data, owner);
-            AllCells.Add(cell);
+            allCells.Add(cellID, cell);
             
             foreach (var observer in cellEventObservers)
             {
@@ -133,16 +137,19 @@ namespace Aspekt.Hex
         {
             return AllCells.FirstOrDefault(c => c.IsPlaced && c.Coordinates.Equals(coordinates));
         }
-
-        public void RemoveCell(HexCoordinates coordinates)
+        
+        public HexCell GetCell(int cellID)
         {
-            var cell = AllCells.FirstOrDefault(c => c.Coordinates.Equals(coordinates));
-            if (cell != null)
-            {
-                cellLifecycleObservers.ForEach(o => o.OnCellRemoved(cell));
-                AllCells.Remove(cell);
-                cell.Remove();
-            }
+            return allCells.ContainsKey(cellID) ? allCells[cellID] : null;
+        }
+
+        public void RemoveCell(HexCell c)
+        {
+            if (c == null) return;
+            
+            allCells.Remove(c.ID);
+            cellLifecycleObservers.ForEach(o => o.OnCellRemoved(c));
+            c.Remove();
         }
         
         public GameObject GetIndicatorPrefab()
@@ -230,7 +237,7 @@ namespace Aspekt.Hex
             }
         }
 
-        private HexCell CreateCell(CellTypes type, int playerId)
+        private HexCell CreateCell(CellTypes type)
         {
             var cellPrefab = GetPrefab(type);
             if (cellPrefab == null) return null;

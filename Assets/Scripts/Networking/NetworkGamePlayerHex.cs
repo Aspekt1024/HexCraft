@@ -183,37 +183,45 @@ namespace Aspekt.Hex
         }
 
         [Command]
-        public void CmdAttackCell(Int16 playerID, Int16 actionID, Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
+        public void CmdAttackCell(Int16 playerID, Int16 actionID, Int16 attackerID, Int16 targetID)
         {
             if (!game.IsCurrentPlayer(playerID)) return;
             
-            var attackingCell = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
+            var attackingCell = game.Cells.GetCell(attackerID);
             if (attackingCell == null || !(attackingCell is UnitCell attackingUnit)) return;
             if (attackingUnit.HasAttacked) return;
             
-            var target = game.Cells.GetCellAtPosition(new HexCoordinates(targetX, targetZ));
+            var target = game.Cells.GetCell(targetID);
             if (!game.Cells.IsValidAttackTarget(attackingUnit, target, ID)) return;
-            
+
             var damage = ValidatedAttack.GetDamage(attackingUnit, target);
-            game.Grid.RpcAttack(playerID, actionID, originX, originZ, targetX, targetZ, (Int16) damage);
-            if (target.CurrentHP <= damage)
+            var isDestroyed = target.CurrentHP <= damage;
+            var gameWon = game.DestroyingCellWinsGame(target); 
+            
+            game.Grid.RpcAttack(
+                playerID, actionID,
+                attackerID, targetID,
+                (Int16) damage, isDestroyed
+            );
+
+            if (gameWon)
             {
-                game.RemoveCell(playerID, target);
+                game.Data.RpcGameWon((Int16)attackingCell.PlayerId);
             }
         }
         
         [Command]
-        public void CmdMoveCell(Int16 playerID, Int16 originX, Int16 originZ, Int16 targetX, Int16 targetZ)
+        public void CmdMoveCell(Int16 playerID, Int16 cellID, Int16 targetX, Int16 targetZ)
         {
             if (!game.IsCurrentPlayer(playerID)) return;
             
-            var movingUnit = game.Cells.GetCellAtPosition(new HexCoordinates(originX, originZ));
+            var cell = game.Cells.GetCell(cellID);
             
             var target = new HexCoordinates(targetX, targetZ);
-            var path = game.Cells.GetPathWithValidityCheck(movingUnit, target, ID);
+            var path = game.Cells.GetPathWithValidityCheck(cell, target, ID);
             if (path != null)
             {
-                game.MoveCell(movingUnit.Coordinates, target);
+                game.MoveCell(cell, target);
             }
         }
         

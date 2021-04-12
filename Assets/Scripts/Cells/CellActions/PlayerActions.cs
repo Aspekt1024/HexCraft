@@ -284,8 +284,7 @@ namespace Aspekt.Hex
                 state = States.None;
                 indicator.Clear();
                 player.CmdMoveCell(
-                    (Int16) player.ID,
-                    (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z, 
+                    (Int16) player.ID, (Int16) unit.ID, 
                     (Int16) coords.X, (Int16) coords.Z);
             }
             return isValidPath;
@@ -308,8 +307,7 @@ namespace Aspekt.Hex
                 unit.ShowAttack(target, validatedAttack.OnAttackLanded);
                 player.CmdAttackCell(
                     (Int16) player.ID, validatedAttack.ID,
-                    (Int16) unit.Coordinates.X, (Int16) unit.Coordinates.Z,
-                    (Int16) coords.X, (Int16) coords.Z
+                    (Int16) unit.ID, (Int16) target.ID
                 );
             }
             return isValid;

@@ -10,6 +10,7 @@ namespace Aspekt.Hex.Commands
         private bool isValidated;
         private bool isAnimationComplete;
         private bool isActioned;
+        private Action onCompletionCallback;
 
         private readonly UnitCell attacker;
         private readonly HexCell target;
@@ -39,7 +40,7 @@ namespace Aspekt.Hex.Commands
             CompleteAttackIfSynced();
         }
 
-        public void Validate(UnitCell attacker, HexCell target, int damage)
+        public void Validate(UnitCell attacker, HexCell target, int damage, Action onCompletionCallback)
         {
             if (this.attacker != attacker)
             {
@@ -49,7 +50,7 @@ namespace Aspekt.Hex.Commands
             
             if (this.target != target)
             {
-                Debug.LogWarning("Invalid target!");
+                Debug.LogError("Invalid target!");
                 isActioned = true;
                 attacker.AttackComplete();
                 return;
@@ -62,6 +63,8 @@ namespace Aspekt.Hex.Commands
             }
 
             this.damage = damage;
+            this.onCompletionCallback = onCompletionCallback;
+            
             isValidated = true;
             
             CompleteAttackIfSynced();
@@ -75,6 +78,7 @@ namespace Aspekt.Hex.Commands
             {
                 isActioned = true;
                 target.RemoveHealth(damage);
+                onCompletionCallback?.Invoke();
                 attacker.AttackComplete();
             }
         }
