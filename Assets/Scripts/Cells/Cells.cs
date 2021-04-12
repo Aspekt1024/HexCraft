@@ -39,6 +39,7 @@ namespace Aspekt.Hex
         
         [Header("Units")]
         [SerializeField] private HexCell meleeUnit;
+        [SerializeField] private HexCell magicUnit;
 
         [Header("Display")]
         [SerializeField] private PathIndicator pathIndicator;
@@ -225,6 +226,8 @@ namespace Aspekt.Hex
                     return income;
                 case CellTypes.MeleeUnit:
                     return meleeUnit;
+                case CellTypes.MageUnit:
+                    return magicUnit;
                 case CellTypes.Blacksmith:
                     return blacksmith;
                 case CellTypes.Market:

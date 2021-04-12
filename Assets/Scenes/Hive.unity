@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config:
-    startingSupply: 15
+    startingSupply: 200
     techConfig:
       upgrades:
       - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}
@@ -335,6 +335,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 5f7645336755b4c4491a1fedea6f473b, type: 2}
       - {fileID: 11400000, guid: bb7a225fa371f29429738957bae9fb65, type: 2}
       - {fileID: 11400000, guid: 13de6652590a7964fa4c07ec1211cb28, type: 2}
+      - {fileID: 11400000, guid: 6a5478aca78008f47a500f191c073249, type: 2}
   ui: {fileID: 1328235041}
 --- !u!4 &322388668
 Transform:
@@ -372,6 +373,8 @@ MonoBehaviour:
     type: 3}
   market: {fileID: 2081058377881746019, guid: 0c41338fc3bfab743a0bdddfd417640f, type: 3}
   meleeUnit: {fileID: 3856654945942102754, guid: a6461c4f62e2fd64893e91336eee2050,
+    type: 3}
+  magicUnit: {fileID: 7132414103651887016, guid: 0d5376899dea16f4884d31632ab65d61,
     type: 3}
   pathIndicator: {fileID: 1324900828}
   indicator: {fileID: 5150164558244077247, guid: 57a53a2b667dedf43ae5789a5fde2e59,

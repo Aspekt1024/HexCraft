@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -19,7 +20,6 @@ namespace Aspekt.Hex
         private int shieldLevel;
         
         public override Technology Technology { get; } = Technology.None;
-        protected override AttackTypes AttackType => AttackTypes.Melee;
 
         private void Awake()
         {
@@ -111,6 +111,11 @@ namespace Aspekt.Hex
                     break;
             }
         }
+
+        public override void ShowAttack(HexCell target, Action attackHitCallback)
+        {
+            StartCoroutine(AttackRoutine(target, attackHitCallback));
+        }
         
         protected override void SetMaterial(Material material)
         {
@@ -196,6 +201,14 @@ namespace Aspekt.Hex
             currentModel.SetArmor(armorLevel);
             currentModel.SetWeapon(weaponLevel);
             currentModel.SetShield(shieldLevel);
+        }
+
+        private IEnumerator AttackRoutine(HexCell target, Action attackHitCallback)
+        {
+            Model.LookAt(target.transform);
+            Anim.SetTrigger(AnimAttackTrigger);
+            yield return new WaitForSeconds(0.3f);
+            attackHitCallback?.Invoke();
         }
     }
 }

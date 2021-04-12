@@ -196,7 +196,7 @@ namespace Aspekt.Hex
 
             var damage = ValidatedAttack.GetDamage(attackingUnit, target);
             var isDestroyed = target.CurrentHP <= damage;
-            var gameWon = game.DestroyingCellWinsGame(target); 
+            var gameWon = isDestroyed && game.DestroyingCellWinsGame(target); 
             
             game.Grid.RpcAttack(
                 playerID, actionID,

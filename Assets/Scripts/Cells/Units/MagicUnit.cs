@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Linq;
+using Aspekt.Hex.Effects;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -7,6 +10,8 @@ namespace Aspekt.Hex
     {
 #pragma warning disable 649
         [SerializeField] private UnitModel model;
+        [SerializeField] private ParticleSystem castParticles;
+        [SerializeField] private FrostSpell projectile;
 #pragma warning restore 649
 
         private int armorLevel;
@@ -14,8 +19,6 @@ namespace Aspekt.Hex
         
         public override Technology Technology { get; } = Technology.None;
         
-        protected override AttackTypes AttackType => AttackTypes.Spell;
-
         private void Awake()
         {
             Setup();
@@ -34,12 +37,15 @@ namespace Aspekt.Hex
             SetSpell(GetUpgradeForLevel(TechGroups.UpgradeMageSpell, 0));
 
             Stats.Range = 3;
+            Stats.Speed = 1;
 
             Model = model.transform;
             Anim = model.GetComponent<Animator>();
             
             model.SetArmor(armorLevel);
             model.SetWeapon(spellLevel);
+            
+            castParticles.gameObject.SetActive(false);
         }
         
 #region Debug and Test
@@ -83,6 +89,11 @@ namespace Aspekt.Hex
             }
         }
 
+        public override void ShowAttack(HexCell target, Action attackHitCallback)
+        {
+            StartCoroutine(AttackRoutine(target, attackHitCallback));
+        }
+
         protected override void SetColor(Color color)
         {
             model.SetColor(color);
@@ -112,6 +123,27 @@ namespace Aspekt.Hex
             Stats.Attack = upgrade.value;
             
             model.SetWeapon(upgrade.level);
+        }
+
+        private IEnumerator AttackRoutine(HexCell target, Action attackHitCallback)
+        {
+            Model.LookAt(target.transform);
+            
+            castParticles.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.3f);
+            
+            Anim.SetTrigger(AnimCastTrigger);
+            yield return new WaitForSeconds(0.3f);
+
+            var frostbolt = Instantiate(projectile);
+            var startPos = castParticles.transform.position;
+            var endPos = target.transform.position;
+            endPos.y = startPos.y;
+            frostbolt.Cast(startPos, endPos, 4f, attackHitCallback);
+            
+            yield return new WaitForSeconds(0.5f);
+            
+            castParticles.gameObject.SetActive(false);
         }
     }
 }

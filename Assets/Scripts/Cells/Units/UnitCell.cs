@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Hex.Actions;
-using Aspekt.Hex.Commands;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -55,21 +54,15 @@ namespace Aspekt.Hex
         public bool HasMoved { get; private set; }
         public bool HasAttacked { get; private set; }
         
+        protected static readonly int AnimAttackTrigger = Animator.StringToHash("attack");
+        protected static readonly int AnimCastTrigger = Animator.StringToHash("cast");
+        
         private static readonly int AnimMoveSpeed = Animator.StringToHash("moveSpeed");
-        private static readonly int AnimAttackTrigger = Animator.StringToHash("attack");
-        private static readonly int AnimCastTrigger = Animator.StringToHash("cast");
         private static readonly int AnimDamagedTrigger = Animator.StringToHash("damaged");
         private static readonly int AnimDeathTrigger = Animator.StringToHash("dead");
 
         private readonly List<IUnitActionObserver> unitActionObservers = new List<IUnitActionObserver>();
 
-        protected enum AttackTypes
-        {
-            Melee, Spell
-        }
-
-        protected abstract AttackTypes AttackType { get; }
-        
         private void Start()
         {
             Model.LookAt(transform.position + Vector3.back);
@@ -119,17 +112,14 @@ namespace Aspekt.Hex
             Coordinates = coords;
             StartCoroutine(MoveRoutine(path));
         }
-        
-        public void ShowAttack(HexCell target, Action attackHitCallback)
-        {
-            StartCoroutine(AttackRoutine(target, attackHitCallback));
-        }
+
+        public abstract void ShowAttack(HexCell target, Action attackHitCallback);
 
         public override void Remove()
         {
             // TODO if not already dead, show death routine
             unitActionObservers.ForEach(o => o.OnUnitRemoved(this));
-            Destroy(gameObject, 2f);
+            StartCoroutine(RemoveRoutine());
         }
         
         public override float ShowDamage(UnitCell attacker, int damage)
@@ -142,7 +132,7 @@ namespace Aspekt.Hex
             }
             else
             {
-                StartCoroutine(DeathRoutine());
+                Anim.SetTrigger(AnimDeathTrigger);
             }
 
             return newHealthPercent;
@@ -216,33 +206,14 @@ namespace Aspekt.Hex
             return distVector * currentSpeed;
         }
 
-        private IEnumerator AttackRoutine(HexCell target, Action attackHitCallback)
-        {
-            Model.LookAt(target.transform);
-            
-            switch (AttackType)
-            {
-                case AttackTypes.Melee:
-                    Anim.SetTrigger(AnimAttackTrigger);
-                    break;
-                case AttackTypes.Spell:
-                    Anim.SetTrigger(AnimCastTrigger);
-                    break;
-            }
-            
-            yield return new WaitForSeconds(0.3f);
-            attackHitCallback?.Invoke();
-        }
-
         public void AttackComplete()
         {
             HasAttacked = true;
             unitActionObservers.ForEach(o => o.OnFinishedAttack(this));
         }
         
-        private IEnumerator DeathRoutine()
+        private IEnumerator RemoveRoutine()
         {
-            Anim.SetTrigger(AnimDeathTrigger);
             yield return new WaitForSeconds(2f);
             
             const float duration = 2f;
@@ -253,7 +224,7 @@ namespace Aspekt.Hex
                 transform.position += Vector3.down * (Time.deltaTime * 0.3f);
                 yield return null;
             }
+            Destroy(gameObject);
         }
-        
     }
 }
