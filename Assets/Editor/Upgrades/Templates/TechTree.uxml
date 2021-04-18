@@ -1,0 +1,5 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement name="TechTree" class="page">
+        <Label text="Tech Tree" />
+    </VisualElement>
+</UXML>

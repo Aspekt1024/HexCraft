@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aspekt.Hex.Config;
 using Aspekt.Hex.UI;
 using UnityEngine;
 
@@ -10,6 +9,8 @@ namespace Aspekt.Hex.Actions
     [CreateAssetMenu(menuName = "Hex/UpgradeAction")]
     public class UpgradeAction : ActionDefinition
     {
+        public const string AssetPath = "Bundles/Data/UpgradeActions";
+        
         [Serializable]
         public struct UpgradeDetails
         {

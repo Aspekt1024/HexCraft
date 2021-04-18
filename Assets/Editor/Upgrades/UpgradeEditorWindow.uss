@@ -1,0 +1,20 @@
+Label {
+    white-space: normal;
+}
+
+.root-container {
+    color: black;
+}
+
+
+.active-button {
+    color: white;
+    background-color: #292d3a;
+}
+
+.hidden {
+    display: none;
+}
+
+.page {
+}

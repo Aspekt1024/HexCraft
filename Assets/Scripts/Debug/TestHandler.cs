@@ -13,8 +13,31 @@ namespace Aspekt.Hex
         [SerializeField] private NetworkManagerHex networkManager;
 #pragma warning restore 649
         
+        public bool loadAssetsFromBundles = true;
+
+        public static TestHandler Instance
+        {
+            get
+            {
+                if (instance != null) return instance;
+                instance = FindObjectOfType<TestHandler>();
+                return instance;
+            }
+        }
+
+        private static TestHandler instance;
+
         private void Awake()
         {
+            if (instance != null)
+            {
+                Debug.LogError("Multiple Test Handlers found! :(");
+                Destroy(gameObject);
+                return;
+            }
+
+            instance = this;
+            
             var room = FindObjectOfType<NetworkManagerHex>();
             if (room == null)
             {

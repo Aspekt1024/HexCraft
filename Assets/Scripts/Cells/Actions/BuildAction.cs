@@ -7,6 +7,8 @@ namespace Aspekt.Hex.Actions
     [CreateAssetMenu(menuName = "Hex/BuildAction")]
     public class BuildAction : ActionDefinition
     {
+        public const string AssetPath = "Bundles/Data/BuildActions";
+        
         public HexCell prefab;
         public int placementRadius = 1;
         public List<Technology> techRequirements;

@@ -1,0 +1,6 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement name="Toolbar" class="toolbar">
+        <VisualElement name="ItemContainer" class="toolbar-item-container"/>
+        <VisualElement name="ModifyIndicator"/>
+    </VisualElement>
+</UXML>

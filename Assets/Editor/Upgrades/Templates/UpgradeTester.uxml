@@ -1,0 +1,5 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement name="UpgradeTester" class="page">
+        <Label text="Upgrade Tester" />
+    </VisualElement>
+</UXML>

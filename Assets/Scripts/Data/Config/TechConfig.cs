@@ -1,12 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Hex.Actions;
+using UnityEngine;
 
 namespace Aspekt.Hex.Config
 {
-    [Serializable]
-    public class TechConfig
+    [CreateAssetMenu(menuName = "Hex/Tech Config", fileName = "TechConfig")]
+    public class TechConfig : ScriptableObject
     {
         public UpgradeAction[] upgrades;
         public BuildAction[] buildActions;
