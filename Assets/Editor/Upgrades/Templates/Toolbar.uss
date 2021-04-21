@@ -34,12 +34,3 @@
     border-width: 1px 1px 0 1px;
     border-color: black;
 }
-.toolbar Button {
-    margin: 0;
-    padding: 3px;
-    width: 100px;
-
-    border-radius: 0;
-    border-width: 1px 1px 0 1px;
-    border-color: black;
-}

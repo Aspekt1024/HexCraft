@@ -10,7 +10,7 @@ namespace Aspekt.Hex
 
     public interface ISuppliesGenerator
     {
-        int GetSupplies();
+        int GetSupplies(PlayerData data);
         Transform GetTransform();
     }
 }

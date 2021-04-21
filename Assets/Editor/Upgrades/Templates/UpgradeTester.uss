@@ -1,0 +1,125 @@
+.upgrade-tester-toolbar {
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+}
+
+.header-info {
+    height: 23px;
+    -unity-text-align: middle-center;
+    margin: 0 10px;
+
+    -unity-font-style: bold;
+    
+    border-width: 1px;
+    border-color: gray;
+}
+
+.upgrade-tester-toolbar Button {
+    margin: 0;
+    padding: 3px;
+    width: 100px;
+
+    border-radius: 0;
+    border-width: 1px 1px 0 1px;
+    border-color: black;
+}
+
+.action-container {
+    display: flex;
+    flex-direction: row;
+    border-width: 1px;
+    border-color: black;
+}
+
+.action-group {
+    border-color: black;
+    border-width: 1px;
+    
+    width: 150px;
+}
+
+.action-group-header {
+    -unity-font-style: bold;
+    font-size: 12px;
+}
+
+.cell-group {
+    border-width: 1px;
+    border-color: black;
+    
+    width: 128px;
+    
+    margin: 5px;
+}
+
+.cell-group-header {
+    -unity-font-style: bold;
+}
+
+.action-button {
+    width: 120px;
+    height: 42px;
+    
+    background-color: #0b580c;
+    color: white;
+    
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    
+    margin: 1px;
+    margin-left: 3px;
+    
+    border-radius: 3px;
+}
+
+.action-button-researched {
+    background-color: gray;
+    color: black;
+    -unity-font-style: normal;
+}
+
+.action-button-unaffordable {
+    background-color: #407940;
+}
+
+.action-unavailable {
+    width: 120px;
+    height: 42px;
+    
+    color: #5f5f5f;
+    border-color: gray;
+    border-width: 1px;
+    border-radius: 3px;
+    
+    -unity-text-align: middle-center;
+    
+    margin-left: 3px;
+}
+
+.action-cost
+{
+    display: flex;
+    flex-direction: row;
+    height: 23px;
+    margin-top: 15px;
+}
+
+.cost-field {
+    background-color: red;
+    width: 30px;
+    height: 17px;
+    color: white;
+}
+
+.action-cost-purchasable Label {
+    color: black;
+}
+
+.action-cost-unaffordable Label {
+    color: black;
+}
+
+.action-cost-researched Label {
+    color: black;
+}

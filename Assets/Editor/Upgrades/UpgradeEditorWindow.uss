@@ -16,5 +16,11 @@ Label {
     display: none;
 }
 
+.header {
+    color: black;
+    -unity-font-style: bold;
+    font-size: 14px;
+}
+
 .page {
 }

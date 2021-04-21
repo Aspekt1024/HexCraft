@@ -307,7 +307,7 @@ namespace Aspekt.Hex
             if (playerData.Player.hasAuthority && playerData.TurnNumber > 1)
             {
                 var suppliers = GetSuppliers(playerData.Player.ID);
-                suppliers.ForEach(s => game.UI.ShowFloatingUI(s.GetTransform(), $"+{s.GetSupplies()}", FloatingUI.Style.Supplies));
+                suppliers.ForEach(s => game.UI.ShowFloatingUI(s.GetTransform(), $"+{s.GetSupplies(playerData)}", FloatingUI.Style.Supplies));
             }
                 
             foreach (var cell in AllCells)
@@ -322,6 +322,11 @@ namespace Aspekt.Hex
         public List<ISuppliesGenerator> GetSuppliers(int playerID)
         {
             var playerCells = game.Cells.AllCells.Where(c => c.Owner.ID == playerID).ToList();
+            return GetSuppliers(playerCells);
+        }
+
+        public static List<ISuppliesGenerator> GetSuppliers(List<HexCell> playerCells)
+        {
             var suppliers = new List<ISuppliesGenerator>();
             var hasMarket = false;
             foreach (var cell in playerCells)

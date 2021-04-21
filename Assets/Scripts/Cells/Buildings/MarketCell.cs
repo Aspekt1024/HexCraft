@@ -5,7 +5,7 @@ namespace Aspekt.Hex
     public class MarketCell : BuildingCell, ISuppliesGenerator
     {
         public override Technology Technology { get; } = Technology.Market;
-        
+
         public Transform GetTransform() => transform;
 
         public override void OnTechAdded(Technology tech)
@@ -21,6 +21,11 @@ namespace Aspekt.Hex
         public int GetSupplies()
         {
             var data = GameData.GetPlayerData(Owner);
+            return GetSupplies(data);
+        }
+
+        public int GetSupplies(PlayerData data)
+        {
             return data.CurrencyData.MaxProduction - data.CurrencyData.UtilisedProduction;
         }
 

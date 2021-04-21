@@ -1,5 +1,25 @@
 <UXML xmlns="UnityEngine.UIElements">
     <VisualElement name="UpgradeTester" class="page">
-        <Label text="Upgrade Tester" />
+        <VisualElement class="upgrade-tester-toolbar">
+            <Label text="Upgrade Tester" class="header" />
+            <Label text="2p | 4s" name="Currency" class="header-info" />
+            <Label text="Turn 1" name="TurnIndicator" class="header-info" />
+            <Button name="NextTurnButton" text="Next Turn" />
+            <Button name="ResetButton" text="Reset" />
+        </VisualElement>
+        <VisualElement class="action-container">
+            <VisualElement class="action-group">
+                <Label text="Build Actions" class="action-group-header"/>
+                <VisualElement name="BuildActions" />
+            </VisualElement>
+            <VisualElement class="action-group">
+                <Label text="Upgrade Actions" class="action-group-header"/>
+                <VisualElement name="UpgradeActions" />
+            </VisualElement>
+            <VisualElement class="action-group">
+                <Label text="Unit Actions" class="action-group-header"/>
+                <VisualElement name="UnitActions" />
+            </VisualElement>
+        </VisualElement>
     </VisualElement>
 </UXML>

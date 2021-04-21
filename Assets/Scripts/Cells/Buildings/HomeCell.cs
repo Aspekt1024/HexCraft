@@ -1,6 +1,3 @@
-
-using System;
-using Aspekt.Hex.Actions;
 using UnityEngine;
 
 namespace Aspekt.Hex
@@ -19,7 +16,7 @@ namespace Aspekt.Hex
             Stats.Supplies = suppliesPerRound;
         }
 
-        public int GetSupplies()
+        public int GetSupplies(PlayerData data)
         {
             return suppliesPerRound;
         }

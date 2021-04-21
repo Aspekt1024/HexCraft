@@ -194,7 +194,7 @@ namespace Aspekt.Hex
         {
             var suppliers = game.Cells.GetSuppliers(data.Player.ID);
             var supplies = data.CurrencyData.Supplies;
-            var generatedSupplies = suppliers.Sum(c => c.GetSupplies());
+            var generatedSupplies = suppliers.Sum(c => c.GetSupplies(data));
             supplies += generatedSupplies;
     
             RpcSetSupplies((Int16)data.Player.ID, (Int16)supplies);
