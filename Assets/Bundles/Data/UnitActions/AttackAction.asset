@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: AttackAction
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 28a02df1369b7fd4eab040459b0cc450, type: 3}
+  actionType: 2000
   title: Attack
   description: Direct the unit to attack a hostile unit or building.

@@ -16,7 +16,7 @@ namespace Aspekt.Hex.Upgrades
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{UpgradeEditor.DirectoryRoot}/Templates/{templateName}.uss");
             
             visualTree.CloneTree(editorRoot);
-
+ 
             Root = editorRoot.Q(templateName);
             Root.styleSheets.Add(styleSheet);
         }

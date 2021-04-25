@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Aspekt.Hex.Upgrades
 {
@@ -10,9 +12,9 @@ namespace Aspekt.Hex.Upgrades
         public const string DirectoryRoot = "Assets/Editor/Upgrades";
         
         private VisualElement root;
-
         private Toolbar toolbar;
-
+        private UpgradeEditorData data;
+        
         private readonly List<Page> pages = new List<Page>();
 
         [MenuItem("Tools/Upgrade Editor _%#U")]
@@ -44,16 +46,17 @@ namespace Aspekt.Hex.Upgrades
             visualTree.CloneTree(root);
             root.styleSheets.Add(styleSheet);
 
-            toolbar = new Toolbar(root);
+            data ??= UpgradeEditorData.Load();
+            toolbar = new Toolbar(root, data);
             
             AddPage(new UpgradeTester(this, root));
-            AddPage(new TechTree(this, root));
+            AddPage(new TechTree(this, root, data));
 
             toolbar.Init();
             
             Undo.undoRedoPerformed += DataFilesUpdated;
         }
-        
+
         private void OnGUI()
         {
             
@@ -64,8 +67,16 @@ namespace Aspekt.Hex.Upgrades
             pages.ForEach(p => p.UpdateContents());
         }
         
+
+        private void OnDisable()
+        {
+            UpgradeEditorData.Save(data);
+            Undo.undoRedoPerformed -= DataFilesUpdated;
+        }
+        
         ~UpgradeEditor()
         {
+            UpgradeEditorData.Save(data);
             Undo.undoRedoPerformed -= DataFilesUpdated;
         }
 

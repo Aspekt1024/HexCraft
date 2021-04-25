@@ -1,5 +1,10 @@
 <UXML xmlns="UnityEngine.UIElements">
     <VisualElement name="TechTree" class="page">
-        <Label text="Tech Tree" />
+        <VisualElement class="page-toolbar">
+            <Label text="Tech Tree" class="header" />
+        </VisualElement>
+        <ScrollView class="tech-tree-container" show-horizontal-scroller="true">
+            <VisualElement name="Nodes" class="tech-tree" />
+        </ScrollView>
     </VisualElement>
 </UXML>

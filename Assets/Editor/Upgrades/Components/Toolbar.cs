@@ -14,10 +14,12 @@ namespace Aspekt.Hex.Upgrades
         private static Toolbar current;
         private readonly List<Button> buttons = new List<Button>();
         private readonly List<Page> pages = new List<Page>();
+        private readonly UpgradeEditorData data;
         
-        public Toolbar(VisualElement editorRoot)
+        public Toolbar(VisualElement editorRoot, UpgradeEditorData data)
         {
             current = this;
+            this.data = data;
             
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>($"{UpgradeEditor.DirectoryRoot}/Templates/Toolbar.uxml");
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"{UpgradeEditor.DirectoryRoot}/Templates/Toolbar.uss");
@@ -34,15 +36,37 @@ namespace Aspekt.Hex.Upgrades
         {
             if (pages.Any())
             {
-                HighlightButton(buttons[0]);
-                OnPageSelected(pages[0]);
+                if (!string.IsNullOrEmpty(data.currentPage))
+                {
+                    var pageIndex = pages.FindIndex(p => p.Title == data.currentPage);
+                    if (pageIndex < 0)
+                    {
+                        SelectDefaultPage();
+                    }
+                    else
+                    {
+                        HighlightButton(buttons[pageIndex]);
+                        OnPageSelected(pages[pageIndex]);
+                    }
+                }
+                else
+                {
+                    SelectDefaultPage();
+                }
             }
+        }
+
+        private void SelectDefaultPage()
+        {
+            HighlightButton(buttons[0]);
+            OnPageSelected(pages[0]);
+            data.currentPage = pages[0].Title;
         }
 
         public void AddPage(Page page)
         {
             pages.Add(page);
-            buttons.Add(CreateToolbarButton(page));
+            CreateToolbarButton(page);
         }
 
         private static string[] OnWillSaveAssets(string[] paths)
@@ -64,6 +88,7 @@ namespace Aspekt.Hex.Upgrades
             {
                 HighlightButton(btn);
                 OnPageSelected(page);
+                
             };
             items.Add(btn);
             buttons.Add(btn);
@@ -73,6 +98,7 @@ namespace Aspekt.Hex.Upgrades
 
         private void OnPageSelected(Page selectedPage)
         {
+            data.currentPage = selectedPage.Title;
             foreach (var page in pages)
             {
                 if (page.Root == selectedPage.Root)

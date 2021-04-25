@@ -20,7 +20,36 @@ Label {
     color: black;
     -unity-font-style: bold;
     font-size: 14px;
+    
+    height: 30px;
 }
 
 .page {
+}
+
+.page-toolbar {
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+}
+
+.page-toolbar Button {
+    margin: 0;
+    padding: 3px;
+    width: 100px;
+
+    border-radius: 0;
+    border-width: 1px 1px 0 1px;
+    border-color: black;
+}
+
+.header-info {
+    height: 23px;
+    -unity-text-align: middle-center;
+    margin: 0 10px;
+
+    -unity-font-style: bold;
+
+    border-width: 1px;
+    border-color: gray;
 }

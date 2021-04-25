@@ -1,6 +1,6 @@
 <UXML xmlns="UnityEngine.UIElements">
     <VisualElement name="UpgradeTester" class="page">
-        <VisualElement class="upgrade-tester-toolbar">
+        <VisualElement class="page-toolbar">
             <Label text="Upgrade Tester" class="header" />
             <Label text="2p | 4s" name="Currency" class="header-info" />
             <Label text="Turn 1" name="TurnIndicator" class="header-info" />

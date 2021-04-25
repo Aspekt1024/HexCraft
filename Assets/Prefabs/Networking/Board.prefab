@@ -126,11 +126,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   startLocation1:
-    x: -3
-    z: -6
+    x: -1
+    z: -3
   startLocation2:
-    x: 3
-    z: 6
+    x: 2
+    z: 0
   boardHalfSize: {x: 10, y: 10}
 --- !u!33 &4926913194976734078
 MeshFilter:
