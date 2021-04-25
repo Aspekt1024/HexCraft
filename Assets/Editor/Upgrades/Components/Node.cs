@@ -14,8 +14,12 @@ namespace Aspekt.Hex.Upgrades
         private ActionDefinition action;
         
         private bool isDragged;
+        private Vector2 startMousePos;
+        private Vector2 startPos;
 
         private VisualElement element;
+
+        public Action OnMove;
         
         public Node(ActionDefinition action)
         {
@@ -28,11 +32,13 @@ namespace Aspekt.Hex.Upgrades
         public void Setup(ActionDefinition action)
         {
             this.action = action;
-            
             hash = action.GetHashCode();
-
             element = GetElement();
-            
+        }
+
+        public bool IsValid()
+        {
+            return action != null;
         }
         
         public VisualElement GetElement()
@@ -60,6 +66,16 @@ namespace Aspekt.Hex.Upgrades
             
             return element;
         }
+
+        public Vector2 GetOutputPosition()
+        {
+            return new Vector2(position.x + 60f, position.y + 25f);
+        }
+
+        public Vector3 GetInputPosition()
+        {
+            return new Vector3(position.x + 60f, position.y + 25f);
+        }
         
         protected override void RegisterCallbacksOnTarget()
         {
@@ -74,9 +90,6 @@ namespace Aspekt.Hex.Upgrades
             target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
         }
-
-        private Vector2 startMousePos;
-        private Vector2 startPos;
         
         private void OnMouseDown(MouseDownEvent e)
         {
@@ -102,6 +115,7 @@ namespace Aspekt.Hex.Upgrades
             {
                 UpdatePosition(e.mousePosition);
                 e.StopPropagation();
+                OnMove?.Invoke();
             }
         }
 

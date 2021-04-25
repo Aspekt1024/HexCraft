@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Util;
 using UnityEngine;
@@ -17,8 +18,6 @@ namespace Aspekt.Hex.Upgrades
         private VisualElement nodeRoot;
         private GameConfig config;
 
-        private readonly List<Node> nodes = new List<Node>();
-        
         public TechTree(UpgradeEditor editor, VisualElement root, UpgradeEditorData data)
         {
             this.editor = editor;
@@ -42,7 +41,6 @@ namespace Aspekt.Hex.Upgrades
 
         private void Reset()
         {
-            nodes.Clear();
             SetupData();
             UpdateTree();
         }
@@ -51,42 +49,42 @@ namespace Aspekt.Hex.Upgrades
         {
             foreach (var upgrade in config.techConfig.upgrades)
             {
-                var node = data.techTreeData.GetNode(upgrade);
-                nodeRoot.Add(node.GetElement());
+                //var node = data.techTreeData.GetNode(upgrade);
+                //nodeRoot.Add(node.GetElement());
             }
 
             foreach (var buildAction in config.techConfig.buildActions)
             {
                 var node = data.techTreeData.GetNode(buildAction);
-                nodeRoot.Add(node.GetElement());
+                
+                var dependencies = GetDependencies(buildAction);
+                dependencies.ForEach(d =>
+                {
+                    var line = new ConnectionElement(d, node);
+                    nodeRoot.Add(line);
+                });
+            }
+            
+            data.techTreeData.GetAllNodes().Where(n => n.IsValid()).ToList().ForEach(n => nodeRoot.Add(n.GetElement()));
+        }
+
+        private List<Node> GetDependencies(BuildAction action)
+        {
+            var techRequirements = new List<Technology>(action.techRequirements);
+            var dependencies = new List<Node>();
+            
+            // TODO find the node that builds it
+            foreach (var buildAction in config.techConfig.buildActions)
+            {
+                if (techRequirements.Contains(buildAction.prefab.Technology))
+                {
+                    dependencies.Add(data.techTreeData.GetNode(buildAction));
+                }
             }
 
-            
-            var node = 
-            var line = new VisualElement
-            {
-                generateVisualContent = (ctx) => DrawLine(Vector2)
-            };
-            nodeRoot.Add(line); 
-            
+            return dependencies;
         }
-        
-        private void OnGenerateVisualContent( MeshGenerationContext cxt )
-        {
-            var mesh = cxt.Allocate( 3, 3 );
-            
-            var vertices = new Vertex[3];
-            vertices[0].position = new Vector3(0, 0, Vertex.nearZ);
-            vertices[1].position = new Vector3(100, 200, Vertex.nearZ);
-            vertices[2].position = new Vector3(0, 200, Vertex.nearZ);
-            vertices[0].tint = Color.red;
-            vertices[1].tint = Color.green;
-            vertices[2].tint = Color.blue;
-            
-            mesh.SetAllVertices( vertices );
-            mesh.SetAllIndices( new ushort[]{ 0, 1, 2 }  );
-        }
-        
+
         private void SetupData()
         {
             var game = Object.FindObjectOfType<GameManager>();

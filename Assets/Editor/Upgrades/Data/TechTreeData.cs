@@ -11,6 +11,8 @@ namespace Aspekt.Hex.Upgrades
         public int test = 1;
         [SerializeField] private List<Node> nodes;
 
+        public List<Node> GetAllNodes() => nodes;
+        
         public Node GetNode(ActionDefinition action)
         {
             var index = nodes.FindIndex(n => n.GetHash() == action.GetHashCode());
