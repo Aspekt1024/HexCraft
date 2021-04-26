@@ -6,32 +6,61 @@
 .tech-tree {
     position: relative;
     
-    background-color: gray;
+    background-color: #111111;
     height: 1000px;
-    width: 700px;
+    width: 1000px;
 }
 
 .node {
     position: absolute;
     
-    border-width: 1px;
-    border-color: white;
-    background-color: darkgray;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: #2f515a;
+    background-color: #809194;
     
-    height: 50px;
+    height: 40px;
     width: 120px;
-}
-
-.node Label {
-    color: black;
+    
+    -unity-text-align: middle-center;
 }
 
 .node-dragged {
-    background-color: red;
+    border-color: #2f515a;
+    background-color: #809194;
 }
 
-.line {
-    background-color: black;
-    border-color: red;
-    border-width: 2px;
+.node-building {
+    border-color: #9fdbe7;
+    background-color: #496f79;
+}
+.node-building.node-dragged {
+    border-color: #9fdbe7;
+    background-color: #72a8b7;
+}
+
+.node-unit {
+    border-color: #abe08f;
+    background-color: #4a832d;
+}
+.node-unit.node-dragged {
+    border-color: #abe08f;
+    background-color: #7ad24c;
+}
+
+.node-upgrade {
+    border-color: #d6aae7;
+    background-color: #6c2d9d;
+}
+.node-upgrade.node-dragged {
+    border-color: #d6aae7;
+    background-color: #9c57d4;
+}
+
+.node Label {
+    color: whitesmoke;
+    -unity-font-style: bold;
+    font-size: 12px;
+    
+    height: 37px;
 }

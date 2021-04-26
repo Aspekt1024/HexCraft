@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -26,7 +27,7 @@ namespace Aspekt.Hex.Upgrades
             
             window.minSize = new Vector2(450f, 300f);
         }
-        
+
         /// <summary>
         /// Records an object for Undo operations and displays an indicator that signifies modifications
         /// to the Upgrade Data
@@ -55,6 +56,7 @@ namespace Aspekt.Hex.Upgrades
             toolbar.Init();
             
             Undo.undoRedoPerformed += DataFilesUpdated;
+            this.SetAntiAliasing(4);
         }
 
         private void OnGUI()

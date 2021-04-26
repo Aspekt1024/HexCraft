@@ -17,11 +17,12 @@ Label {
 }
 
 .header {
-    color: black;
+    color: whitesmoke;
     -unity-font-style: bold;
     font-size: 14px;
     
     height: 30px;
+    -unity-text-align: middle-left;
 }
 
 .page {

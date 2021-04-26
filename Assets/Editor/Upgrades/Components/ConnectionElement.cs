@@ -8,21 +8,41 @@ namespace Aspekt.Hex.Upgrades
         private readonly Node output;
         private readonly Node input;
         
-        public ConnectionElement(Node output, Node input)
+        public ConnectionElement(Node output, Node input, Color color, float thickness, bool isGlowEnabled)
         {
             this.output = output;
             this.input = input;
             
-            generateVisualContent = (ctx) 
-                => DrawLine(ctx, output.GetOutputPosition(), input.GetInputPosition(), 2f);
+            generateVisualContent = (ctx) => DrawLine(
+                ctx,
+                output.GetOutputPosition(),
+                input.GetInputPosition(),
+                color,
+                thickness,
+                isGlowEnabled
+            );
 
             output.OnMove += MarkDirtyRepaint;
             input.OnMove += MarkDirtyRepaint;
         }
         
-        private void DrawLine(MeshGenerationContext cxt, Vector2 startPos, Vector2 endPos, float thickness)
+        private void DrawLine(MeshGenerationContext ctx, Vector2 startPos, Vector2 endPos, Color color, float thickness, bool isGlowEnabled)
         {
-            var mesh = cxt.Allocate( 6, 6 );
+            if (isGlowEnabled)
+            {
+                var colorBase = new Color(color.r, color.g, color.b, color.a * 0.3f);
+                var colorNear = new Color(color.r, color.g, color.b, color.a * 0.5f);
+                DrawLine(ctx, startPos, endPos, colorBase, thickness * 3f);
+                DrawLine(ctx, startPos, endPos, colorNear, thickness * 1.5f);
+            }
+            
+            DrawLine(ctx, startPos, endPos, color, thickness);
+            DrawTriangle(ctx, startPos, endPos, color, thickness);
+        }
+
+        private void DrawLine(MeshGenerationContext ctx, Vector2 startPos, Vector2 endPos, Color color, float thickness)
+        {
+            var mesh = ctx.Allocate( 6, 6 );
             
             var dir = (endPos - startPos).normalized;
 
@@ -41,15 +61,40 @@ namespace Aspekt.Hex.Upgrades
             vertices[4].position = endCenter - normal * halfThickness;
             vertices[5].position = endCenter + normal * halfThickness;
             
-            vertices[0].tint = Color.black;
-            vertices[1].tint = Color.black;
-            vertices[2].tint = Color.black;
-            vertices[3].tint = Color.black;
-            vertices[4].tint = Color.black;
-            vertices[5].tint = Color.black;
+            vertices[0].tint = color;
+            vertices[1].tint = color;
+            vertices[2].tint = color;
+            vertices[3].tint = color;
+            vertices[4].tint = color;
+            vertices[5].tint = color;
             
             mesh.SetAllVertices( vertices );
             mesh.SetAllIndices( new ushort[]{ 0, 1, 2, 3, 4, 5 });
+        }
+
+        private void DrawTriangle(MeshGenerationContext ctx, Vector2 startPos, Vector2 endPos, Color color, float thickness)
+        {
+            var mesh = ctx.Allocate( 3, 3 );
+
+            var halfLength = thickness * 2f;
+            var width = thickness * 3f;
+            
+            var dir = (endPos - startPos).normalized;
+            var dist = (endPos - startPos).magnitude;
+            var center = new Vector3(startPos.x + dir.x * (dist * 0.5f - halfLength), startPos.y + dir.y * (dist * 0.5f - halfLength), Vertex.nearZ);
+            var normal = new Vector3(-dir.y, dir.x, 0f);
+            
+            var vertices = new Vertex[3];
+            vertices[0].position = center + normal * width;
+            vertices[1].position = center - normal * width;
+            vertices[2].position = new Vector3(center.x + dir.x * halfLength * 2f, center.y + dir.y * thickness * 4f, center.z);
+            
+            vertices[0].tint = color;
+            vertices[1].tint = color;
+            vertices[2].tint = color;
+            
+            mesh.SetAllVertices( vertices );
+            mesh.SetAllIndices(new ushort[] { 0, 1, 2 });
         }
 
         ~ConnectionElement()

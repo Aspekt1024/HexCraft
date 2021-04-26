@@ -10,7 +10,8 @@ namespace Aspekt.Hex.Upgrades
     {
         [SerializeField] private int hash;
         [SerializeField] private Vector2 position;
-        
+
+        private HexCell cell;
         private ActionDefinition action;
         
         private bool isDragged;
@@ -27,18 +28,57 @@ namespace Aspekt.Hex.Upgrades
             activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
         }
 
+        public Node(HexCell cell)
+        {
+            Setup(cell);
+            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
+        }
+
         public int GetHash() => hash;
+
+        public static int GenerateHash(ActionDefinition action)
+        {
+            if (action is BuildAction buildAction && buildAction.prefab != null)
+            {
+                return GenerateHash(buildAction.prefab);
+            }
+            return Hash128.Compute("Action" + action.name).GetHashCode();
+        }
+        
+        public static int GenerateHash(HexCell cell) => Hash128.Compute("Cell" + cell.name).GetHashCode();
         
         public void Setup(ActionDefinition action)
         {
             this.action = action;
-            hash = action.GetHashCode();
+            if (action is BuildAction buildAction)
+            {
+                cell = buildAction.prefab;
+                hash = GenerateHash(cell);
+            }
+            else
+            {
+                hash = GenerateHash(action);
+            }
+            
             element = GetElement();
         }
 
-        public bool IsValid()
+        public void Setup(HexCell cell)
         {
-            return action != null;
+            this.cell = cell;
+            hash = GenerateHash(cell);
+            element = GetElement();
+        }
+
+        public bool HasValidObject()
+        {
+            return action != null || cell != null;
+        }
+
+        public object GetObject()
+        {
+            if (cell != null) return cell;
+            return action;
         }
         
         public VisualElement GetElement()
@@ -48,17 +88,20 @@ namespace Aspekt.Hex.Upgrades
             element = new VisualElement();
             element.AddToClassList("node");
 
-            var tech = Technology.None;
-            if (action is BuildAction buildAction)
+            if (cell != null)
             {
-                tech = buildAction.prefab.Technology;
+                element.Add(new Label(cell.DisplayName));
+                element.AddToClassList(cell is UnitCell ? "node-unit" : "node-building");
             }
-            else if (action is UpgradeAction upgradeAction)
+            else if (action != null)
             {
-                tech = upgradeAction.GetNextTech();
+                element.Add(new Label(action.name));
+                if (action is UpgradeAction)
+                {
+                    element.AddToClassList("node-upgrade");
+                }
             }
             
-            element.Add(new Label(action.name + ": " + tech.ToString()));
             element.style.top = position.y;
             element.style.left = position.x;
             

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace Aspekt.Hex.Upgrades
@@ -10,18 +11,18 @@ namespace Aspekt.Hex.Upgrades
         public TechTreeData techTreeData;
         public string currentPage;
         
-        private const string FilePath = "upgradeEditorData.json";
+        private const string FilePath = "Assets/Editor/Upgrades/Data/upgradeEditorData.json";
 
         public static UpgradeEditorData Load()
         {
             try
             {
-                var data = File.ReadAllText(GetPath());
+                var data = File.ReadAllText(FilePath);
                 return JsonUtility.FromJson<UpgradeEditorData>(data);
             }
             catch
             {
-                Debug.LogError($"Failed to read from {GetPath()}");
+                Debug.LogError($"Failed to read from {FilePath}");
                 return new UpgradeEditorData();
             }
         }
@@ -29,21 +30,17 @@ namespace Aspekt.Hex.Upgrades
         public static void Save(UpgradeEditorData data)
         {
             data ??= new UpgradeEditorData();
-            
+
             var json = JsonUtility.ToJson(data);
             try
             {
-                File.WriteAllText(GetPath(), json);
+                File.WriteAllText(FilePath, json);
             }
-            catch
+            catch(Exception e)
             {
-                Debug.LogError($"Failed to write to {GetPath()}");
+                Debug.LogError($"Failed to write to {FilePath}: {e.Message}");
             }
-        }
-
-        private static string GetPath()
-        {
-            return Path.Combine(Application.persistentDataPath, FilePath);
+            AssetDatabase.Refresh();
         }
     }
 }
