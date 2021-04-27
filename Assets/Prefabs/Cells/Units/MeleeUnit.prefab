@@ -59,7 +59,6 @@ MonoBehaviour:
   brownMaterial: {fileID: 2100000, guid: 32515cc96492c6d4ab732a997912d2e0, type: 2}
   cellType: 2000
   DisplayName: Soldier
-  PlacementRadius: 1
   Cost:
     production: 1
     supplies: 5
@@ -70,8 +69,7 @@ MonoBehaviour:
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
-  groundUnitModel: {fileID: 1411488990733350500}
-  mountedUnitModel: {fileID: 5490442777878340513}
+  ID: 0
   upgradeStats:
   - techGroup: 2000
     upgrades:
@@ -129,6 +127,8 @@ MonoBehaviour:
     - tech: 3312
       level: 3
       value: 60
+  groundUnitModel: {fileID: 1411488990733350500}
+  mountedUnitModel: {fileID: 5490442777878340513}
 --- !u!1 &5490442777878331624
 GameObject:
   m_ObjectHideFlags: 0
@@ -11040,6 +11040,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 782101018828945454, guid: d9f35a02153d24a4e8e23d09ae24506c,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 782101018828945454, guid: d9f35a02153d24a4e8e23d09ae24506c,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -11055,6 +11060,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 782101018828945454, guid: d9f35a02153d24a4e8e23d09ae24506c,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 782101018828945454, guid: d9f35a02153d24a4e8e23d09ae24506c,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -11067,16 +11077,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 782101018828945454, guid: d9f35a02153d24a4e8e23d09ae24506c,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 782101018828945454, guid: d9f35a02153d24a4e8e23d09ae24506c,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 782101018828945454, guid: d9f35a02153d24a4e8e23d09ae24506c,
         type: 3}

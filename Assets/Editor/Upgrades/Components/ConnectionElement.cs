@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,6 +8,10 @@ namespace Aspekt.Hex.Upgrades
     {
         private readonly Node output;
         private readonly Node input;
+        
+        private readonly TechTree tree;
+
+        private Vector2 mousePos;
         
         public ConnectionElement(Node output, Node input, Color color, float thickness, bool isGlowEnabled)
         {
@@ -24,6 +29,24 @@ namespace Aspekt.Hex.Upgrades
 
             output.OnMove += MarkDirtyRepaint;
             input.OnMove += MarkDirtyRepaint;
+        }
+
+        public ConnectionElement(Node start, TechTree tree, Color color, float thickness, bool isGlowEnabled)
+        {
+            this.tree = tree;
+            var startMousePos = Event.current.mousePosition;
+            mousePos = startMousePos;
+            
+            generateVisualContent = ctx => DrawLine(
+                ctx,
+                start.GetOutputPosition(),
+                start.GetOutputPosition() + mousePos - startMousePos,
+                color,
+                thickness,
+                isGlowEnabled
+            );
+
+            tree.OnDrag += TechTreeMouseMoved;
         }
         
         private void DrawLine(MeshGenerationContext ctx, Vector2 startPos, Vector2 endPos, Color color, float thickness, bool isGlowEnabled)
@@ -99,8 +122,15 @@ namespace Aspekt.Hex.Upgrades
 
         ~ConnectionElement()
         {
-            output.OnMove -= MarkDirtyRepaint;
-            input.OnMove -= MarkDirtyRepaint;
+            if (output != null) output.OnMove -= MarkDirtyRepaint;
+            if (input != null) input.OnMove -= MarkDirtyRepaint;
+            if (tree != null) tree.OnDrag -= TechTreeMouseMoved;
+        }
+
+        private void TechTreeMouseMoved(Vector2 mousePos)
+        {
+            this.mousePos = mousePos;
+            MarkDirtyRepaint();
         }
     }
 }

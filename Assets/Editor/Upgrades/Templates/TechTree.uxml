@@ -3,8 +3,6 @@
         <VisualElement class="page-toolbar">
             <Label text="Tech Tree" class="header" />
         </VisualElement>
-        <ScrollView class="tech-tree-container" show-horizontal-scroller="true">
-            <VisualElement name="Nodes" class="tech-tree" />
-        </ScrollView>
+        <ScrollView name="Nodes" class="tech-tree-container" show-horizontal-scroller="true" />
     </VisualElement>
 </UXML>

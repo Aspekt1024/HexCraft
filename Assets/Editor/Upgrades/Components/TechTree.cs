@@ -9,15 +9,21 @@ using Object = UnityEngine.Object;
 
 namespace Aspekt.Hex.Upgrades
 {
-    public class TechTree : Page
+    public class TechTree : Page, TechTreeContainer.IObserver
     {
         private readonly UpgradeEditor editor;
         private readonly UpgradeEditorData data;
+        private TechTreeContainer container;
 
         public override string Title => "Tech Tree";
 
         private VisualElement nodeRoot;
         private GameConfig config;
+        
+        public Action<Vector2> OnDrag;
+        private Node lastNode;
+        private Node startNode;
+        private ConnectionElement depLine;
 
         public TechTree(UpgradeEditor editor, VisualElement root, UpgradeEditorData data)
         {
@@ -34,7 +40,11 @@ namespace Aspekt.Hex.Upgrades
         
         private void SetupUI()
         {
-            nodeRoot = Root.Q("Nodes");
+            var scrollView = Root.Q("Nodes");
+            container = new TechTreeContainer();
+            nodeRoot = container.GetElement();
+            container.RegisterSingleObserver(this);
+            scrollView.Add(nodeRoot);
 
             SetupData();
             UpdateTree();
@@ -42,6 +52,7 @@ namespace Aspekt.Hex.Upgrades
 
         private void Reset()
         {
+            nodeRoot.Clear();
             SetupData();
             UpdateTree();
         }
@@ -151,6 +162,8 @@ namespace Aspekt.Hex.Upgrades
             {
                 if (!node.HasValidObject()) continue;
                 nodeRoot.Add(node.GetElement());
+                node.OnEnter = NodeEntered;
+                node.OnLeave = NodeLeft;
             }
         }
 
@@ -203,5 +216,47 @@ namespace Aspekt.Hex.Upgrades
             });
         }
 
+        public void OnStartDependency()
+        {
+            if (lastNode != null)
+            {
+                startNode = lastNode;
+                depLine = new ConnectionElement(startNode, this, Color.yellow, 2f, true);
+                nodeRoot.Add(depLine);
+            }
+        }
+
+        public void OnEndDependency(UpgradeDependencyMode mode)
+        {
+            if (startNode != null)
+            {
+                if (lastNode != null)
+                {
+                    var success = NodeDependencies.CreateDependency(startNode, lastNode, config.techConfig, mode);
+                    if (success)
+                    {
+                        UpdateContents();
+                    }
+                }
+                startNode = null;
+            }
+            
+            if (depLine != null)
+            {
+                if (nodeRoot.Contains(depLine)) nodeRoot.Remove(depLine);
+                depLine = null;
+            }
+        }
+
+        public void OnDependencyDrag(Vector2 mousePos) => OnDrag?.Invoke(mousePos);
+        private void NodeEntered(Node node) => lastNode = node;
+
+        private void NodeLeft(Node node)
+        {
+            if (lastNode == node)
+            {
+                lastNode = null;
+            }
+        }
     }
 }

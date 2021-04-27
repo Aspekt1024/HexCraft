@@ -47,8 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions:
   - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}
-  - {fileID: 11400000, guid: 7e3d351021ccc484d8f476e1470fd220, type: 2}
   - {fileID: 11400000, guid: 36ae8acea533cac4698f2a822efe6b9b, type: 2}
+  - {fileID: 11400000, guid: 7e3d351021ccc484d8f476e1470fd220, type: 2}
   hexOutline: {fileID: 6301690519140048039}
   blackMaterial: {fileID: 2100000, guid: 19e5e5a2c659faf49a059ec9fc3e642d, type: 2}
   whiteMaterial: {fileID: 2100000, guid: 0c68c1882ddd40b4ebf2fa7eae477af0, type: 2}

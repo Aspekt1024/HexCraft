@@ -19,9 +19,11 @@ namespace Aspekt.Hex.Upgrades
         private Vector2 startPos;
 
         private VisualElement element;
-
-        public Action OnMove;
         
+        public Action OnMove;
+        public Action<Node> OnEnter;
+        public Action<Node> OnLeave;
+
         public Node(ActionDefinition action)
         {
             Setup(action);
@@ -125,6 +127,8 @@ namespace Aspekt.Hex.Upgrades
             target.RegisterCallback<MouseDownEvent>(OnMouseDown);
             target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            target.RegisterCallback<MouseEnterEvent>(OnMouseEnter);
+            target.RegisterCallback<MouseLeaveEvent>(OnMouseLeave);
         }
 
         protected override void UnregisterCallbacksFromTarget()
@@ -132,24 +136,32 @@ namespace Aspekt.Hex.Upgrades
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            target.UnregisterCallback<MouseEnterEvent>(OnMouseEnter);
+            target.UnregisterCallback<MouseLeaveEvent>(OnMouseLeave);
         }
         
         private void OnMouseDown(MouseDownEvent e)
         {
-            isDragged = true;
-            startMousePos = e.mousePosition;
-            startPos = position;
-            element.AddToClassList("node-dragged");
-            target.CaptureMouse();
-            e.StopPropagation();
+            if (e.button == 0)
+            {
+                isDragged = true;
+                startMousePos = e.mousePosition;
+                startPos = position;
+                element.AddToClassList("node-dragged");
+                target.CaptureMouse();
+                e.StopPropagation();
+            }
         }
 
         private void OnMouseUp(MouseUpEvent e)
         {
-            isDragged = false;
-            element.RemoveFromClassList("node-dragged");
-            target.ReleaseMouse();
-            e.StopPropagation();
+            if (isDragged && e.button == 0)
+            {
+                isDragged = false;
+                element.RemoveFromClassList("node-dragged");
+                target.ReleaseMouse();
+                e.StopPropagation();
+            }
         }
 
         private void OnMouseMove(MouseMoveEvent e)
@@ -157,9 +169,19 @@ namespace Aspekt.Hex.Upgrades
             if (isDragged)
             {
                 UpdatePosition(e.mousePosition);
-                e.StopPropagation();
                 OnMove?.Invoke();
+                e.StopPropagation();
             }
+        }
+
+        private void OnMouseEnter(MouseEnterEvent e)
+        {
+            OnEnter?.Invoke(this);
+        }
+
+        private void OnMouseLeave(MouseLeaveEvent e)
+        {
+            OnLeave?.Invoke(this);
         }
 
         private void UpdatePosition(Vector2 mousePos)
