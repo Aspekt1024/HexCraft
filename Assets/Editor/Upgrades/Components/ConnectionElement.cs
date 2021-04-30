@@ -31,20 +31,23 @@ namespace Aspekt.Hex.Upgrades
             input.OnMove += MarkDirtyRepaint;
         }
 
-        public ConnectionElement(Node start, TechTree tree, Color color, float thickness, bool isGlowEnabled)
+        public ConnectionElement(TechTree tree, Vector2 startPos, Color color, float thickness, bool isGlowEnabled)
         {
             this.tree = tree;
-            var startMousePos = Event.current.mousePosition;
-            mousePos = startMousePos;
             
-            generateVisualContent = ctx => DrawLine(
-                ctx,
-                start.GetOutputPosition(),
-                start.GetOutputPosition() + mousePos - startMousePos,
-                color,
-                thickness,
-                isGlowEnabled
-            );
+            mousePos = startPos;
+            
+            generateVisualContent = ctx =>
+            {
+                DrawLine(
+                    ctx,
+                    startPos,
+                    mousePos,
+                    color,
+                    thickness,
+                    isGlowEnabled
+                );
+            };
 
             tree.OnDrag += TechTreeMouseMoved;
         }

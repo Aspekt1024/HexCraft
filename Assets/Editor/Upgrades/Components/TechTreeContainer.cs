@@ -18,7 +18,7 @@ namespace Aspekt.Hex.Upgrades
         
         public interface IObserver
         {
-            void OnStartDependency();
+            void OnStartDependency(Vector2 mousePos);
             void OnEndDependency(UpgradeDependencyMode mode);
             void OnDependencyDrag(Vector2 mousePos);
         }
@@ -63,7 +63,7 @@ namespace Aspekt.Hex.Upgrades
             {
                 isDragged = true;
                 e.StopPropagation();
-                observer?.OnStartDependency();
+                observer?.OnStartDependency(e.localMousePosition);
                 target.CaptureMouse();
             }
         }
@@ -83,7 +83,7 @@ namespace Aspekt.Hex.Upgrades
         {
             if (isDragged)
             {
-                observer?.OnDependencyDrag(e.mousePosition);
+                observer?.OnDependencyDrag(e.localMousePosition);
             }
         }
 

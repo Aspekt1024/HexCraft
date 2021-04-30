@@ -216,12 +216,12 @@ namespace Aspekt.Hex.Upgrades
             });
         }
 
-        public void OnStartDependency()
+        public void OnStartDependency(Vector2 mousePos)
         {
             if (lastNode != null)
             {
                 startNode = lastNode;
-                depLine = new ConnectionElement(startNode, this, Color.yellow, 2f, true);
+                depLine = new ConnectionElement(this, mousePos, Color.yellow, 2f, true);
                 nodeRoot.Add(depLine);
             }
         }
