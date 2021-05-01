@@ -8,24 +8,44 @@ namespace Aspekt.Hex.Upgrades
     [Serializable]
     public class TechTreeData
     {
-        public int test = 1;
-        [SerializeField] private List<Node> nodes;
+        [SerializeField] private List<CellNode> cellNodes;
+        [SerializeField] private List<UpgradeGroupNode> upgradeGroupNodes;
 
-        public List<Node> GetAllNodes() => nodes;
+        private List<Node> allNodes = new List<Node>();
+
+        public List<Node> GetAllNodes() => allNodes;
+
+        public void Init()
+        {
+            allNodes.AddRange(cellNodes);
+            allNodes.AddRange(upgradeGroupNodes);
+        }
         
         public Node GetNode(ActionDefinition action)
         {
-            var hash = Node.GenerateHash(action);
-            var node = GetNodeFromHash(hash);
+            if (action is BuildAction buildAction)
+            {
+                return GetNode(buildAction.prefab);
+            } 
+            
+            if (!(action is UpgradeAction upgradeAction))
+            {
+                Debug.LogError($"No node type defined for action {action.GetType()}");
+                return null;
+            }
+            
+            var hash = UpgradeGroupNode.GenerateHash(upgradeAction);
+            var node = GetNodeFromHash<UpgradeGroupNode>(hash);
             
             if (node == null)
             {
-                node = new Node(action);
-                nodes.Add(node);
+                node = new UpgradeGroupNode(upgradeAction);
+                upgradeGroupNodes.Add(node);
+                allNodes.Add(node);
             }
             else
             {
-                node.Setup(action);
+                node.Setup(upgradeAction);
             }
             
             return node;
@@ -33,13 +53,14 @@ namespace Aspekt.Hex.Upgrades
 
         public Node GetNode(HexCell cell)
         {
-            var hash = Node.GenerateHash(cell);
-            var node = GetNodeFromHash(hash);
+            var hash = CellNode.GenerateHash(cell);
+            var node = GetNodeFromHash<CellNode>(hash);
 
             if (node == null)
             {
-                node = new Node(cell);
-                nodes.Add(node);
+                node = new CellNode(cell);
+                cellNodes.Add(node);
+                allNodes.Add(node);
             }
             else
             {
@@ -51,24 +72,28 @@ namespace Aspekt.Hex.Upgrades
 
         public void Purge()
         {
-            nodes.Clear();
+            cellNodes.Clear();
+            upgradeGroupNodes.Clear();
+            allNodes.Clear();
         }
 
         public void Clean()
         {
-            for (int i = nodes.Count - 1; i >= 0; i--)
+            for (int i = allNodes.Count - 1; i >= 0; i--)
             {
-                if (!nodes[i].HasValidObject() || nodes[i].GetObject() is UnitAction)
+                if (!allNodes[i].HasValidObject() || allNodes[i].GetObject() is UnitAction)
                 {
-                    nodes.RemoveAt(i);
+                    if (allNodes[i] is CellNode cellNode) cellNodes.Remove(cellNode);
+                    if (allNodes[i] is UpgradeGroupNode upgradeNode) upgradeGroupNodes.Remove(upgradeNode);
+                    allNodes.RemoveAt(i);
                 }
             }
         }
 
-        private Node GetNodeFromHash(int hash)
+        private T GetNodeFromHash<T>(int hash) where T : Node
         {
-            var index = nodes.FindIndex(n => n.GetHash() == hash);
-            return index >= 0 ? nodes[index] : null;
+            var index = allNodes.FindIndex(n => n.GetHash() == hash);
+            return (T)(index >= 0 ? allNodes[index] : null);
         }
     }
 }

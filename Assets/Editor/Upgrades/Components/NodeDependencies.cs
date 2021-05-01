@@ -21,29 +21,29 @@ namespace Aspekt.Hex.Upgrades
             {
                 if (toObj is ActionDefinition toAction)
                 {
-                    return HandleDependency(fromAction, toAction, techConfig, mode);
+                    return HandleDependency(fromAction, toAction, mode);
                 }
                 else if (toObj is HexCell toCell)
                 {
-                    return HandleDependency(fromAction, toCell, techConfig, mode);
+                    return HandleDependency(fromAction, GetBuildAction(toCell, techConfig), mode);
                 }
             }
             else if (fromObj is HexCell fromCell)
             {
                 if (toObj is ActionDefinition toAction)
                 {
-                    return HandleDependency(fromCell, toAction, techConfig, mode);
+                    return HandleDependency(fromCell, toAction, mode);
                 }
                 else if (toObj is HexCell toCell)
                 {
-                    return HandleDependency(fromCell, toCell, techConfig, mode);
+                    return HandleDependency(fromCell, GetBuildAction(toCell, techConfig), mode);
                 }
             }
 
             return false;
         }
 
-        private static bool HandleDependency(ActionDefinition fromAction, ActionDefinition toAction, TechConfig techConfig, UpgradeDependencyMode mode)
+        private static bool HandleDependency(ActionDefinition fromAction, ActionDefinition toAction, UpgradeDependencyMode mode)
         {
             var tech = GetTechFromAction(fromAction);
             if (toAction is BuildAction buildActionTo)
@@ -77,46 +77,19 @@ namespace Aspekt.Hex.Upgrades
             }
             return false;
         }
-
-        private static bool HandleDependency(ActionDefinition fromAction, HexCell toCell, TechConfig techConfig, UpgradeDependencyMode mode)
-        {
-            var buildActionTo = GetBuildAction(toCell, techConfig);
-            var tech = GetTechFromAction(fromAction);
-            buildActionTo.techRequirements.Add(tech);
-            EditorUtility.SetDirty(buildActionTo);
-            return true;
-        }
         
-        private static bool HandleDependency(HexCell fromCell, ActionDefinition toAction, TechConfig techConfig, UpgradeDependencyMode mode)
-        {
-            if (mode == UpgradeDependencyMode.CreateBuild)
-            {
-                return AddBuildAction(fromCell, toAction);
-            }
-            else if (mode == UpgradeDependencyMode.RemoveBuild)
-            {
-                return RemoveBuildAction(fromCell, toAction);
-            }
-            else if (mode == UpgradeDependencyMode.CreateTechRequirement)
-            {
-                // TODO
-            }
-
-            return false;
-        }
-        
-        private static bool HandleDependency(HexCell fromCell, HexCell toCell, TechConfig techConfig, UpgradeDependencyMode mode)
+        private static bool HandleDependency(HexCell fromCell, ActionDefinition toAction, UpgradeDependencyMode mode)
         {
             switch (mode)
             {
                 case UpgradeDependencyMode.CreateBuild:
-                    return AddBuildAction(fromCell, GetBuildAction(toCell, techConfig));
+                    return AddActionToCell(fromCell, toAction);
                 case UpgradeDependencyMode.CreateTechRequirement:
-                    return AddBuildDependency(GetBuildAction(toCell, techConfig), fromCell.Technology);
+                    return AddRequirementToAction(toAction, fromCell.Technology);
                 case UpgradeDependencyMode.RemoveBuild:
-                    return RemoveBuildAction(fromCell, GetBuildAction(toCell, techConfig));
+                    return RemoveActionFromCell(fromCell, toAction);
                 case UpgradeDependencyMode.RemoveTechRequirement:
-                    return RemoveBuildDependency(GetBuildAction(toCell, techConfig), fromCell.Technology);
+                    return RemoveRequirementFromAction(toAction, fromCell.Technology);
                 default:
                     return false;
             }
@@ -151,7 +124,7 @@ namespace Aspekt.Hex.Upgrades
             return Technology.None;
         }
 
-        private static bool AddBuildAction(HexCell cell, ActionDefinition action)
+        private static bool AddActionToCell(HexCell cell, ActionDefinition action)
         {
             var fieldInfo = typeof(HexCell).GetField("actions", BindingFlags.NonPublic | BindingFlags.Instance);
             if (fieldInfo == null) return false;
@@ -166,7 +139,7 @@ namespace Aspekt.Hex.Upgrades
             return true;
         }
 
-        private static bool RemoveBuildAction(HexCell cell, ActionDefinition action)
+        private static bool RemoveActionFromCell(HexCell cell, ActionDefinition action)
         {
             var fieldInfo = typeof(HexCell).GetField("actions", BindingFlags.NonPublic | BindingFlags.Instance);
             if (fieldInfo == null) return false;
@@ -181,7 +154,7 @@ namespace Aspekt.Hex.Upgrades
             return true;
         }
 
-        private static bool AddBuildDependency(ActionDefinition action, Technology tech)
+        private static bool AddRequirementToAction(ActionDefinition action, Technology tech)
         {
             if (action is BuildAction buildAction)
             {
@@ -195,7 +168,7 @@ namespace Aspekt.Hex.Upgrades
             return false;
         }
 
-        private static bool RemoveBuildDependency(ActionDefinition action, Technology tech)
+        private static bool RemoveRequirementFromAction(ActionDefinition action, Technology tech)
         {
             if (action is BuildAction buildAction)
             {

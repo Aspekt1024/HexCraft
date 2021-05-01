@@ -1,117 +1,39 @@
 using System;
-using Aspekt.Hex.Actions;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Aspekt.Hex.Upgrades
 {
     [Serializable]
-    public class Node : MouseManipulator
+    public abstract class Node : MouseManipulator
     {
-        [SerializeField] private int hash;
-        [SerializeField] private Vector2 position;
+        public int test = 1;
+        [SerializeField] protected int hash;
+        [SerializeField] protected Vector2 position;
 
-        private HexCell cell;
-        private ActionDefinition action;
-        
         private bool isDragged;
         private Vector2 startMousePos;
         private Vector2 startPos;
 
-        private VisualElement element;
+        protected VisualElement element;
         
         public Action OnMove;
         public Action<Node> OnEnter;
         public Action<Node> OnLeave;
 
-        public Node(ActionDefinition action)
+        protected Node()
         {
-            Setup(action);
-            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
-        }
-
-        public Node(HexCell cell)
-        {
-            Setup(cell);
             activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
         }
 
         public int GetHash() => hash;
-
-        public static int GenerateHash(ActionDefinition action)
-        {
-            if (action is BuildAction buildAction && buildAction.prefab != null)
-            {
-                return GenerateHash(buildAction.prefab);
-            }
-            return Hash128.Compute("Action" + action.name).GetHashCode();
-        }
         
-        public static int GenerateHash(HexCell c) => Hash128.Compute("Cell" + c.name).GetHashCode();
+        public abstract object GetObject();
+
+        public abstract bool HasValidObject();
+
+        public abstract VisualElement GetElement();
         
-        public void Setup(ActionDefinition action)
-        {
-            this.action = action;
-            if (action is BuildAction buildAction)
-            {
-                cell = buildAction.prefab;
-                hash = GenerateHash(cell);
-            }
-            else
-            {
-                hash = GenerateHash(action);
-            }
-            
-            element = GetElement();
-        }
-
-        public void Setup(HexCell cell)
-        {
-            this.cell = cell;
-            hash = GenerateHash(cell);
-            element = GetElement();
-        }
-
-        public bool HasValidObject()
-        {
-            return action != null || cell != null;
-        }
-
-        public object GetObject()
-        {
-            if (cell != null) return cell;
-            return action;
-        }
-        
-        public VisualElement GetElement()
-        {
-            if (element != null) return element;
-            
-            element = new VisualElement();
-            element.AddToClassList("node");
-
-            if (cell != null)
-            {
-                element.Add(new Label(cell.DisplayName));
-                element.AddToClassList(cell is UnitCell ? "node-unit" : "node-building");
-            }
-            else if (action != null)
-            {
-                element.Add(new Label(action.name));
-                if (action is UpgradeAction)
-                {
-                    element.AddToClassList("node-upgrade");
-                }
-            }
-            
-            element.style.top = position.y;
-            element.style.left = position.x;
-            
-            element.AddManipulator(this);
-            
-            return element;
-        }
-
         public Vector2 GetOutputPosition()
         {
             return new Vector2(position.x + 60f, position.y + 25f);

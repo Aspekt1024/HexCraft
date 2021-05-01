@@ -59,29 +59,29 @@ namespace Aspekt.Hex.Upgrades
 
         private void UpdateTree()
         {
-            UpdateTree2();
-            return;
-            
-            foreach (var upgrade in config.techConfig.upgrades)
+            var allNodes = data.techTreeData.GetAllNodes();
+            foreach (var node in allNodes)
             {
-                var node = data.techTreeData.GetNode(upgrade);
-                foreach (var upgradeDetail in upgrade.upgradeDetails)
+                if (!node.HasValidObject()) continue;
+
+                var obj = node.GetObject();
+                if (obj is HexCell cell)
                 {
-                    var dependencies = GetDependencies(upgradeDetail.requiredTech);
-                    ShowDependencyLinks(node, dependencies);
+                    ProcessCell(cell, node);
+                }
+                else if (obj is ActionDefinition action)
+                {
+                    ProcessAction(action, node);
                 }
             }
-
-            foreach (var buildAction in config.techConfig.buildActions)
-            {
-                var node = data.techTreeData.GetNode(buildAction);
-                var dependencies = GetDependencies(buildAction.techRequirements);
-                ShowDependencyLinks(node, dependencies);
-            }
             
-            data.techTreeData.GetAllNodes()
-                .Where(n => n.HasValidObject()).ToList()
-                .ForEach(n => nodeRoot.Add(n.GetElement()));
+            foreach (var node in data.techTreeData.GetAllNodes())
+            {
+                if (!node.HasValidObject()) continue;
+                nodeRoot.Add(node.GetElement());
+                node.OnEnter = NodeEntered;
+                node.OnLeave = NodeLeft;
+            }
         }
 
         private List<Node> GetDependencies(List<Technology> techRequirements)
@@ -137,33 +137,6 @@ namespace Aspekt.Hex.Upgrades
             foreach (var upgradeAction in config.techConfig.upgrades)
             {
                 data.techTreeData.GetNode(upgradeAction);
-            }
-        }
-
-        private void UpdateTree2()
-        {
-            var allNodes = data.techTreeData.GetAllNodes();
-            foreach (var node in allNodes)
-            {
-                if (!node.HasValidObject()) continue;
-
-                var obj = node.GetObject();
-                if (obj is HexCell cell)
-                {
-                    ProcessCell(cell, node);
-                }
-                else if (obj is ActionDefinition action)
-                {
-                    ProcessAction(action, node);
-                }
-            }
-            
-            foreach (var node in data.techTreeData.GetAllNodes())
-            {
-                if (!node.HasValidObject()) continue;
-                nodeRoot.Add(node.GetElement());
-                node.OnEnter = NodeEntered;
-                node.OnLeave = NodeLeft;
             }
         }
 
