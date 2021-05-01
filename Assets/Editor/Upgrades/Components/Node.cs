@@ -47,7 +47,7 @@ namespace Aspekt.Hex.Upgrades
             return Hash128.Compute("Action" + action.name).GetHashCode();
         }
         
-        public static int GenerateHash(HexCell cell) => Hash128.Compute("Cell" + cell.name).GetHashCode();
+        public static int GenerateHash(HexCell c) => Hash128.Compute("Cell" + c.name).GetHashCode();
         
         public void Setup(ActionDefinition action)
         {

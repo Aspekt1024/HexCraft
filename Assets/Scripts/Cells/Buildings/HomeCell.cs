@@ -4,7 +4,7 @@ namespace Aspekt.Hex
 {
     public class HomeCell : BuildingCell, ISuppliesGenerator, IProductionGenerator
     {
-        public override Technology Technology { get; } = Technology.None;
+        public override Technology Technology { get; } = Technology.TownHall;
         public int production = 1;
         public int suppliesPerRound = 2;
 

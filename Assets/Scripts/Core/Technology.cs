@@ -4,11 +4,16 @@ namespace Aspekt.Hex
     {
         None = 0,
         
+        TownHall = 100,
         Barracks = 1000,
         Blacksmith = 1100,
         Farm = 2000,
         Stables = 2100,
         Market = 2200,
+        
+        Soldier = 2500,
+        Mage = 2510,
+        Archer = 2520,
         
         UpgradeWeapons1 = 3010,
         UpgradeWeapons2 = 3011,

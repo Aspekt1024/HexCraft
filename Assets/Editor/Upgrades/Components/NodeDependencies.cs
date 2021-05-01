@@ -12,6 +12,8 @@ namespace Aspekt.Hex.Upgrades
     {
         public static bool CreateDependency(Node from, Node to, TechConfig techConfig, UpgradeDependencyMode mode)
         {
+            if (from.GetHashCode() == to.GetHashCode()) return false;
+            
             var fromObj = from.GetObject();
             var toObj = to.GetObject();
 
@@ -105,19 +107,16 @@ namespace Aspekt.Hex.Upgrades
         
         private static bool HandleDependency(HexCell fromCell, HexCell toCell, TechConfig techConfig, UpgradeDependencyMode mode)
         {
-            var buildActionTo = GetBuildAction(toCell, techConfig);
             switch (mode)
             {
                 case UpgradeDependencyMode.CreateBuild:
-                    return AddBuildAction(fromCell, buildActionTo);
+                    return AddBuildAction(fromCell, GetBuildAction(toCell, techConfig));
                 case UpgradeDependencyMode.CreateTechRequirement:
-                    // TODO
-                    return false;
+                    return AddBuildDependency(GetBuildAction(toCell, techConfig), fromCell.Technology);
                 case UpgradeDependencyMode.RemoveBuild:
-                    return RemoveBuildAction(fromCell, buildActionTo);
+                    return RemoveBuildAction(fromCell, GetBuildAction(toCell, techConfig));
                 case UpgradeDependencyMode.RemoveTechRequirement:
-                    // TODO
-                    return false;
+                    return RemoveBuildDependency(GetBuildAction(toCell, techConfig), fromCell.Technology);
                 default:
                     return false;
             }
@@ -180,6 +179,34 @@ namespace Aspekt.Hex.Upgrades
             
             EditorUtility.SetDirty(cell);
             return true;
+        }
+
+        private static bool AddBuildDependency(ActionDefinition action, Technology tech)
+        {
+            if (action is BuildAction buildAction)
+            {
+                if (buildAction.techRequirements.Contains(tech)) return false;
+                buildAction.techRequirements.Add(tech);
+                return true;
+            }
+            
+            // TODO upgrades
+
+            return false;
+        }
+
+        private static bool RemoveBuildDependency(ActionDefinition action, Technology tech)
+        {
+            if (action is BuildAction buildAction)
+            {
+                if (!buildAction.techRequirements.Contains(tech)) return false;
+                buildAction.techRequirements.Remove(tech);
+                return true;
+            }
+            
+            // TODO upgrades
+
+            return false;
         }
     }
 }

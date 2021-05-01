@@ -17,7 +17,7 @@ namespace Aspekt.Hex
         private int armorLevel;
         private int spellLevel;
         
-        public override Technology Technology { get; } = Technology.None;
+        public override Technology Technology { get; } = Technology.Mage;
         
         private void Awake()
         {
