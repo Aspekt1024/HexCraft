@@ -25,6 +25,8 @@ namespace Aspekt.Hex.Upgrades
         private Node startNode;
         private ConnectionElement depLine;
 
+        private readonly List<ConnectionElement> dependencyLinks = new List<ConnectionElement>();
+
         public TechTree(UpgradeEditor editor, VisualElement root, UpgradeEditorData data)
         {
             this.editor = editor;
@@ -74,11 +76,31 @@ namespace Aspekt.Hex.Upgrades
                     ProcessAction(action, node);
                 }
             }
+
+            allNodes = data.techTreeData.GetAllNodes();
+            foreach (var node in allNodes)
+            {
+                if (!node.HasValidObject()) continue;
+                if (node is UpgradeGroupNode)
+                {
+                    // TODO want to add sub nodes afterwards
+                    nodeRoot.Add(node.GetElement());
+                }
+            }
+
+            // TODO this can be done better
+            foreach (var link in dependencyLinks)
+            {
+                nodeRoot.Add(link);
+            }
             
             foreach (var node in data.techTreeData.GetAllNodes())
             {
                 if (!node.HasValidObject()) continue;
-                nodeRoot.Add(node.GetElement());
+                if (!(node is UpgradeGroupNode))
+                {
+                    nodeRoot.Add(node.GetElement());
+                }
                 node.OnEnter = NodeEntered;
                 node.OnLeave = NodeLeft;
             }
@@ -168,24 +190,25 @@ namespace Aspekt.Hex.Upgrades
             if (action is BuildAction buildAction)
             {
                 var deps = GetDependencies(buildAction.techRequirements);
-                ShowDependencyLinks(node, deps);
+                CreateDependencyLinks(node, deps);
             }
             else if (action is UpgradeAction upgradeAction)
             {
                 foreach (var upgrade in upgradeAction.upgradeDetails)
                 {
+                    var subNode = ((UpgradeGroupNode) node).GetSubNode(upgrade);
                     var deps = GetDependencies(upgrade.requiredTech);
-                    ShowDependencyLinks(node, deps);
+                    CreateDependencyLinks(subNode, deps);
                 }
             }
         }
         
-        private void ShowDependencyLinks(Node node, List<Node> dependencies)
+        private void CreateDependencyLinks(Node node, List<Node> dependencies)
         {
             dependencies.ForEach(d =>
             {
                 var line = new ConnectionElement(d, node, new Color(1f, 0.86f, 0.61f), 1.5f, true);
-                nodeRoot.Add(line);
+                dependencyLinks.Add(line);
             });
         }
 
@@ -194,6 +217,7 @@ namespace Aspekt.Hex.Upgrades
             if (lastNode != null)
             {
                 startNode = lastNode;
+                startNode.ActivatingLinkStart();
                 depLine = new ConnectionElement(this, mousePos, Color.yellow, 2f, true);
                 nodeRoot.Add(depLine);
             }
@@ -203,8 +227,10 @@ namespace Aspekt.Hex.Upgrades
         {
             if (startNode != null)
             {
+                startNode.ActivatingLinkEnd();
                 if (lastNode != null)
                 {
+                    lastNode.ActivatingLinkEnd();
                     var success = NodeDependencies.CreateDependency(startNode, lastNode, config.techConfig, mode);
                     if (success)
                     {
@@ -222,10 +248,21 @@ namespace Aspekt.Hex.Upgrades
         }
 
         public void OnDependencyDrag(Vector2 mousePos) => OnDrag?.Invoke(mousePos);
-        private void NodeEntered(Node node) => lastNode = node;
+        private void NodeEntered(Node node)
+        {
+            if (startNode != null)
+            {
+                node.ActivatingLinkStart();
+            }
+            lastNode = node;
+        }
 
         private void NodeLeft(Node node)
         {
+            if (startNode != null && startNode != node)
+            {
+                node.ActivatingLinkEnd();
+            }
             if (lastNode == node)
             {
                 lastNode = null;

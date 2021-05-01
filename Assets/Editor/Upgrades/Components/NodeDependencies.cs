@@ -13,115 +13,92 @@ namespace Aspekt.Hex.Upgrades
         public static bool CreateDependency(Node from, Node to, TechConfig techConfig, UpgradeDependencyMode mode)
         {
             if (from.GetHashCode() == to.GetHashCode()) return false;
-            
-            var fromObj = from.GetObject();
-            var toObj = to.GetObject();
 
-            if (fromObj is ActionDefinition fromAction)
+            switch (from)
             {
-                if (toObj is ActionDefinition toAction)
-                {
-                    return HandleDependency(fromAction, toAction, mode);
-                }
-                else if (toObj is HexCell toCell)
-                {
-                    return HandleDependency(fromAction, GetBuildAction(toCell, techConfig), mode);
-                }
+                case CellNode fromCell:
+                    if (to is UpgradeGroupNode toUpgrade)
+                    {
+                        return HandleUpgradeDependency(fromCell.GetCell(), toUpgrade, techConfig, mode);
+                    }
+                    else
+                    {
+                        return HandleCellActionModification(fromCell.GetCell(), to.GetAction(techConfig), mode);
+                    }
+                case UpgradeGroupNode upgradeGroupNode:
+                    return HandleUpgradeModification(upgradeGroupNode, to.GetAction(techConfig), mode);
+                default:
+                    Debug.LogWarning($"Unhandled dependency creation: {from}");
+                    return false;
             }
-            else if (fromObj is HexCell fromCell)
-            {
-                if (toObj is ActionDefinition toAction)
-                {
-                    return HandleDependency(fromCell, toAction, mode);
-                }
-                else if (toObj is HexCell toCell)
-                {
-                    return HandleDependency(fromCell, GetBuildAction(toCell, techConfig), mode);
-                }
-            }
-
-            return false;
         }
 
-        private static bool HandleDependency(ActionDefinition fromAction, ActionDefinition toAction, UpgradeDependencyMode mode)
+        private static bool HandleUpgradeDependency(HexCell cell, UpgradeGroupNode toUpgrade, TechConfig techConfig, UpgradeDependencyMode mode)
         {
-            var tech = GetTechFromAction(fromAction);
-            if (toAction is BuildAction buildActionTo)
+            var toSubNode = toUpgrade.GetDependentSubNode();
+            if (toSubNode == null)
             {
-                switch (mode)
-                {
-                    case UpgradeDependencyMode.CreateBuild:
-                        // Not applicable
-                        break;
-                    case UpgradeDependencyMode.CreateTechRequirement:
-                        if (buildActionTo.techRequirements.Contains(tech)) return false;
-                        buildActionTo.techRequirements.Add(tech);
-                        break;
-                    case UpgradeDependencyMode.RemoveBuild:
-                        // Not applicable
-                        break;
-                    case UpgradeDependencyMode.RemoveTechRequirement:
-                        if (!buildActionTo.techRequirements.Contains(tech)) return false;
-                        buildActionTo.techRequirements.Remove(tech);
-                        break;
-                    default:
-                        return false;
-                }
-                
-                EditorUtility.SetDirty(buildActionTo);
-                return true;
+                return HandleCellActionModification(cell, toUpgrade.GetAction(techConfig), mode);
             }
-            else if (toAction is UpgradeAction upgradeActionTo)
+
+            var upgrade = toUpgrade.GetUpgradeAction();
+            var dependentTech = toSubNode.GetTechnology();
+            var requiredTech = cell.Technology;
+            
+            switch (mode)
             {
-                // TODO expand upgrade actions
+                case UpgradeDependencyMode.AddAction:
+                    // Cannot add sub-upgrade as an action
+                    return false;
+                case UpgradeDependencyMode.CreateTechRequirement:
+                    return AddTechRequirementToUpgrade(upgrade, dependentTech, requiredTech);
+                case UpgradeDependencyMode.RemoveAction:
+                    // Cannot remove sub-upgrade as an action
+                    return false;
+                case UpgradeDependencyMode.RemoveTechRequirement:
+                    return RemoveTechRequirementFromUpgrade(upgrade, dependentTech, requiredTech);
+                default:
+                    return false;
             }
-            return false;
         }
         
-        private static bool HandleDependency(HexCell fromCell, ActionDefinition toAction, UpgradeDependencyMode mode)
+        private static bool HandleCellActionModification(HexCell cell, ActionDefinition action, UpgradeDependencyMode mode)
         {
             switch (mode)
             {
-                case UpgradeDependencyMode.CreateBuild:
-                    return AddActionToCell(fromCell, toAction);
+                case UpgradeDependencyMode.AddAction:
+                    return AddActionToCell(cell, action);
                 case UpgradeDependencyMode.CreateTechRequirement:
-                    return AddRequirementToAction(toAction, fromCell.Technology);
-                case UpgradeDependencyMode.RemoveBuild:
-                    return RemoveActionFromCell(fromCell, toAction);
+                    return AddRequirementToAction(action, cell.Technology);
+                case UpgradeDependencyMode.RemoveAction:
+                    return RemoveActionFromCell(cell, action);
                 case UpgradeDependencyMode.RemoveTechRequirement:
-                    return RemoveRequirementFromAction(toAction, fromCell.Technology);
+                    return RemoveRequirementFromAction(action, cell.Technology);
                 default:
                     return false;
             }
         }
 
-        private static BuildAction GetBuildAction(HexCell cell, TechConfig techConfig)
+        private static bool HandleUpgradeModification(UpgradeGroupNode group, ActionDefinition action, UpgradeDependencyMode mode)
         {
-            foreach (var buildAction in techConfig.buildActions)
+            var tech = group.GetSelectedTech();
+            if (tech == Technology.None) return false;
+            
+            switch (mode)
             {
-                if (buildAction.prefab.cellType == cell.cellType)
-                {
-                    return buildAction;
-                }
+                case UpgradeDependencyMode.CreateTechRequirement:
+                    return AddRequirementToAction(action, tech);
+                case UpgradeDependencyMode.RemoveTechRequirement:
+                    return RemoveRequirementFromAction(action, tech);
+                case UpgradeDependencyMode.AddAction:
+                    // Not applicable - upgrades don't have actions
+                    return false;
+                case UpgradeDependencyMode.RemoveAction:
+                    // Not applicable - upgrades don't have actions
+                    return false;
+                default:
+                    return false;
             }
-            return null;
-        }
-
-        private static Technology GetTechFromAction(ActionDefinition action)
-        {
-            if (action is BuildAction buildAction)
-            {
-                return buildAction.prefab.Technology;
-            }
-            else if (action is UpgradeAction upgradeAction)
-            {
-                // TODO expand upgrade tech
-                Debug.LogWarning("Need to expand upgrade tech, Dan");
-                //return upgradeAction
-                return Technology.None;
-            }
-
-            return Technology.None;
         }
 
         private static bool AddActionToCell(HexCell cell, ActionDefinition action)
@@ -163,8 +140,9 @@ namespace Aspekt.Hex.Upgrades
                 return true;
             }
             
-            // TODO upgrades
-
+            // Only build actions can have dependencies. Upgrade action dependencies are handled by the
+            // individual sub tech.
+            
             return false;
         }
 
@@ -176,9 +154,48 @@ namespace Aspekt.Hex.Upgrades
                 buildAction.techRequirements.Remove(tech);
                 return true;
             }
-            
-            // TODO upgrades
 
+            // Only build actions can have dependencies. Upgrade action dependencies are handled by the
+            // individual sub tech.
+
+            return false;
+        }
+
+        private static bool AddTechRequirementToUpgrade(UpgradeAction action, Technology dependentTech, Technology requiredTech)
+        {
+            for (int i = 0; i < action.upgradeDetails.Length; i++)
+            {
+                if (action.upgradeDetails[i].tech == dependentTech)
+                {
+                    var details = action.upgradeDetails[i];
+                    if (details.requiredTech.Contains(requiredTech)) return false;
+                    
+                    details.requiredTech.Add(requiredTech);
+                    action.upgradeDetails[i] = details;
+                    
+                    EditorUtility.SetDirty(action);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool RemoveTechRequirementFromUpgrade(UpgradeAction action, Technology dependentTech, Technology requiredTech)
+        {
+            for (int i = 0; i < action.upgradeDetails.Length; i++)
+            {
+                if (action.upgradeDetails[i].tech == dependentTech)
+                {
+                    var details = action.upgradeDetails[i];
+                    if (!details.requiredTech.Contains(requiredTech)) return false;
+                    
+                    details.requiredTech.Remove(requiredTech);
+                    action.upgradeDetails[i] = details;
+                    
+                    EditorUtility.SetDirty(action);
+                    return true;
+                }
+            }
             return false;
         }
     }

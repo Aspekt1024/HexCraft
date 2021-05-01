@@ -1,4 +1,6 @@
 using System;
+using Aspekt.Hex.Actions;
+using Aspekt.Hex.Config;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,8 +17,22 @@ namespace Aspekt.Hex.Upgrades
         }
         
         public static int GenerateHash(HexCell c) => Hash128.Compute("Cell" + c.name).GetHashCode();
+        
+        public override ActionDefinition GetAction(TechConfig techConfig)
+        {
+            foreach (var buildAction in techConfig.buildActions)
+            {
+                if (buildAction.prefab.cellType == cell.cellType)
+                {
+                    return buildAction;
+                }
+            }
+            return null;
+        }
+
         public override bool HasValidObject() => cell != null;
         public override object GetObject() => cell;
+        public HexCell GetCell() => cell;
 
         public void Setup(HexCell cell)
         {

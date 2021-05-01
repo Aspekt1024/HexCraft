@@ -5,9 +5,9 @@ namespace Aspekt.Hex.Upgrades
 {
     public enum UpgradeDependencyMode
     {
-        CreateBuild,
+        AddAction,
         CreateTechRequirement,
-        RemoveBuild,
+        RemoveAction,
         RemoveTechRequirement,
     }
     
@@ -91,11 +91,11 @@ namespace Aspekt.Hex.Upgrades
         {
             if (e.ctrlKey)
             {
-                return e.shiftKey ? UpgradeDependencyMode.RemoveTechRequirement : UpgradeDependencyMode.RemoveBuild;
+                return e.shiftKey ? UpgradeDependencyMode.RemoveTechRequirement : UpgradeDependencyMode.RemoveAction;
             }
             else
             {
-                return e.shiftKey ? UpgradeDependencyMode.CreateTechRequirement : UpgradeDependencyMode.CreateBuild;
+                return e.shiftKey ? UpgradeDependencyMode.CreateTechRequirement : UpgradeDependencyMode.AddAction;
             }
         }
         

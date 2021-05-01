@@ -1,4 +1,6 @@
 using System;
+using Aspekt.Hex.Actions;
+using Aspekt.Hex.Config;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,11 +9,10 @@ namespace Aspekt.Hex.Upgrades
     [Serializable]
     public abstract class Node : MouseManipulator
     {
-        public int test = 1;
         [SerializeField] protected int hash;
         [SerializeField] protected Vector2 position;
 
-        private bool isDragged;
+        protected bool IsDragged;
         private Vector2 startMousePos;
         private Vector2 startPos;
 
@@ -26,22 +27,39 @@ namespace Aspekt.Hex.Upgrades
             activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
         }
 
+        public Vector2 GetPosition() => position;
+
+        protected bool MoveDisabled;
+
         public int GetHash() => hash;
         
         public abstract object GetObject();
+        public abstract ActionDefinition GetAction(TechConfig techConfig);
 
         public abstract bool HasValidObject();
 
         public abstract VisualElement GetElement();
+
+        protected virtual string ActivatingLinkClass => "node-newlink";
+
+        public virtual void ActivatingLinkStart()
+        {
+            GetElement().AddToClassList(ActivatingLinkClass);
+        }
+
+        public virtual void ActivatingLinkEnd()
+        {
+            GetElement().RemoveFromClassList(ActivatingLinkClass);
+        }
         
-        public Vector2 GetOutputPosition()
+        public virtual Vector2 GetOutputPosition()
         {
             return new Vector2(position.x + 60f, position.y + 25f);
         }
 
-        public Vector3 GetInputPosition()
+        public virtual Vector2 GetInputPosition()
         {
-            return new Vector3(position.x + 60f, position.y + 25f);
+            return new Vector2(position.x + 60f, position.y + 25f);
         }
         
         protected override void RegisterCallbacksOnTarget()
@@ -64,9 +82,9 @@ namespace Aspekt.Hex.Upgrades
         
         private void OnMouseDown(MouseDownEvent e)
         {
-            if (e.button == 0)
+            if ( e.button == 0)
             {
-                isDragged = true;
+                IsDragged = true;
                 startMousePos = e.mousePosition;
                 startPos = position;
                 element.AddToClassList("node-dragged");
@@ -77,18 +95,18 @@ namespace Aspekt.Hex.Upgrades
 
         private void OnMouseUp(MouseUpEvent e)
         {
-            if (isDragged && e.button == 0)
+            if (IsDragged && e.button == 0)
             {
-                isDragged = false;
+                IsDragged = false;
                 element.RemoveFromClassList("node-dragged");
                 target.ReleaseMouse();
                 e.StopPropagation();
             }
         }
 
-        private void OnMouseMove(MouseMoveEvent e)
+        protected virtual void OnMouseMove(MouseMoveEvent e)
         {
-            if (isDragged)
+            if (IsDragged)
             {
                 UpdatePosition(e.mousePosition);
                 OnMove?.Invoke();
@@ -108,6 +126,8 @@ namespace Aspekt.Hex.Upgrades
 
         private void UpdatePosition(Vector2 mousePos)
         {
+            if (MoveDisabled) return;
+
             position = startPos + mousePos - startMousePos;
             
             element.style.top = position.y;
