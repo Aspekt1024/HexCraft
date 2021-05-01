@@ -60,7 +60,7 @@ namespace Aspekt.Hex.Upgrades
         private void UpdateTree()
         {
             var allNodes = data.techTreeData.GetAllNodes();
-            foreach (var node in allNodes)
+            foreach (var node in allNodes) 
             {
                 if (!node.HasValidObject()) continue;
 
@@ -123,7 +123,7 @@ namespace Aspekt.Hex.Upgrades
                 if (cellType == Cells.CellTypes.None) continue;
                 
                 var cell = cells.GetPrefab(cellType);
-                if (cell != null)
+                if (cell != null) 
                 {
                     data.techTreeData.GetNode(cell);
                 }

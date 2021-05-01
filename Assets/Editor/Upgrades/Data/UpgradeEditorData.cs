@@ -19,7 +19,6 @@ namespace Aspekt.Hex.Upgrades
             {
                 var text = File.ReadAllText(FilePath);
                 var data = JsonUtility.FromJson<UpgradeEditorData>(text);
-                data.techTreeData.Init();
                 return data;
             }
             catch

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Aspekt.Hex.Actions;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,6 +10,8 @@ namespace Aspekt.Hex.Upgrades
     public class UpgradeGroupNode : Node
     {
         private UpgradeAction action;
+        
+        // TODO list of upgrade nodes
         
         public UpgradeGroupNode(UpgradeAction action)
         {
@@ -31,12 +34,18 @@ namespace Aspekt.Hex.Upgrades
             if (element != null) return element;
             
             element = new VisualElement();
-            element.AddToClassList("node");
+            element.AddToClassList("node-group");
 
-            if (action != null)
+            element.Add(new Label(action.name));
+            element.AddToClassList("node-upgrade");
+
+            foreach (var upgrade in action.upgradeDetails)
             {
-                element.Add(new Label(action.name));
-                element.AddToClassList("node-upgrade");
+                var e = new VisualElement();
+                e.AddToClassList("node-group-subnode");
+                e.Add(new Label(upgrade.title));
+
+                element.Add(e);
             }
             
             element.style.top = position.y;

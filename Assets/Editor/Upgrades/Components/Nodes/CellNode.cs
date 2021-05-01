@@ -32,11 +32,8 @@ namespace Aspekt.Hex.Upgrades
             element = new VisualElement();
             element.AddToClassList("node");
 
-            if (cell != null)
-            {
-                element.Add(new Label(cell.DisplayName));
-                element.AddToClassList(cell is UnitCell ? "node-unit" : "node-building");
-            }
+            element.Add(new Label(cell.DisplayName));
+            element.AddToClassList(cell is UnitCell ? "node-unit" : "node-building");
             
             element.style.top = position.y;
             element.style.left = position.x;

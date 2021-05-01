@@ -25,6 +25,49 @@
     -unity-text-align: middle-center;
 }
 
+.node-group {
+    position: absolute;
+    
+    border-width: 2px;
+    border-radius: 5px;
+    
+    height: 110px;
+    width: 140px;
+    
+    -unity-text-align: upper-center;
+}
+
+.node-group Label {
+    color: whitesmoke;
+    -unity-font-style: bold;
+    font-size: 12px;
+
+    height: 20px;
+}
+
+.node-group-subnode {
+
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: #ae75c4;
+    
+    background-color: rebeccapurple;
+    
+    margin: auto;
+    
+    height: 24px;
+    width: 120px;
+
+    -unity-text-align: middle-center;
+}
+
+.node-group-subnode Label {
+
+    -unity-font-style: normal;
+    font-size: 11px;
+    height: 20px;
+}
+
 .node-dragged {
     border-color: #2f515a;
     background-color: #809194;

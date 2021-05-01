@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aspekt.Hex.Actions;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 namespace Aspekt.Hex.Upgrades
 {
@@ -11,16 +13,13 @@ namespace Aspekt.Hex.Upgrades
         [SerializeField] private List<CellNode> cellNodes;
         [SerializeField] private List<UpgradeGroupNode> upgradeGroupNodes;
 
-        private List<Node> allNodes = new List<Node>();
-
-        public List<Node> GetAllNodes() => allNodes;
-
-        public void Init()
+        public List<Node> GetAllNodes()
         {
-            allNodes.AddRange(cellNodes);
-            allNodes.AddRange(upgradeGroupNodes);
+            var nodes = cellNodes.Select(n => n as Node).ToList();
+            nodes.AddRange(upgradeGroupNodes);
+            return nodes;
         }
-        
+
         public Node GetNode(ActionDefinition action)
         {
             if (action is BuildAction buildAction)
@@ -41,7 +40,6 @@ namespace Aspekt.Hex.Upgrades
             {
                 node = new UpgradeGroupNode(upgradeAction);
                 upgradeGroupNodes.Add(node);
-                allNodes.Add(node);
             }
             else
             {
@@ -60,7 +58,6 @@ namespace Aspekt.Hex.Upgrades
             {
                 node = new CellNode(cell);
                 cellNodes.Add(node);
-                allNodes.Add(node);
             }
             else
             {
@@ -74,24 +71,30 @@ namespace Aspekt.Hex.Upgrades
         {
             cellNodes.Clear();
             upgradeGroupNodes.Clear();
-            allNodes.Clear();
         }
 
         public void Clean()
         {
-            for (int i = allNodes.Count - 1; i >= 0; i--)
+            for (int i = cellNodes.Count - 1; i >= 0; i--)
             {
-                if (!allNodes[i].HasValidObject() || allNodes[i].GetObject() is UnitAction)
+                if (!cellNodes[i].HasValidObject() || cellNodes[i].GetObject() is UnitAction)
                 {
-                    if (allNodes[i] is CellNode cellNode) cellNodes.Remove(cellNode);
-                    if (allNodes[i] is UpgradeGroupNode upgradeNode) upgradeGroupNodes.Remove(upgradeNode);
-                    allNodes.RemoveAt(i);
+                    cellNodes.RemoveAt(i);
+                }
+            }
+
+            for (int i = upgradeGroupNodes.Count - 1; i >= 0; i--)
+            {
+                if (!upgradeGroupNodes[i].HasValidObject())
+                {
+                    upgradeGroupNodes.RemoveAt(i);
                 }
             }
         }
 
         private T GetNodeFromHash<T>(int hash) where T : Node
         {
+            var allNodes = GetAllNodes();
             var index = allNodes.FindIndex(n => n.GetHash() == hash);
             return (T)(index >= 0 ? allNodes[index] : null);
         }
