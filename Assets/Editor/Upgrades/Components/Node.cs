@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Config;
 using UnityEngine;
@@ -6,17 +7,27 @@ using UnityEngine.UIElements;
 
 namespace Aspekt.Hex.Upgrades
 {
+    public struct TreeElement
+    {
+        public VisualElement VisualElement;
+        public int SortOrder;
+        public VisualElement Parent;
+        public List<TreeElement> Children;
+    }
+    
     [Serializable]
     public abstract class Node : MouseManipulator
     {
         [SerializeField] protected int hash;
         [SerializeField] protected Vector2 position;
 
+        public abstract int SortOrder { get; }
+        
         protected bool IsDragged;
         private Vector2 startMousePos;
         private Vector2 startPos;
 
-        protected VisualElement element;
+        protected TreeElement Element;
         
         public Action OnMove;
         public Action<Node> OnEnter;
@@ -38,28 +49,46 @@ namespace Aspekt.Hex.Upgrades
 
         public abstract bool HasValidObject();
 
-        public abstract VisualElement GetElement();
+        public abstract TreeElement GetElement();
 
         protected virtual string ActivatingLinkClass => "node-newlink";
 
         public virtual void ActivatingLinkStart()
         {
-            GetElement().AddToClassList(ActivatingLinkClass);
+            GetElement().VisualElement.AddToClassList(ActivatingLinkClass);
         }
 
         public virtual void ActivatingLinkEnd()
         {
-            GetElement().RemoveFromClassList(ActivatingLinkClass);
-        }
-        
-        public virtual Vector2 GetOutputPosition()
-        {
-            return new Vector2(position.x + 60f, position.y + 25f);
+            GetElement().VisualElement.RemoveFromClassList(ActivatingLinkClass);
         }
 
-        public virtual Vector2 GetInputPosition()
+        public virtual Vector2 GetConnectingPosition(Vector2 fromPos)
         {
-            return new Vector2(position.x + 60f, position.y + 25f);
+            var e = Element.VisualElement;
+            var pos = position;
+
+            var dist = pos - fromPos;
+            if (Mathf.Abs(dist.y) > Mathf.Abs(dist.x))
+            {
+                pos.x += e.layout.width / 2f;
+
+                if (fromPos.y > pos.y)
+                {
+                    pos.y += e.layout.height;
+                }
+            }
+            else
+            {
+                pos.y += e.layout.height / 2f;
+            
+                if (fromPos.x > pos.x)
+                {
+                    pos.x += e.layout.width;
+                }
+            }
+
+            return pos;
         }
         
         protected override void RegisterCallbacksOnTarget()
@@ -87,7 +116,7 @@ namespace Aspekt.Hex.Upgrades
                 IsDragged = true;
                 startMousePos = e.mousePosition;
                 startPos = position;
-                element.AddToClassList("node-dragged");
+                Element.VisualElement.AddToClassList("node-dragged");
                 target.CaptureMouse();
                 e.StopPropagation();
             }
@@ -98,7 +127,7 @@ namespace Aspekt.Hex.Upgrades
             if (IsDragged && e.button == 0)
             {
                 IsDragged = false;
-                element.RemoveFromClassList("node-dragged");
+                Element.VisualElement.RemoveFromClassList("node-dragged");
                 target.ReleaseMouse();
                 e.StopPropagation();
             }
@@ -128,11 +157,14 @@ namespace Aspekt.Hex.Upgrades
         {
             if (MoveDisabled) return;
 
-            position = startPos + mousePos - startMousePos;
+            const float snapLength = 10f;
             
-            element.style.top = position.y;
-            element.style.left = position.x;
+            position = startPos + mousePos - startMousePos;
+            position.x = Mathf.Round(position.x / snapLength) * snapLength;
+            position.y = Mathf.Round(position.y / snapLength) * snapLength;
+            
+            Element.VisualElement.style.top = position.y;
+            Element.VisualElement.style.left = position.x;
         }
-        
     }
 }

@@ -43,6 +43,8 @@ namespace Aspekt.Hex.Upgrades
             }
             else
             {
+                // TODO this calls a second Setup on the node
+                // TODO which replaces the upgrade group sub nodes
                 node.Setup(upgradeAction);
             }
             

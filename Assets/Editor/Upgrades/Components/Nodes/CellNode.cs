@@ -9,6 +9,8 @@ namespace Aspekt.Hex.Upgrades
     [Serializable]
     public class CellNode : Node
     {
+        public override int SortOrder => 100;
+
         private HexCell cell;
         
         public CellNode(HexCell cell)
@@ -38,14 +40,14 @@ namespace Aspekt.Hex.Upgrades
         {
             this.cell = cell;
             hash = GenerateHash(cell);
-            element = GetElement();
+            Element = GetElement();
         }
 
-        public override VisualElement GetElement()
+        public override TreeElement GetElement()
         {
-            if (element != null) return element;
+            if (Element.VisualElement != null) return Element;
             
-            element = new VisualElement();
+            var element = new VisualElement();
             element.AddToClassList("node");
 
             element.Add(new Label(cell.DisplayName));
@@ -55,8 +57,11 @@ namespace Aspekt.Hex.Upgrades
             element.style.left = position.x;
             
             element.AddManipulator(this);
+
+            Element.VisualElement = element;
+            Element.SortOrder = SortOrder;
             
-            return element;
+            return Element;
         }
     }
 }

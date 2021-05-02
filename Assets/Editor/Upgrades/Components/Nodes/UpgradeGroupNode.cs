@@ -11,6 +11,8 @@ namespace Aspekt.Hex.Upgrades
     [Serializable]
     public class UpgradeGroupNode : Node
     {
+        public override int SortOrder => 0;
+        
         private UpgradeAction action;
         
         private List<UpgradeSubNode> subNodes;
@@ -34,40 +36,53 @@ namespace Aspekt.Hex.Upgrades
         {
             this.action = action;
 
-            subNodes = new List<UpgradeSubNode>();
-            foreach (var upgrade in action.upgradeDetails)
+            if (subNodes == null)
             {
-                var subNode = new UpgradeSubNode(this, upgrade);
-                subNodes.Add(subNode);
-                subNode.OnEnter = OnEnteredSubNode;
-                subNode.OnLeave = OnLeftSubNode;
+                subNodes = new List<UpgradeSubNode>();
+                for (int i = 0; i < action.upgradeDetails.Length; i++)
+                {
+                    var subNode = new UpgradeSubNode(this, action.upgradeDetails[i], i);
+                    subNodes.Add(subNode);
+                    subNode.OnEnter = OnEnteredSubNode;
+                    subNode.OnLeave = OnLeftSubNode;
+                }
             }
             
             hash = GenerateHash(action);
-            element = GetElement();
+            Element = GetElement();
         }
 
-        public override VisualElement GetElement()
+        public override TreeElement GetElement()
         {
-            if (element != null) return element;
+            if (Element.VisualElement != null) return Element;
             
-            element = new VisualElement();
+            var element = new VisualElement();
             element.AddToClassList("node-group");
 
             element.Add(new Label(action.name));
             element.AddToClassList("node-upgrade");
             
-            foreach (var subNode in subNodes)
-            {
-                element.Add(subNode.GetElement());
-            }
-            
             element.style.top = position.y;
             element.style.left = position.x;
             
             element.AddManipulator(this);
+
+            Element.VisualElement = element;
+            Element.SortOrder = SortOrder;
             
-            return element;
+            Element.Children = new List<TreeElement>();
+            foreach (var subNode in subNodes)
+            {
+                var subElement = subNode.GetElement();
+                Element.Children.Add(new TreeElement()
+                {
+                    Parent = element,
+                    VisualElement = subElement.VisualElement,
+                    SortOrder = subElement.SortOrder,
+                });
+            }
+            
+            return Element;
         }
 
         public UpgradeSubNode GetSubNode(UpgradeAction.UpgradeDetails upgradeDetails)
@@ -78,13 +93,41 @@ namespace Aspekt.Hex.Upgrades
         public Technology GetSelectedTech() => activatingSubNode?.GetTechnology() ?? Technology.None;
         public UpgradeSubNode GetDependentSubNode() => lastSubNode;
 
+        public override Vector2 GetConnectingPosition(Vector2 fromPos)
+        {
+            var e = Element.VisualElement;
+            var pos = position;
+
+            var dist = pos - fromPos;
+            if (Mathf.Abs(dist.y) > Mathf.Abs(dist.x))
+            {
+                pos.x += e.layout.width / 2f;
+
+                if (fromPos.y > pos.y)
+                {
+                    pos.y += e.layout.height;
+                }
+            }
+            else
+            {
+                pos.y += 10f;
+            
+                if (fromPos.x > pos.x)
+                {
+                    pos.x += e.layout.width;
+                }
+            }
+
+            return pos;
+        }
+
         private void OnEnteredSubNode(Node node)
         {
             lastSubNode = (UpgradeSubNode) node;
-            if (isActivatingNewLink)
+            if (isActivatingNewLink && activatingSubNode == null)
             {
                 lastSubNode.ActivatingLinkStart();
-                element.RemoveFromClassList(ActivatingLinkClass);
+                Element.VisualElement.RemoveFromClassList(ActivatingLinkClass);
             }
         }
 
@@ -95,10 +138,10 @@ namespace Aspekt.Hex.Upgrades
                 lastSubNode = null;
             }
 
-            if (isActivatingNewLink)
+            if (isActivatingNewLink && activatingSubNode == null)
             {
                 node.ActivatingLinkEnd();
-                element.AddToClassList(ActivatingLinkClass);
+                Element.VisualElement.AddToClassList(ActivatingLinkClass);
             }
         }
 
@@ -126,6 +169,7 @@ namespace Aspekt.Hex.Upgrades
             if (activatingSubNode != null)
             {
                 activatingSubNode.ActivatingLinkEnd();
+                activatingSubNode = null;
             }
             else
             {

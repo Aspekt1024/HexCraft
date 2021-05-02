@@ -6,6 +6,8 @@ namespace Aspekt.Hex.Upgrades
 {
     public class ConnectionElement : VisualElement
     {
+        public int SortOrder = 10;
+        
         private readonly Node output;
         private readonly Node input;
         
@@ -20,8 +22,8 @@ namespace Aspekt.Hex.Upgrades
             
             generateVisualContent = (ctx) => DrawLine(
                 ctx,
-                output.GetOutputPosition(),
-                input.GetInputPosition(),
+                output.GetConnectingPosition(input.GetPosition()),
+                input.GetConnectingPosition(output.GetPosition()),
                 color,
                 thickness,
                 isGlowEnabled
@@ -102,18 +104,20 @@ namespace Aspekt.Hex.Upgrades
         {
             var mesh = ctx.Allocate( 3, 3 );
 
-            var halfLength = thickness * 2f;
+            var length = thickness * 4f;
             var width = thickness * 3f;
+
+            var distAlongLine = 1f;
             
             var dir = (endPos - startPos).normalized;
             var dist = (endPos - startPos).magnitude;
-            var center = new Vector3(startPos.x + dir.x * (dist * 0.5f - halfLength), startPos.y + dir.y * (dist * 0.5f - halfLength), Vertex.nearZ);
+            var center = new Vector3(startPos.x + dir.x * (dist * distAlongLine - length), startPos.y + dir.y * (dist * distAlongLine -  length), Vertex.nearZ);
             var normal = new Vector3(-dir.y, dir.x, 0f);
             
             var vertices = new Vertex[3];
             vertices[0].position = center + normal * width;
             vertices[1].position = center - normal * width;
-            vertices[2].position = new Vector3(center.x + dir.x * halfLength * 2f, center.y + dir.y * thickness * 4f, center.z);
+            vertices[2].position = new Vector3(center.x + dir.x * length, center.y + dir.y * length, center.z);
             
             vertices[0].tint = color;
             vertices[1].tint = color;

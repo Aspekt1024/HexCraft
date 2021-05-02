@@ -8,11 +8,16 @@ namespace Aspekt.Hex.Upgrades
 {
     public class UpgradeSubNode : Node
     {
+        public override int SortOrder { get; } = 90;
+        
+        private readonly int index;
+        
         private UpgradeGroupNode group;
         private UpgradeAction.UpgradeDetails upgrade;
 
-        public UpgradeSubNode(UpgradeGroupNode group, UpgradeAction.UpgradeDetails upgrade)
+        public UpgradeSubNode(UpgradeGroupNode group, UpgradeAction.UpgradeDetails upgrade, int index)
         {
+            this.index = index;
             MoveDisabled = true;
             Setup(group, upgrade);
         }
@@ -27,46 +32,60 @@ namespace Aspekt.Hex.Upgrades
         {
             this.group = group;
             this.upgrade = upgrade;
+            
             hash = GenerateHash(upgrade);
-            element = GetElement();
+            Element = GetElement();
         }
 
-        public override VisualElement GetElement()
+        public override TreeElement GetElement()
         {
-            if (element != null) return element;
+            if (Element.VisualElement != null) return Element;
 
-            element = new VisualElement { name = upgrade.title };
+            var element = new VisualElement { name = upgrade.title };
             element.AddToClassList("node-group-subnode");
             element.Add(new Label(upgrade.title));
 
+            Element.VisualElement = element;
+            Element.SortOrder = SortOrder + index;
+            
             element.AddManipulator(this);
-
-            return element;
+            
+            UpdatePosition();
+            
+            return Element;
         }
 
-
-        public override Vector2 GetInputPosition() => GetCenterPosition();
-        public override Vector2 GetOutputPosition() => GetCenterPosition();
-
-        private Vector2 GetCenterPosition()
+        public override Vector2 GetConnectingPosition(Vector2 fromPos)
         {
-            var groupElement = group.GetElement();
-            var left = groupElement.style.left.value.value;
-            var top = groupElement.style.top.value.value;
+            var e = Element.VisualElement;
+            var pos = group.GetPosition();
+            pos.x += e.layout.x;
+            pos.y += e.layout.y + e.layout.height / 2f;
             
-            var e = groupElement.Children().FirstOrDefault(v => v.name == upgrade.title);
-            if (e != null)
+            if (fromPos.x > pos.x)
             {
-                left += e.layout.x + e.layout.width / 2f;
-                top += e.layout.y + e.layout.height / 2f;
+                pos.x += e.layout.width;
             }
-
-            return new Vector2(left, top);
+            
+            return pos;
         }
 
         public void OnParentMoved()
         {
             OnMove?.Invoke();
+            UpdatePosition();
+        }
+
+        private void UpdatePosition()
+        {
+            position = group.GetPosition() + Element.VisualElement.layout.position;
+        }
+        
+        private VisualElement GetElementInParent()
+        {
+            var groupElement = group.GetElement().VisualElement;
+            var e = groupElement.Children().FirstOrDefault(v => v.name == upgrade.title);
+            return e;
         }
     }
 }

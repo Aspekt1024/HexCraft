@@ -55,11 +55,18 @@ namespace Aspekt.Hex.Upgrades
         private void Reset()
         {
             nodeRoot.Clear();
+            dependencyLinks.Clear();
             SetupData();
             UpdateTree();
         }
 
         private void UpdateTree()
+        {
+            ProcessAllNodeLogic();
+            ProcessAllNodeVisuals();
+        }
+
+        private void ProcessAllNodeLogic()
         {
             var allNodes = data.techTreeData.GetAllNodes();
             foreach (var node in allNodes) 
@@ -76,33 +83,54 @@ namespace Aspekt.Hex.Upgrades
                     ProcessAction(action, node);
                 }
             }
+        }
 
-            allNodes = data.techTreeData.GetAllNodes();
+        private void ProcessAllNodeVisuals()
+        {
+            var allElements = new List<TreeElement>();
+
+            var allNodes = data.techTreeData.GetAllNodes();
             foreach (var node in allNodes)
             {
                 if (!node.HasValidObject()) continue;
-                if (node is UpgradeGroupNode)
-                {
-                    // TODO want to add sub nodes afterwards
-                    nodeRoot.Add(node.GetElement());
-                }
-            }
-
-            // TODO this can be done better
-            foreach (var link in dependencyLinks)
-            {
-                nodeRoot.Add(link);
-            }
-            
-            foreach (var node in data.techTreeData.GetAllNodes())
-            {
-                if (!node.HasValidObject()) continue;
-                if (!(node is UpgradeGroupNode))
-                {
-                    nodeRoot.Add(node.GetElement());
-                }
+                
                 node.OnEnter = NodeEntered;
                 node.OnLeave = NodeLeft;
+
+                AddElementsToList(node.GetElement(), allElements);
+            }
+
+            foreach (var link in dependencyLinks)
+            {
+                allElements.Add(new TreeElement()
+                {
+                    VisualElement = link,
+                    SortOrder = link.SortOrder
+                });
+            }
+            
+            foreach (var element in allElements.OrderBy(e => e.SortOrder))
+            {
+                if (element.Parent == null)
+                {
+                    nodeRoot.Add(element.VisualElement);
+                }
+                else
+                {
+                    element.Parent.Add(element.VisualElement);
+                }
+            }
+        }
+
+        private static void AddElementsToList(TreeElement element, List<TreeElement> allElements)
+        {
+            allElements.Add(element);
+            
+            if (element.Children == null) return;
+            
+            foreach (var child in element.Children)
+            {
+                AddElementsToList(child, allElements);
             }
         }
 
