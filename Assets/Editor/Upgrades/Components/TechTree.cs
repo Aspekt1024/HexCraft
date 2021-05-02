@@ -138,11 +138,13 @@ namespace Aspekt.Hex.Upgrades
         {
             var dependencies = new List<Node>();
             
-            foreach (var buildAction in config.techConfig.buildActions)
+            foreach (var cellNode in data.techTreeData.GetCellNodes())
             {
-                if (techRequirements.Contains(buildAction.prefab.Technology))
+                var cell = cellNode.GetCell();
+                if (cell == null) continue;
+                if (techRequirements.Contains(cell.Technology))
                 {
-                    dependencies.Add(data.techTreeData.GetNode(buildAction));
+                    dependencies.Add(data.techTreeData.GetNode(cell));
                 }
             }
 

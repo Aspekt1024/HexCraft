@@ -7,8 +7,11 @@
     position: relative;
     
     background-color: #111111;
-    height: 1000px;
-    width: 1000px;
+    
+    min-width: 1000px;
+    min-height: 1000px;
+    height: 100%;
+    width: 100%;
 }
 
 .node {

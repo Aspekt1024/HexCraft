@@ -137,6 +137,7 @@ namespace Aspekt.Hex.Upgrades
             {
                 if (buildAction.techRequirements.Contains(tech)) return false;
                 buildAction.techRequirements.Add(tech);
+                EditorUtility.SetDirty(buildAction);
                 return true;
             }
             

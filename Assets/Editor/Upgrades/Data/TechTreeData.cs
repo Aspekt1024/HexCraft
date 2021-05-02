@@ -13,6 +13,8 @@ namespace Aspekt.Hex.Upgrades
         [SerializeField] private List<CellNode> cellNodes;
         [SerializeField] private List<UpgradeGroupNode> upgradeGroupNodes;
 
+        public List<CellNode> GetCellNodes() => cellNodes.ToList();
+        
         public List<Node> GetAllNodes()
         {
             var nodes = cellNodes.Select(n => n as Node).ToList();
