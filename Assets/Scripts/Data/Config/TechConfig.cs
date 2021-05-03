@@ -12,13 +12,15 @@ namespace Aspekt.Hex.Config
         public BuildAction[] buildActions;
         
         private readonly Dictionary<Technology, UpgradeAction.UpgradeDetails> techDict = new Dictionary<Technology, UpgradeAction.UpgradeDetails>();
-
-        private readonly HashSet<Technology> buildingTech = new HashSet<Technology>
+        private readonly HashSet<Technology> buildingTech = new HashSet<Technology>();
+        
+        public void Init(List<HexCell> cellPrefabs)
         {
-            Technology.Farm,
-            Technology.Barracks,
-            Technology.Blacksmith,
-        };
+            foreach (var cell in cellPrefabs)
+            {
+                buildingTech.Add(cell.Technology);
+            }
+        }
 
         public bool IsBuildingTech(Technology tech) => buildingTech.Contains(tech);
         

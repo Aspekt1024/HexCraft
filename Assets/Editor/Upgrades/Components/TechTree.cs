@@ -154,7 +154,14 @@ namespace Aspekt.Hex.Upgrades
                 {
                     if (techRequirements.Contains(upgrade.tech))
                     {
-                        dependencies.Add(data.techTreeData.GetNode(upgradeAction));
+                        var upgradeGroupNode = data.techTreeData.GetNode(upgradeAction) as UpgradeGroupNode;
+                        if (upgradeGroupNode == null)
+                        {
+                            Debug.LogError($"upgrade action {upgradeAction} did not produce {nameof(UpgradeGroupNode)}");
+                            continue;
+                        }
+                        var upgradeNode = upgradeGroupNode.GetSubNode(upgrade);
+                        dependencies.Add(upgradeNode);
                     }
                 }
             }
@@ -257,16 +264,16 @@ namespace Aspekt.Hex.Upgrades
         {
             if (startNode != null)
             {
-                startNode.ActivatingLinkEnd();
                 if (lastNode != null)
                 {
-                    lastNode.ActivatingLinkEnd();
                     var success = NodeDependencies.CreateDependency(startNode, lastNode, config.techConfig, mode);
                     if (success)
                     {
                         UpdateContents();
                     }
+                    lastNode.ActivatingLinkEnd();
                 }
+                startNode.ActivatingLinkEnd();
                 startNode = null;
             }
             

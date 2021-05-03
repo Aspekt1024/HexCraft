@@ -325,14 +325,15 @@ namespace Aspekt.Hex.Upgrades
         
         private void SetupData()
         {
-            playerData = new PlayerData(null);
-
             var game = Object.FindObjectOfType<GameManager>();
             var config = InspectorUtil.GetPrivateValue<GameConfig, GameManager>("config", game);
+            var cells = Object.FindObjectOfType<Cells>();
+            
+            config.Init(cells);
+            playerData = new PlayerData(null);
             
             playerData.Init(config);
             
-            var cells = Object.FindObjectOfType<Cells>();
             var homeCell = (BuildingCell)cells.GetPrefab(Cells.CellTypes.Base);
             buildings.Add(homeCell);
             

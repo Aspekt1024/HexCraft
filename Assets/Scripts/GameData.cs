@@ -57,6 +57,7 @@ namespace Aspekt.Hex
         {
             this.game = game;
             Config = config;
+            config.Init(game.Cells);
             playerData.ForEach(d =>
             {
                 d.Init(config);

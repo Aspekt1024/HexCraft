@@ -351,19 +351,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee2f8715ca8a449a995fbb27c896d3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  home: {fileID: 7880173819020327077, guid: c931da40c5ee4484784f4c4812828644, type: 3}
-  training: {fileID: 1312393799163408318, guid: 1e8f7e0b158b67f4db0523ec6c6c8535,
-    type: 3}
-  income: {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
-  blacksmith: {fileID: 9196783149601408105, guid: 6eda4cb626c73354eb0a612f89828650,
-    type: 3}
-  stables: {fileID: -6701571572801982158, guid: 3773372c4a09d7646bbece41e6e3655b,
-    type: 3}
-  market: {fileID: 2081058377881746019, guid: 0c41338fc3bfab743a0bdddfd417640f, type: 3}
-  meleeUnit: {fileID: 3856654945942102754, guid: a6461c4f62e2fd64893e91336eee2050,
-    type: 3}
-  magicUnit: {fileID: 7132414103651887016, guid: 0d5376899dea16f4884d31632ab65d61,
-    type: 3}
+  cellPrefabs:
+  - {fileID: 7132414103651887016, guid: 0d5376899dea16f4884d31632ab65d61, type: 3}
+  - {fileID: 3856654945942102754, guid: a6461c4f62e2fd64893e91336eee2050, type: 3}
+  - {fileID: 9196783149601408105, guid: 6eda4cb626c73354eb0a612f89828650, type: 3}
+  - {fileID: 7880173819020327077, guid: c931da40c5ee4484784f4c4812828644, type: 3}
+  - {fileID: 2798176205286681153, guid: ac294f4a4243251499a2e70d2c569122, type: 3}
+  - {fileID: 2081058377881746019, guid: 0c41338fc3bfab743a0bdddfd417640f, type: 3}
+  - {fileID: -6701571572801982158, guid: 3773372c4a09d7646bbece41e6e3655b, type: 3}
+  - {fileID: 1312393799163408318, guid: 1e8f7e0b158b67f4db0523ec6c6c8535, type: 3}
   pathIndicator: {fileID: 1324900828}
   indicator: {fileID: 5150164558244077247, guid: 57a53a2b667dedf43ae5789a5fde2e59,
     type: 3}

@@ -17,16 +17,18 @@ namespace Aspekt.Hex.Upgrades
             switch (from)
             {
                 case CellNode fromCell:
-                    if (to is UpgradeGroupNode toUpgrade)
+                    switch (to)
                     {
-                        return HandleUpgradeDependency(fromCell.GetCell(), toUpgrade, techConfig, mode);
-                    }
-                    else
-                    {
-                        return HandleCellActionModification(fromCell.GetCell(), to.GetAction(techConfig), mode);
+                        case UpgradeGroupNode toUpgrade:
+                            return HandleUpgradeDependency(fromCell.GetCell(), toUpgrade, techConfig, mode);
+                        case CellNode _:
+                            return HandleCellActionModification(fromCell.GetCell(), to.GetAction(techConfig), mode);
+                        default:
+                            Debug.LogWarning($"Unhandled dependency creation: cell node to {to}");
+                            return false;
                     }
                 case UpgradeGroupNode upgradeGroupNode:
-                    return HandleUpgradeModification(upgradeGroupNode, to.GetAction(techConfig), mode);
+                    return HandleUpgradeDependencyModification(upgradeGroupNode, to.GetAction(techConfig), mode);
                 default:
                     Debug.LogWarning($"Unhandled dependency creation: {from}");
                     return false;
@@ -79,7 +81,7 @@ namespace Aspekt.Hex.Upgrades
             }
         }
 
-        private static bool HandleUpgradeModification(UpgradeGroupNode group, ActionDefinition action, UpgradeDependencyMode mode)
+        private static bool HandleUpgradeDependencyModification(UpgradeGroupNode group, ActionDefinition action, UpgradeDependencyMode mode)
         {
             var tech = group.GetSelectedTech();
             if (tech == Technology.None) return false;

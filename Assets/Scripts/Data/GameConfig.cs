@@ -11,6 +11,11 @@ namespace Aspekt.Hex
 
         public TechConfig techConfig;
 
+        public void Init(Cells cells)
+        {
+            techConfig.Init(cells.GetAllPrefabs());
+        }
+        
         public UpgradeAction.UpgradeDetails GetUpgradeDetails(Technology tech)
         {
             return techConfig.GetDetails(tech);

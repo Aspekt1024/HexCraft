@@ -29,17 +29,7 @@ namespace Aspekt.Hex
         }
         
 #pragma warning disable 649
-        [Header("Buildings")]
-        [SerializeField] private HomeCell home;
-        [SerializeField] private TrainingCell training;
-        [SerializeField] private IncomeCell income;
-        [SerializeField] private BlacksmithCell blacksmith;
-        [SerializeField] private StablesCell stables;
-        [SerializeField] private MarketCell market;
-        
-        [Header("Units")]
-        [SerializeField] private HexCell meleeUnit;
-        [SerializeField] private HexCell magicUnit;
+        [SerializeField] private List<HexCell> cellPrefabs;
 
         [Header("Display")]
         [SerializeField] private PathIndicator pathIndicator;
@@ -48,6 +38,7 @@ namespace Aspekt.Hex
 #pragma warning restore 649
 
         public List<HexCell> AllCells => allCells.Values.ToList();
+        public List<HexCell> GetAllPrefabs() => cellPrefabs;
         private readonly Dictionary<int, HexCell> allCells = new Dictionary<int, HexCell>();
         private int lastCellIndex;
 
@@ -216,28 +207,12 @@ namespace Aspekt.Hex
 
         public HexCell GetPrefab(CellTypes type)
         {
-            switch (type)
+            var cell = cellPrefabs.FirstOrDefault(c => c.cellType == type);
+            if (cell == null)
             {
-                case CellTypes.Base:
-                    return home;
-                case CellTypes.Training:
-                    return training;
-                case CellTypes.Income:
-                    return income;
-                case CellTypes.MeleeUnit:
-                    return meleeUnit;
-                case CellTypes.MageUnit:
-                    return magicUnit;
-                case CellTypes.Blacksmith:
-                    return blacksmith;
-                case CellTypes.Market:
-                    return market;
-                case CellTypes.Stables:
-                    return stables;
-                default:
-                    Debug.LogError("invalid cell type: " + type);
-                    return null;
+                Debug.LogError($"Invalid cell type: {type}");
             }
+            return cell;
         }
 
         private HexCell CreateCell(CellTypes type)
