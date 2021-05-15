@@ -4,7 +4,6 @@ using System.Linq;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Util;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 

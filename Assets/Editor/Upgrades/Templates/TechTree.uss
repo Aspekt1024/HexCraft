@@ -112,3 +112,15 @@
 .node-newlink {
     background-color: red;
 }
+
+.node-steps {
+    position: absolute;
+    top: 0;
+    right: 0;
+    
+    margin: 1px;
+}
+
+.node-steps Label {
+    color: #ffffff;
+}

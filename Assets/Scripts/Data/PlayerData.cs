@@ -37,5 +37,29 @@ namespace Aspekt.Hex
             TechnologyData.AddTechnology(tech);
             techObservers.ForEach(o => o.OnTechAdded(Player, tech));
         }
+
+        public PlayerData Clone()
+        {
+            var playerDataCopy = new PlayerData(Player)
+            {
+                TurnNumber = TurnNumber,
+                TechnologyData = TechnologyData.Clone(), 
+            };
+
+            playerDataCopy.CurrencyData = new CurrencyData(playerDataCopy)
+            {
+                Supplies = CurrencyData.Supplies,
+                MaxProduction = CurrencyData.MaxProduction
+            };
+
+            return playerDataCopy;
+        }
+
+        public bool HasSameData(PlayerData data)
+        {
+            return data.CurrencyData.Supplies == CurrencyData.Supplies
+                   && data.CurrencyData.MaxProduction == CurrencyData.MaxProduction
+                   && data.TechnologyData.IsEqual(TechnologyData);
+        }
     }
 }

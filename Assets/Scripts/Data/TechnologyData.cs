@@ -58,5 +58,20 @@ namespace Aspekt.Hex
             }
             return Technology.None;
         }
+
+        public TechnologyData Clone()
+        {
+            var techDataCopy = new TechnologyData(config);
+            foreach (var upgrade in upgrades)
+            {
+                techDataCopy.AddTechnology(upgrade);
+            }
+            return techDataCopy;
+        }
+
+        public bool IsEqual(TechnologyData data)
+        {
+            return data.upgrades.Count == upgrades.Count && data.upgrades.All(u => upgrades.Contains(u));
+        }
     }
 }
