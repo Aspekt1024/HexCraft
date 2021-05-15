@@ -56,6 +56,7 @@ namespace Aspekt.Hex.Upgrades
         {
             nodeRoot.Clear();
             dependencyLinks.Clear();
+            data.techTreeData.ClearVisualData();
             SetupData();
             UpdateTree();
         }

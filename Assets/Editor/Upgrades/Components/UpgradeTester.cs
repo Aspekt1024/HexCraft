@@ -234,51 +234,12 @@ namespace Aspekt.Hex.Upgrades
 
         private Button CreateButton(string label, Cost cost, Action onClick, Action<Cost> costUpdateAction, bool isResearched)
         {
-            var btn = new Button { text = label };
+            var btn = new Button();
             btn.AddToClassList("action-button");
-
+            btn.Add(new Label(label));
+            
             var canAfford = playerData.CurrencyData.CanAfford(cost);
-
-            var costDisplay = new VisualElement();
-            costDisplay.AddToClassList("action-cost");
-            var suppliesCost = new LongField(3) {value = cost.supplies};
-            suppliesCost.RegisterValueChangedCallback(
-                newSupplies => costUpdateAction.Invoke(new Cost()
-                {
-                    production = cost.production,
-                    supplies = (int) newSupplies.newValue
-                }));
-            suppliesCost.AddToClassList("cost-field");
-            
-            var productionCost = new LongField(3) {value = cost.production};
-            productionCost.RegisterValueChangedCallback(
-                newProduction => costUpdateAction.Invoke(new Cost()
-                {
-                    production = (int) newProduction.newValue,
-                    supplies = cost.supplies
-                }));
-            productionCost.AddToClassList("cost-field");
-            
-            costDisplay.Add(suppliesCost);
-            costDisplay.Add(new Label("s "));
-            costDisplay.Add(productionCost);
-            costDisplay.Add(new Label("p"));
-            
-            if (isResearched)
-            {
-                costDisplay.AddToClassList("action-cost-researched");
-                btn.AddToClassList("action-button-researched");
-            }
-            else if (!canAfford)
-            {
-                costDisplay.AddToClassList("action-cost-unaffordable");
-                btn.AddToClassList("action-button-unaffordable");
-            }
-            else
-            {
-                costDisplay.AddToClassList("action-cost-purchasable");
-            }
-
+            var costDisplay = NodeUtil.CreateCostField(cost, costUpdateAction, isResearched, canAfford);
             btn.Add(costDisplay);
             if (!isResearched && canAfford)
             {

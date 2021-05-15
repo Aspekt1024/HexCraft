@@ -111,10 +111,10 @@ namespace Aspekt.Hex.Upgrades
             var actionList = ((ActionDefinition[]) fieldInfo.GetValue(cell)).ToList();
             if (actionList.Contains(action)) return false;
             
+            Undo.RecordObject(cell, "Add cell action");
             actionList.Add(action);
             fieldInfo.SetValue(cell, actionList.ToArray());
             
-            EditorUtility.SetDirty(cell);
             return true;
         }
 
@@ -126,10 +126,10 @@ namespace Aspekt.Hex.Upgrades
             var actionList = ((ActionDefinition[]) fieldInfo.GetValue(cell)).ToList();
             if (!actionList.Contains(action)) return false;
             
+            Undo.RecordObject(cell, "Remove cell action");
             actionList.Remove(action);
             fieldInfo.SetValue(cell, actionList.ToArray());
             
-            EditorUtility.SetDirty(cell);
             return true;
         }
 
@@ -138,8 +138,8 @@ namespace Aspekt.Hex.Upgrades
             if (action is BuildAction buildAction)
             {
                 if (buildAction.techRequirements.Contains(tech)) return false;
+                Undo.RecordObject(buildAction, "Add tech requirement");
                 buildAction.techRequirements.Add(tech);
-                EditorUtility.SetDirty(buildAction);
                 return true;
             }
             
@@ -154,6 +154,7 @@ namespace Aspekt.Hex.Upgrades
             if (action is BuildAction buildAction)
             {
                 if (!buildAction.techRequirements.Contains(tech)) return false;
+                Undo.RecordObject(buildAction, "Remove tech requirement");
                 buildAction.techRequirements.Remove(tech);
                 return true;
             }
@@ -173,10 +174,10 @@ namespace Aspekt.Hex.Upgrades
                     var details = action.upgradeDetails[i];
                     if (details.requiredTech.Contains(requiredTech)) return false;
                     
+                    Undo.RecordObject(action, "Add tech requirement");
                     details.requiredTech.Add(requiredTech);
                     action.upgradeDetails[i] = details;
                     
-                    EditorUtility.SetDirty(action);
                     return true;
                 }
             }
@@ -192,10 +193,10 @@ namespace Aspekt.Hex.Upgrades
                     var details = action.upgradeDetails[i];
                     if (!details.requiredTech.Contains(requiredTech)) return false;
                     
+                    Undo.RecordObject(action, "Remove tech requirement");
                     details.requiredTech.Remove(requiredTech);
                     action.upgradeDetails[i] = details;
                     
-                    EditorUtility.SetDirty(action);
                     return true;
                 }
             }

@@ -96,6 +96,12 @@ namespace Aspekt.Hex.Upgrades
             }
         }
 
+        public void ClearVisualData()
+        {
+            cellNodes.ForEach(n => n.ClearElement());
+            upgradeGroupNodes.ForEach(n => n.ClearElement());
+        }
+
         private T GetNodeFromHash<T>(int hash) where T : Node
         {
             var allNodes = GetAllNodes();

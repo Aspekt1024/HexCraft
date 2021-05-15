@@ -1,6 +1,7 @@
 using System;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Config;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -51,6 +52,8 @@ namespace Aspekt.Hex.Upgrades
             element.AddToClassList("node");
 
             element.Add(new Label(cell.DisplayName));
+            var costField = NodeUtil.CreateCostField(cell.Cost, OnCostUpdated);
+            element.Add(costField);
             element.AddToClassList(cell is UnitCell ? "node-unit" : "node-building");
             
             element.style.top = position.y;
@@ -62,6 +65,12 @@ namespace Aspekt.Hex.Upgrades
             Element.SortOrder = SortOrder;
             
             return Element;
+        }
+
+        private void OnCostUpdated(Cost newCost)
+        {
+            Undo.RecordObject(cell, "Upgrade cell cost");
+            cell.Cost = newCost;
         }
     }
 }

@@ -70,29 +70,3 @@
     
     margin-left: 3px;
 }
-
-.action-cost
-{
-    display: flex;
-    flex-direction: row;
-    height: 23px;
-    margin-top: 15px;
-}
-
-.cost-field {
-    width: 30px;
-    height: 17px;
-    color: white;
-}
-
-.action-cost-purchasable Label {
-    color: black;
-}
-
-.action-cost-unaffordable Label {
-    color: black;
-}
-
-.action-cost-researched Label {
-    color: black;
-}

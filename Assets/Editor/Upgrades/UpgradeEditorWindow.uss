@@ -54,3 +54,31 @@ Label {
     border-width: 1px;
     border-color: gray;
 }
+
+/* Cost field styles */
+.action-cost
+{
+    display: flex;
+    flex-direction: row;
+    height: 23px;
+    width: 100px;
+    margin: auto;
+}
+
+.cost-field {
+    width: 30px;
+    height: 17px;
+    color: white;
+}
+
+.action-cost-purchasable Label {
+    color: black;
+}
+
+.action-cost-unaffordable Label {
+    color: black;
+}
+
+.action-cost-researched Label {
+    color: black;
+}

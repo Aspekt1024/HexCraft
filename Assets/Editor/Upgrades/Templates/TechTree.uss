@@ -28,6 +28,12 @@
     -unity-text-align: middle-center;
 }
 
+.node Label {
+    color: whitesmoke;
+    -unity-font-style: bold;
+    font-size: 12px;
+}
+
 .node-group {
     position: absolute;
     
@@ -101,14 +107,6 @@
 .node-upgrade.node-dragged {
     border-color: #d6aae7;
     background-color: #9c57d4;
-}
-
-.node Label {
-    color: whitesmoke;
-    -unity-font-style: bold;
-    font-size: 12px;
-    
-    height: 37px;
 }
 
 .node-newlink {

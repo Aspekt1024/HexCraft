@@ -43,6 +43,11 @@ namespace Aspekt.Hex.Upgrades
         protected bool MoveDisabled;
 
         public int GetHash() => hash;
+
+        public void ClearElement()
+        {
+            Element.VisualElement = null;
+        }
         
         public abstract object GetObject();
         public abstract ActionDefinition GetAction(TechConfig techConfig);
