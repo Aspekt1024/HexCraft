@@ -1,0 +1,63 @@
+.object-viewer {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    
+    width: 250px;
+    height: 300px;
+    
+    background-color: black;
+    border-color: gray;
+    border-width: 2px;
+    border-radius: 3px;
+}
+
+.object-viewer-contents {
+    min-height: 296px;
+}
+
+.object-header {
+    -unity-font-style: bold;
+    font-size: 20px;
+}
+
+.calc-button {
+    position: absolute;
+    
+    height: 20px;
+    
+    top: 2px;
+    right: 2px;
+}
+
+.plan-step {
+    display: flex;
+    flex-direction: row;
+    
+    margin: 1px;
+    border-color: #58be58;
+    background-color: #c3fcc9;
+    border-width: 1px;
+    color: black;
+}
+
+.plan-step-action {
+    color: black;
+    width: 150px;
+}
+
+.plan-step-currency {
+    border-color: #40a740;
+    background-color: #79be81;
+    color: black;
+    width: 100%;
+}
+
+.plan-step-nextturn {
+    border-color: #be7c58;
+    background-color: #f1bf73;
+}
+
+.node-steps Label {
+    color: #ffffff;
+}

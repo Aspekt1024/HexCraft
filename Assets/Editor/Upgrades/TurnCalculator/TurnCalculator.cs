@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Util;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Aspekt.Hex.Upgrades
 {
@@ -16,10 +18,7 @@ namespace Aspekt.Hex.Upgrades
         
         private HexCell targetCell;
 
-        private static readonly HashSet<Cells.CellTypes> availableCellTypes = new HashSet<Cells.CellTypes>
-        {
-            Cells.CellTypes.Stables,
-        };
+        private Queue<TurnCalculatorNode> gamePlan;
         
         public TurnCalculator()
         {
@@ -29,43 +28,31 @@ namespace Aspekt.Hex.Upgrades
             config.Init(cells);
         }
         
-        public int CalculateNumSteps(HexCell cell)
+        public void QueueCalculation(HexCell cell, Action onCompleteCallback)
         {
-            if (!availableCellTypes.Contains(cell.cellType)) return -1;
+            gamePlan = null;
+            if (cell == null) return;
             
             var homeCell = (BuildingCell)cells.GetPrefab(Cells.CellTypes.Base);
             var playerData = CreatePlayerData(homeCell as HomeCell);
             var buildings = new List<BuildingCell> { homeCell };
 
-            if (cell is BuildingCell buildingCell && buildings.Contains(buildingCell)) return 0;
-            if (playerData.TechnologyData.HasTechnology(cell.Technology)) return 0;
+            if (cell is BuildingCell buildingCell && buildings.Contains(buildingCell)) return;
+            if (playerData.TechnologyData.HasTechnology(cell.Technology)) return;
 
             openSet.Clear();
             closedSet.Clear();
             targetCell = cell;
             
             openSet.Add(new TurnCalculatorNode(playerData, buildings));
-            var gamePlan = GetGamePlan();
-
-            if (gamePlan == null)
-            {
-                return -1;
-            }
-
-            var actions = "";
-            var turnNumber = 0;
-            while (gamePlan.Any())
-            {
-                var node = gamePlan.Dequeue();
-                turnNumber = node.PlayerData.TurnNumber;
-                actions += node.Action + ", ";
-            }
+            gamePlan = CalculateGamePlan();
             
-            Debug.Log(actions);
-            return turnNumber - 1;
+            onCompleteCallback?.Invoke();
         }
 
-        private Queue<TurnCalculatorNode> GetGamePlan()
+        public Queue<TurnCalculatorNode> GetCalculatedPlan() => gamePlan;
+
+        private Queue<TurnCalculatorNode> CalculateGamePlan()
         {
             var iterations = 0;
             while (openSet.Any())

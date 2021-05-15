@@ -56,16 +56,6 @@ namespace Aspekt.Hex.Upgrades
             element.Add(new Label(cell.DisplayName));
             var costField = NodeUtil.CreateCostField(cell.Cost, OnCostUpdated);
             element.Add(costField);
-
-            var calc = new TurnCalculator();
-            var numSteps = calc.CalculateNumSteps(cell);
-            if (numSteps > 0)
-            {
-                var stepLabel = new VisualElement();
-                stepLabel.AddToClassList("node-steps");
-                stepLabel.Add(new Label(numSteps.ToString()));
-                element.Add(stepLabel);
-            }
             
             element.AddToClassList(cell is UnitCell ? "node-unit" : "node-building");
             

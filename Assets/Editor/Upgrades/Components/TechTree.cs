@@ -14,6 +14,7 @@ namespace Aspekt.Hex.Upgrades
         private readonly UpgradeEditor editor;
         private readonly UpgradeEditorData data;
         private TechTreeContainer container;
+        private ObjectViewer objectViewer;
 
         public override string Title => "Tech Tree";
 
@@ -47,6 +48,8 @@ namespace Aspekt.Hex.Upgrades
             nodeRoot = container.GetElement();
             container.RegisterSingleObserver(this);
             scrollView.Add(nodeRoot);
+            
+            objectViewer = new ObjectViewer(scrollView);
 
             SetupData();
             UpdateTree();
@@ -57,6 +60,7 @@ namespace Aspekt.Hex.Upgrades
             nodeRoot.Clear();
             dependencyLinks.Clear();
             data.techTreeData.ClearVisualData();
+            objectViewer.UpdateContents();
             SetupData();
             UpdateTree();
         }
@@ -254,6 +258,10 @@ namespace Aspekt.Hex.Upgrades
         {
             if (lastNode != null)
             {
+                if (lastNode is CellNode cellNode)
+                {
+                    objectViewer.ShowNodeDetails(cellNode.GetCell());
+                }
                 startNode = lastNode;
                 startNode.ActivatingLinkStart();
                 depLine = new ConnectionElement(this, mousePos, Color.yellow, 2f, true);

@@ -1,0 +1,7 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement name="ObjectViewer" class="object-viewer">
+        <ScrollView show-vertical-scroller="true">
+            <VisualElement name="ObjectContents" class="object-viewer-contents" />
+        </ScrollView>
+    </VisualElement>
+</UXML>

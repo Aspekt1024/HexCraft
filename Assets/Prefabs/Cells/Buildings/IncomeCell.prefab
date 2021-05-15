@@ -58,7 +58,7 @@ MonoBehaviour:
   DisplayName: Farm
   Cost:
     production: 0
-    supplies: 10
+    supplies: 7
   MaxHP: 2
   BasicDescription: Generates 1 food per round, at the start of your turn.
   Coordinates:
@@ -69,7 +69,7 @@ MonoBehaviour:
   ID: 0
   renderers:
   - {fileID: 4694660904767215729}
-  production: 3
+  production: 7
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
