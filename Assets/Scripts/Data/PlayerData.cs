@@ -49,7 +49,8 @@ namespace Aspekt.Hex
             playerDataCopy.CurrencyData = new CurrencyData(playerDataCopy)
             {
                 Supplies = CurrencyData.Supplies,
-                MaxProduction = CurrencyData.MaxProduction
+                MaxProduction = CurrencyData.MaxProduction,
+                UtilisedProduction = CurrencyData.UtilisedProduction,
             };
 
             return playerDataCopy;

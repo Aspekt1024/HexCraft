@@ -57,10 +57,29 @@ namespace Aspekt.Hex.Upgrades
             {
                 var turnIndication = new VisualElement();
                 var stepContainer = new VisualElement();
-                var turnNumber = 0;
+                var turnNumber = 1;
                 while (gamePlan.Any())
                 {
                     var node = gamePlan.Dequeue();
+                    var numTurnsSinceLastAction = node.PlayerData.TurnNumber - turnNumber;
+                    
+                    for (int i = 0; i < numTurnsSinceLastAction; i++)
+                    {
+                        var nextTurnAction = new VisualElement();
+                        nextTurnAction.AddToClassList("plan-step");
+                        var nextTurnLabel = new Label("Next turn");
+                        nextTurnLabel.AddToClassList("plan-step-action");
+                        nextTurnLabel.AddToClassList("plan-step-nextturn");
+                        nextTurnAction.Add(nextTurnLabel);
+
+                        var runningSupplies = node.InitialSupplies + node.SuppliesPerTurn * (i + 1);
+                        var currencyLabel = new Label($"{runningSupplies}s {node.InitialProduction}p");
+                        currencyLabel.AddToClassList("plan-step-currency");
+                        nextTurnAction.Add(currencyLabel);
+                        
+                        stepContainer.Add(nextTurnAction);
+                    }
+                    
                     turnNumber = node.PlayerData.TurnNumber;
                     
                     var planStep = new VisualElement();
@@ -68,13 +87,9 @@ namespace Aspekt.Hex.Upgrades
                     
                     var action = new Label(node.Action);
                     action.AddToClassList("plan-step-action");
-                    if (node.Action == "Next Turn")
-                    {
-                        action.AddToClassList("plan-step-nextturn");
-                    }
                     planStep.Add(action);
-                    var supplies = node.PlayerData.CurrencyData.Supplies.ToString();
-                    var production = node.PlayerData.CurrencyData.AvailableProduction.ToString();
+                    var supplies = node.PlayerData.CurrencyData.Supplies;
+                    var production = node.PlayerData.CurrencyData.AvailableProduction;
                     var currency = new Label($"{supplies}s {production}p");
                     currency.AddToClassList("plan-step-currency");
                     planStep.Add(currency);

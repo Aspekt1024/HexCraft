@@ -129,7 +129,6 @@ namespace Aspekt.Hex.Upgrades
             {
                 foreach (var action in building.Actions)
                 {
-                    if (!(targetCell is UnitCell) && action is BuildAction {prefab: UnitCell _}) continue;
                     var newNode = TryCreateNewNode(node, action);
                     if (newNode != null)
                     {
@@ -138,7 +137,6 @@ namespace Aspekt.Hex.Upgrades
                 }
             }
             
-            neighbours.Add(new TurnCalculatorNode(node, 1));
             return neighbours;
         }
 
@@ -149,28 +147,51 @@ namespace Aspekt.Hex.Upgrades
                 if (origin.Buildings.Contains(buildAction.prefab)) return null;
                 if (origin.PlayerData.TechnologyData.HasTechnology(buildAction.prefab.Technology)) return null;
                 if (!origin.PlayerData.TechnologyData.HasTechnologies(buildAction.techRequirements)) return null;
-                if (!origin.PlayerData.CurrencyData.CanAfford(buildAction.prefab.Cost)) return null;
 
-                return new TurnCalculatorNode(origin, buildAction.prefab);
+                var turnCount = GetTurnsUntilAffordable(origin, buildAction.prefab.Cost);
+                if (turnCount < 0) return null;
+                
+                return new TurnCalculatorNode(origin, buildAction.prefab, turnCount);
             }
             else if (action is UpgradeAction upgradeAction)
             {
+                UpgradeAction.UpgradeDetails nextUpgrade;
                 try
                 {
-                    var nextUpgrade = upgradeAction.upgradeDetails.First(u => !origin.PlayerData.TechnologyData.HasTechnology(u.tech));
-                    if (origin.PlayerData.TechnologyData.HasTechnology(nextUpgrade.tech)) return null;
-                    if (!origin.PlayerData.TechnologyData.HasTechnologies(nextUpgrade.requiredTech)) return null;
-                    if (!origin.PlayerData.CurrencyData.CanAfford(nextUpgrade.cost)) return null;
-
-                    return new TurnCalculatorNode(origin, nextUpgrade);
+                    nextUpgrade = upgradeAction.upgradeDetails.First(u => !origin.PlayerData.TechnologyData.HasTechnology(u.tech));
                 }
                 catch
                 {
-                    
+                    return null;
                 }
+                
+                if (origin.PlayerData.TechnologyData.HasTechnology(nextUpgrade.tech)) return null;
+                if (!origin.PlayerData.TechnologyData.HasTechnologies(nextUpgrade.requiredTech)) return null;
+                    
+                var turnCount = GetTurnsUntilAffordable(origin, nextUpgrade.cost);
+                if (turnCount < 0) return null;
+
+                return new TurnCalculatorNode(origin, nextUpgrade, turnCount);
             }
 
             return null;
+        }
+
+        private static int GetTurnsUntilAffordable(TurnCalculatorNode node, Cost cost)
+        {
+            if (node.PlayerData.CurrencyData.CanAfford(cost)) return 0;
+            if (node.PlayerData.CurrencyData.AvailableProduction < cost.production) return -1;
+            
+            var suppliers = Cells.GetSuppliers(node.Buildings.Select(b => b as HexCell).ToList());
+            var suppliesPerTurn = suppliers.Sum(c => c.GetSupplies(node.PlayerData));
+
+            var requiredSupplies = cost.supplies - node.PlayerData.CurrencyData.Supplies;
+            var numTurns = Mathf.CeilToInt((float)requiredSupplies / suppliesPerTurn);
+                
+            const float maxTurnCount = 10;
+            if (numTurns > maxTurnCount) return -1;
+
+            return numTurns;
         }
 
         private PlayerData CreatePlayerData(HomeCell homeCell)
