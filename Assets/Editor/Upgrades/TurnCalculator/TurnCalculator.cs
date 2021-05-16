@@ -106,16 +106,7 @@ namespace Aspekt.Hex.Upgrades
 
         private void AddToOpenSet(TurnCalculatorNode node)
         {
-            var consecutiveNextTurns = 0;
-            var prevNode = node;
-            while (prevNode.PreviousNode != null && prevNode.PreviousNode.PlayerData.TurnNumber < prevNode.PlayerData.TurnNumber)
-            {
-                prevNode = prevNode.PreviousNode;
-                consecutiveNextTurns++;
-                if (consecutiveNextTurns > 2) return;
-            }
-            
-            if (node.PlayerData.TurnNumber > 12) return;
+            if (node.PlayerData.TurnNumber > 50) return;
             
             if (openSet.Any(openNode => openNode.IsEqual(node) && openNode.F < node.F)) return;
             if (closedSet.Any(closedNode => closedNode.IsEqual(node) && closedNode.F < node.F)) return;
@@ -151,7 +142,7 @@ namespace Aspekt.Hex.Upgrades
                 var turnCount = GetTurnsUntilAffordable(origin, buildAction.prefab.Cost);
                 if (turnCount < 0) return null;
                 
-                return new TurnCalculatorNode(origin, buildAction.prefab, turnCount);
+                return new TurnCalculatorNode(origin, buildAction.prefab, turnCount, targetCell.Cost);
             }
             else if (action is UpgradeAction upgradeAction)
             {
@@ -171,7 +162,7 @@ namespace Aspekt.Hex.Upgrades
                 var turnCount = GetTurnsUntilAffordable(origin, nextUpgrade.cost);
                 if (turnCount < 0) return null;
 
-                return new TurnCalculatorNode(origin, nextUpgrade, turnCount);
+                return new TurnCalculatorNode(origin, nextUpgrade, turnCount, targetCell.Cost);
             }
 
             return null;
@@ -184,6 +175,7 @@ namespace Aspekt.Hex.Upgrades
             
             var suppliers = Cells.GetSuppliers(node.Buildings.Select(b => b as HexCell).ToList());
             var suppliesPerTurn = suppliers.Sum(c => c.GetSupplies(node.PlayerData));
+            if (suppliesPerTurn <= 0) return -1;
 
             var requiredSupplies = cost.supplies - node.PlayerData.CurrencyData.Supplies;
             var numTurns = Mathf.CeilToInt((float)requiredSupplies / suppliesPerTurn);

@@ -101,6 +101,7 @@ namespace Aspekt.Hex.Upgrades
                 
                 node.OnEnter = NodeEntered;
                 node.OnLeave = NodeLeft;
+                node.OnClick = NodeClicked;
 
                 AddElementsToList(node.GetElement(), allElements);
             }
@@ -258,10 +259,6 @@ namespace Aspekt.Hex.Upgrades
         {
             if (lastNode != null)
             {
-                if (lastNode is CellNode cellNode)
-                {
-                    objectViewer.ShowNodeDetails(cellNode.GetCell());
-                }
                 startNode = lastNode;
                 startNode.ActivatingLinkStart();
                 depLine = new ConnectionElement(this, mousePos, Color.yellow, 2f, true);
@@ -312,6 +309,14 @@ namespace Aspekt.Hex.Upgrades
             if (lastNode == node)
             {
                 lastNode = null;
+            }
+        }
+
+        private void NodeClicked(Node node)
+        {
+            if (node is CellNode cellNode)
+            {
+                objectViewer.ShowNodeDetails(cellNode.GetCell());
             }
         }
     }

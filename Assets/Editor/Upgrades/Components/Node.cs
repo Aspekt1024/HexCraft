@@ -32,6 +32,7 @@ namespace Aspekt.Hex.Upgrades
         public Action OnMove;
         public Action<Node> OnEnter;
         public Action<Node> OnLeave;
+        public Action<Node> OnClick;
 
         protected Node()
         {
@@ -116,13 +117,14 @@ namespace Aspekt.Hex.Upgrades
         
         private void OnMouseDown(MouseDownEvent e)
         {
-            if ( e.button == 0)
+            if (e.button == 0)
             {
                 IsDragged = true;
                 startMousePos = e.mousePosition;
                 startPos = position;
                 Element.VisualElement.AddToClassList("node-dragged");
                 target.CaptureMouse();
+                OnClick?.Invoke(this);
                 e.StopPropagation();
             }
         }

@@ -75,12 +75,6 @@ namespace Aspekt.Hex.Upgrades
             UpgradeEditorData.Save(data);
             Undo.undoRedoPerformed -= DataFilesUpdated;
         }
-        
-        ~UpgradeEditor()
-        {
-            UpgradeEditorData.Save(data);
-            Undo.undoRedoPerformed -= DataFilesUpdated;
-        }
 
         private void AddPage(Page page)
         {

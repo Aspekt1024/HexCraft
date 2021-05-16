@@ -1,11 +1,9 @@
 using System;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Config;
-using Aspekt.Hex.Util;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace Aspekt.Hex.Upgrades
 {
@@ -74,6 +72,7 @@ namespace Aspekt.Hex.Upgrades
         {
             Undo.RecordObject(cell, "Upgrade cell cost");
             cell.Cost = newCost;
+            // TODO redraw
         }
     }
 }
