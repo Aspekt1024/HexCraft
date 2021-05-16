@@ -12,20 +12,20 @@ namespace Aspekt.Hex.Upgrades
             costDisplay.AddToClassList("action-cost");
             var suppliesCost = new LongField(3) {value = cost.supplies};
             suppliesCost.RegisterValueChangedCallback(
-                newSupplies => costUpdateAction.Invoke(new Cost()
+                newSupplies =>
                 {
-                    production = cost.production,
-                    supplies = (int) newSupplies.newValue
-                }));
+                    cost.supplies = (int) newSupplies.newValue;
+                    costUpdateAction.Invoke(cost);
+                });
             suppliesCost.AddToClassList("cost-field");
             
             var productionCost = new LongField(3) {value = cost.production};
             productionCost.RegisterValueChangedCallback(
-                newProduction => costUpdateAction.Invoke(new Cost()
+                newProduction =>
                 {
-                    production = (int) newProduction.newValue,
-                    supplies = cost.supplies
-                }));
+                    cost.production = (int) newProduction.newValue;
+                    costUpdateAction.Invoke(cost);
+                });
             productionCost.AddToClassList("cost-field");
             
             costDisplay.Add(suppliesCost);

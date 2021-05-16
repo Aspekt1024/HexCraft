@@ -72,7 +72,6 @@ namespace Aspekt.Hex.Upgrades
         {
             Undo.RecordObject(cell, "Upgrade cell cost");
             cell.Cost = newCost;
-            // TODO redraw
         }
     }
 }
