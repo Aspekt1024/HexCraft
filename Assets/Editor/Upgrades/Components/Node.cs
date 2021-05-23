@@ -71,6 +71,16 @@ namespace Aspekt.Hex.Upgrades
             GetElement().VisualElement.RemoveFromClassList(ActivatingLinkClass);
         }
 
+        public virtual void ShowSelected()
+        {
+            Element.VisualElement.AddToClassList("node-selected");
+        }
+
+        public virtual void ShowUnselected()
+        {
+            Element.VisualElement.RemoveFromClassList("node-selected");
+        }
+
         public virtual Vector2 GetConnectingPosition(Vector2 fromPos)
         {
             var e = Element.VisualElement;

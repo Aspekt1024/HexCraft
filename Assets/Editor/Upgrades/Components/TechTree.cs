@@ -21,6 +21,7 @@ namespace Aspekt.Hex.Upgrades
         private VisualElement nodeRoot;
         private GameConfig config;
         
+        private Node selectedNode;
         public Action<Vector2> OnDrag;
         private Node lastNode;
         private Node startNode;
@@ -117,14 +118,7 @@ namespace Aspekt.Hex.Upgrades
             
             foreach (var element in allElements.OrderBy(e => e.SortOrder))
             {
-                if (element.Parent == null)
-                {
-                    nodeRoot.Add(element.VisualElement);
-                }
-                else
-                {
-                    element.Parent.Add(element.VisualElement);
-                }
+                nodeRoot.Add(element.VisualElement);
             }
         }
 
@@ -314,6 +308,10 @@ namespace Aspekt.Hex.Upgrades
 
         private void NodeClicked(Node node)
         {
+            selectedNode?.ShowUnselected();
+            node.ShowSelected();
+            selectedNode = node;
+            
             if (node is CellNode cellNode)
             {
                 objectViewer.ShowNodeDetails(cellNode.GetCell());

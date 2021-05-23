@@ -34,6 +34,9 @@ namespace Aspekt.Hex
         UpgradeMageSpell1 = 4110,
         UpgradeMageSpell2 = 4111,
         UpgradeMageSpell3 = 4112,
+        
+        UpgradeTownHall1 = 5000,
+        UpgradeTownHall2 = 5010,
     }
 
     public enum TechGroups
@@ -48,5 +51,7 @@ namespace Aspekt.Hex
         
         UpgradeMageArmor = 3000,
         UpgradeMageSpell = 3100,
+        
+        UpgradeTownHall = 5000,
     }
 }

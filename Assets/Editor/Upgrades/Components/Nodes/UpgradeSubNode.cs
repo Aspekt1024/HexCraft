@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Config;
 using UnityEngine;
@@ -7,20 +6,22 @@ using UnityEngine.UIElements;
 
 namespace Aspekt.Hex.Upgrades
 {
+    [Serializable]
     public class UpgradeSubNode : Node
     {
         public override int SortOrder { get; } = 90;
         
-        private readonly int index;
-        
         private UpgradeGroupNode group;
         private UpgradeAction.UpgradeDetails upgrade;
 
+        private bool moveWithParent;
+        private int index;
+        private bool isActivatingNewLink;
+
         public UpgradeSubNode(UpgradeGroupNode group, UpgradeAction.UpgradeDetails upgrade, int index)
         {
-            this.index = index;
-            MoveDisabled = true;
-            Setup(group, upgrade);
+            MoveDisabled = false;
+            Setup(group, upgrade, index);
         }
 
         public static int GenerateHash(UpgradeAction.UpgradeDetails upgrade) => Hash128.Compute("SubUpgrade" + upgrade.title).GetHashCode();
@@ -29,11 +30,19 @@ namespace Aspekt.Hex.Upgrades
         public UpgradeAction.UpgradeDetails GetUpgradeDetails() => upgrade;
         public override ActionDefinition GetAction(TechConfig techConfig) => group.GetAction(techConfig);
         public Technology GetTechnology() => upgrade.tech;
+        public bool IsActivatingNewLink => isActivatingNewLink;
         
-        public void Setup(UpgradeGroupNode group, UpgradeAction.UpgradeDetails upgrade)
+        public void SetMoveWithParent(bool value)
+        {
+            MoveDisabled = value;
+            moveWithParent = value;
+        }
+
+        public void Setup(UpgradeGroupNode group, UpgradeAction.UpgradeDetails upgrade, int index)
         {
             this.group = group;
             this.upgrade = upgrade;
+            this.index = index;
             
             hash = GenerateHash(upgrade);
             Element = GetElement();
@@ -48,11 +57,12 @@ namespace Aspekt.Hex.Upgrades
             element.Add(new Label(upgrade.title));
 
             Element.VisualElement = element;
-            Element.SortOrder = SortOrder + index;
+            Element.SortOrder = SortOrder;
+            
+            element.style.top = position.y;
+            element.style.left = position.x;
             
             element.AddManipulator(this);
-            
-            UpdatePosition();
             
             return Element;
         }
@@ -65,10 +75,9 @@ namespace Aspekt.Hex.Upgrades
         public override Vector2 GetConnectingPosition(Vector2 fromPos)
         {
             var e = Element.VisualElement;
-            var pos = group.GetPosition();
-            pos.x += e.layout.x;
-            pos.y += e.layout.y + e.layout.height / 2f;
-            
+
+            var pos = position;
+            pos.y += e.layout.height / 2f;
             if (fromPos.x > pos.x)
             {
                 pos.x += e.layout.width;
@@ -79,20 +88,31 @@ namespace Aspekt.Hex.Upgrades
 
         public void OnParentMoved()
         {
-            OnMove?.Invoke();
-            UpdatePosition();
+            if (moveWithParent)
+            {
+                OnMove?.Invoke();
+                position = group.GetPosition();
+                var e = Element.VisualElement;
+
+                position.y += (e.layout.height + 1f) * (index + 1);
+                position.x += (group.GetElement().VisualElement.layout.width - e.layout.width) / 2f;
+                
+                e.style.top = position.y;
+                e.style.left = position.x;
+            }
         }
 
-        private void UpdatePosition()
+        public override void ActivatingLinkStart()
         {
-            position = group.GetPosition() + Element.VisualElement.layout.position;
+            if (group.IsGroupActivatingNewLink) return;
+            isActivatingNewLink = true;
+            base.ActivatingLinkStart();
         }
-        
-        private VisualElement GetElementInParent()
+
+        public override void ActivatingLinkEnd()
         {
-            var groupElement = group.GetElement().VisualElement;
-            var e = groupElement.Children().FirstOrDefault(v => v.name == upgrade.title);
-            return e;
+            isActivatingNewLink = false;
+            base.ActivatingLinkEnd();
         }
     }
 }
