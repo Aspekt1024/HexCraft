@@ -84,7 +84,7 @@
     width: 35px;
 }
 .plan-step-currency-item-pos {
-    color: #004e00;
+    color: #0e2fa7;
     -unity-font-style: bold;
 }
 .plan-step-currency-item-neg {

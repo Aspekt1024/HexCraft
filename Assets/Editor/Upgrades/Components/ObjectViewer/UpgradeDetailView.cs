@@ -19,6 +19,8 @@ namespace Aspekt.Hex.Upgrades
             header.AddToClassList("object-header");
             container.Add(header);
             
+            container.Add(new Label($"Cost: {upgrade.cost.supplies} supplies, {upgrade.cost.production} production"));
+            
             gamePlan.ShowGamePlan(container);
 
             var btn = new Button {text = "Turns"};

@@ -47,17 +47,20 @@ namespace Aspekt.Hex.Upgrades
             while (gamePlan.Any())
             {
                 var node = gamePlan.Dequeue();
-                    
                 ShowNextTurnSteps(node, turnNumber, stepContainer);
+                
+                var numTurnsSinceLastAction = node.PlayerData.TurnNumber - turnNumber;
+                var suppliesAtStartOfTurn = node.InitialSupplies + node.SuppliesPerTurn * numTurnsSinceLastAction;
+                
                 turnNumber = node.PlayerData.TurnNumber;
 
                 var details = new StepRowDetails
                 {
                     TurnNumber = turnNumber,
                     Label = node.Action,
-                    InitialSupplies = node.InitialSupplies,
+                    InitialSupplies = suppliesAtStartOfTurn,
                     InitialProduction = node.InitialProduction,
-                    SupplyDifference = node.PlayerData.CurrencyData.Supplies - node.InitialSupplies,
+                    SupplyDifference = node.PlayerData.CurrencyData.Supplies - suppliesAtStartOfTurn,
                     ProductionDifference = node.PlayerData.CurrencyData.AvailableProduction - node.InitialProduction,
                 };
                 var step = CreateStepRow(details);
