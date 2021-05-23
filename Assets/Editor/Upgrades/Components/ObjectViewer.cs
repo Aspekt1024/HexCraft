@@ -1,4 +1,5 @@
 using System.Linq;
+using Aspekt.Hex.Actions;
 using UnityEngine.UIElements;
 
 namespace Aspekt.Hex.Upgrades
@@ -8,24 +9,56 @@ namespace Aspekt.Hex.Upgrades
         public override string Title => "ObjectViewer";
 
         private readonly VisualElement contents;
-        
-        private readonly TurnCalculator turnCalculator;
+
+        private readonly CellDetailView cellDetailView;
+        private readonly UpgradeDetailView upgradeDetailView;
+        private readonly UpgradeGroupView upgradeGroupDetailView;
         
         private HexCell cell;
+        private UpgradeAction upgrade;
+        private UpgradeAction.UpgradeDetails upgradeDetails;
         
         public ObjectViewer(VisualElement root)
         {
+            var gamePlan = new GamePlan();
+            cellDetailView = new CellDetailView(gamePlan);
+            upgradeDetailView = new UpgradeDetailView(gamePlan);
+            upgradeGroupDetailView = new UpgradeGroupView();
+            
             AddToRoot(root, "ObjectViewer");
             contents = Root.Q("ObjectContents");
-            
-            turnCalculator = new TurnCalculator();
             
             SetupUI();
         }
 
         public void ShowNodeDetails(HexCell cell)
         {
+            if (this.cell == cell) return;
+            
             this.cell = cell;
+            upgrade = null;
+            upgradeDetails.tech = Technology.None;
+            UpdateContents();
+        }
+
+        public void ShowNodeDetails(ActionDefinition action)
+        {
+            if (upgrade == action) return;
+            if (!(action is UpgradeAction upgradeAction)) return;
+            
+            upgrade = upgradeAction;
+            cell = null;
+            upgradeDetails.tech = Technology.None;
+            UpdateContents();
+        }
+
+        public void ShowNodeDetails(UpgradeAction.UpgradeDetails upgradeDetails)
+        {
+            if (this.upgradeDetails.tech == upgradeDetails.tech) return;
+            
+            this.upgradeDetails = upgradeDetails;
+            cell = null;
+            upgrade = null;
             UpdateContents();
         }
         
@@ -38,75 +71,24 @@ namespace Aspekt.Hex.Upgrades
         {
             contents.Clear();
             
-            if (cell == null)
+            if (cell == null && upgradeDetails.tech == Technology.None && upgrade == null)
             {
-                contents.Add(new Label("No cell selected"));
+                contents.Add(new Label("Click on a node to show its details"));
                 return;
             }
 
-            var header = new Label(cell.DisplayName);
-            header.AddToClassList("object-header");
-            contents.Add(header);
-            if (cell is IProductionGenerator productionGenerator)
+            if (cell != null)
             {
-                contents.Add(new Label("generates " + productionGenerator.GetProduction() + " production"));
+                cellDetailView.Show(contents, cell, UpdateContents);
             }
-
-            var gamePlan = turnCalculator.GetCalculatedPlan();
-            if (gamePlan != null)
+            else if (upgradeDetails.tech != Technology.None)
             {
-                var turnIndication = new VisualElement();
-                var stepContainer = new VisualElement();
-                var turnNumber = 1;
-                while (gamePlan.Any())
-                {
-                    var node = gamePlan.Dequeue();
-                    var numTurnsSinceLastAction = node.PlayerData.TurnNumber - turnNumber;
-                    
-                    for (int i = 0; i < numTurnsSinceLastAction; i++)
-                    {
-                        var nextTurnAction = new VisualElement();
-                        nextTurnAction.AddToClassList("plan-step");
-                        var nextTurnLabel = new Label("Next turn");
-                        nextTurnLabel.AddToClassList("plan-step-action");
-                        nextTurnLabel.AddToClassList("plan-step-nextturn");
-                        nextTurnAction.Add(nextTurnLabel);
-
-                        var runningSupplies = node.InitialSupplies + node.SuppliesPerTurn * (i + 1);
-                        var currencyLabel = new Label($"{runningSupplies}s {node.InitialProduction}p");
-                        currencyLabel.AddToClassList("plan-step-currency");
-                        nextTurnAction.Add(currencyLabel);
-                        
-                        stepContainer.Add(nextTurnAction);
-                    }
-                    
-                    turnNumber = node.PlayerData.TurnNumber;
-                    
-                    var planStep = new VisualElement();
-                    planStep.AddToClassList("plan-step");
-                    
-                    var action = new Label(node.Action);
-                    action.AddToClassList("plan-step-action");
-                    planStep.Add(action);
-                    var supplies = node.PlayerData.CurrencyData.Supplies;
-                    var production = node.PlayerData.CurrencyData.AvailableProduction;
-                    var currency = new Label($"{supplies}s {production}p");
-                    currency.AddToClassList("plan-step-currency");
-                    planStep.Add(currency);
-                    
-                    stepContainer.Add(planStep);
-                }
-                turnIndication.Add(new Label($"Optimal turns ({(turnNumber - 1).ToString()}):"));
-                turnIndication.Add(stepContainer);
-                contents.Add(turnIndication);
+                upgradeDetailView.Show(contents, upgradeDetails, UpdateContents);
             }
-
-            var btn = new Button {text = "Calculate Turns"};
-            btn.AddToClassList("calc-button");
-
-            btn.clicked += () => turnCalculator.QueueCalculation(cell, UpdateContents);
-            contents.Add(btn);
-                
+            else if (upgrade != null)
+            {
+                upgradeGroupDetailView.Show(contents, upgrade, UpdateContents);
+            }
         }
     }
 }

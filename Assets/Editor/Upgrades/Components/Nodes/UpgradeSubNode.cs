@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Aspekt.Hex.Actions;
 using Aspekt.Hex.Config;
@@ -25,6 +26,7 @@ namespace Aspekt.Hex.Upgrades
         public static int GenerateHash(UpgradeAction.UpgradeDetails upgrade) => Hash128.Compute("SubUpgrade" + upgrade.title).GetHashCode();
         public override bool HasValidObject() => upgrade.tech != Technology.None;
         public override object GetObject() => upgrade;
+        public UpgradeAction.UpgradeDetails GetUpgradeDetails() => upgrade;
         public override ActionDefinition GetAction(TechConfig techConfig) => group.GetAction(techConfig);
         public Technology GetTechnology() => upgrade.tech;
         
@@ -53,6 +55,11 @@ namespace Aspekt.Hex.Upgrades
             UpdatePosition();
             
             return Element;
+        }
+
+        public override void SetupOnClickCallbacks(Action<Node> onClickCallback)
+        {
+            OnClick = onClickCallback;
         }
 
         public override Vector2 GetConnectingPosition(Vector2 fromPos)

@@ -101,7 +101,7 @@ namespace Aspekt.Hex.Upgrades
                 
                 node.OnEnter = NodeEntered;
                 node.OnLeave = NodeLeft;
-                node.OnClick = NodeClicked;
+                node.SetupOnClickCallbacks(NodeClicked);
 
                 AddElementsToList(node.GetElement(), allElements);
             }
@@ -317,6 +317,14 @@ namespace Aspekt.Hex.Upgrades
             if (node is CellNode cellNode)
             {
                 objectViewer.ShowNodeDetails(cellNode.GetCell());
+            }
+            else if (node is UpgradeGroupNode upgradeGroupNode)
+            {
+                objectViewer.ShowNodeDetails(upgradeGroupNode.GetAction(config.techConfig));
+            }
+            else if (node is UpgradeSubNode upgradeSubNode)
+            {
+                objectViewer.ShowNodeDetails(upgradeSubNode.GetUpgradeDetails());
             }
         }
     }

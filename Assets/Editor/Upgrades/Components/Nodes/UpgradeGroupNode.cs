@@ -85,6 +85,15 @@ namespace Aspekt.Hex.Upgrades
             return Element;
         }
 
+        public override void SetupOnClickCallbacks(Action<Node> onClickCallback)
+        {
+            OnClick = onClickCallback;
+            foreach (var subNode in subNodes)
+            {
+                subNode.SetupOnClickCallbacks(onClickCallback);;
+            }
+        }
+
         public UpgradeSubNode GetSubNode(UpgradeAction.UpgradeDetails upgradeDetails)
         {
             return subNodes.FirstOrDefault(n => n.GetTechnology() == upgradeDetails.tech);

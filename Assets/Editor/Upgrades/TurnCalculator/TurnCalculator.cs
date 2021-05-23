@@ -17,6 +17,7 @@ namespace Aspekt.Hex.Upgrades
         private readonly List<TurnCalculatorNode> closedSet = new List<TurnCalculatorNode>();
         
         private HexCell targetCell;
+        private UpgradeAction.UpgradeDetails targetUpgrade;
 
         private Queue<TurnCalculatorNode> gamePlan;
         
@@ -30,23 +31,46 @@ namespace Aspekt.Hex.Upgrades
         
         public void QueueCalculation(HexCell cell, Action onCompleteCallback)
         {
-            gamePlan = null;
             if (cell == null) return;
+            var nullUpgradeDetails = new UpgradeAction.UpgradeDetails();
+            SetupAndCalculateGamePlan(cell, nullUpgradeDetails, onCompleteCallback);
+        }
+
+        public void QueueCalculation(UpgradeAction.UpgradeDetails upgrade, Action onCompleteCallback)
+        {
+            if (upgrade.tech == Technology.None) return;
+            SetupAndCalculateGamePlan(null, upgrade, onCompleteCallback);
+        }
+
+        private void SetupAndCalculateGamePlan(HexCell cell, UpgradeAction.UpgradeDetails upgrade, Action onCompleteCallback)
+        {
+            targetCell = cell;
+            targetUpgrade = upgrade;
             
             var homeCell = (BuildingCell)cells.GetPrefab(Cells.CellTypes.Base);
             var playerData = CreatePlayerData(homeCell as HomeCell);
             var buildings = new List<BuildingCell> { homeCell };
 
-            if (cell is BuildingCell buildingCell && buildings.Contains(buildingCell)) return;
-            if (playerData.TechnologyData.HasTechnology(cell.Technology)) return;
+            if (targetCell != null)
+            {
+                if (targetCell is BuildingCell buildingCell && buildings.Contains(buildingCell)) return;
+                if (playerData.TechnologyData.HasTechnology(targetCell.Technology)) return;
+            }
+            else if (targetUpgrade.tech != Technology.None)
+            {
+                if (playerData.TechnologyData.HasTechnology(targetUpgrade.tech)) return;
+            }
+            else
+            {
+                return;
+            }
 
             openSet.Clear();
             closedSet.Clear();
-            targetCell = cell;
             
             openSet.Add(new TurnCalculatorNode(playerData, buildings));
+
             gamePlan = CalculateGamePlan();
-            
             onCompleteCallback?.Invoke();
         }
 
@@ -64,7 +88,7 @@ namespace Aspekt.Hex.Upgrades
                 var neighbours = GetNeighbouringNodes(node);
                 foreach (var neighbour in neighbours)
                 {
-                    if (neighbour.PlayerData.TechnologyData.HasTechnology(targetCell.Technology))
+                    if (NodeAchievesGamePlan(neighbour))
                     {
                         return ConstructGamePlan(neighbour);
                     }
@@ -73,8 +97,20 @@ namespace Aspekt.Hex.Upgrades
                 closedSet.Add(node);
             }
 
-            Debug.LogWarning("Failed to find game plan for " + targetCell.DisplayName);
+            if (targetCell != null)
+            {
+                Debug.LogWarning("Failed to find game plan for " + targetCell.DisplayName);
+            }
+            else
+            {
+                Debug.LogWarning("Failed to find game plan for " + targetUpgrade.title);
+            }
             return null;
+        }
+
+        private bool NodeAchievesGamePlan(TurnCalculatorNode node)
+        {
+            return node.PlayerData.TechnologyData.HasTechnology(targetCell != null ? targetCell.Technology : targetUpgrade.tech);
         }
 
         private Queue<TurnCalculatorNode> ConstructGamePlan(TurnCalculatorNode node)
@@ -141,8 +177,9 @@ namespace Aspekt.Hex.Upgrades
 
                 var turnCount = GetTurnsUntilAffordable(origin, buildAction.prefab.Cost);
                 if (turnCount < 0) return null;
-                
-                return new TurnCalculatorNode(origin, buildAction.prefab, turnCount, targetCell.Cost);
+
+                var costForHeuristic = targetCell == null ? targetUpgrade.cost : targetCell.Cost;
+                return new TurnCalculatorNode(origin, buildAction.prefab, turnCount, costForHeuristic);
             }
             else if (action is UpgradeAction upgradeAction)
             {
@@ -162,7 +199,8 @@ namespace Aspekt.Hex.Upgrades
                 var turnCount = GetTurnsUntilAffordable(origin, nextUpgrade.cost);
                 if (turnCount < 0) return null;
 
-                return new TurnCalculatorNode(origin, nextUpgrade, turnCount, targetCell.Cost);
+                var costForHeuristic = targetCell == null ? targetUpgrade.cost : targetCell.Cost;
+                return new TurnCalculatorNode(origin, nextUpgrade, turnCount, costForHeuristic);
             }
 
             return null;

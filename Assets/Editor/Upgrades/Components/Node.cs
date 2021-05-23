@@ -32,7 +32,7 @@ namespace Aspekt.Hex.Upgrades
         public Action OnMove;
         public Action<Node> OnEnter;
         public Action<Node> OnLeave;
-        public Action<Node> OnClick;
+        protected Action<Node> OnClick;
 
         protected Node()
         {
@@ -56,6 +56,8 @@ namespace Aspekt.Hex.Upgrades
         public abstract bool HasValidObject();
 
         public abstract TreeElement GetElement();
+
+        public abstract void SetupOnClickCallbacks(Action<Node> onClickCallback);
 
         protected virtual string ActivatingLinkClass => "node-newlink";
 

@@ -3,7 +3,7 @@
     bottom: 15px;
     left: 0;
     
-    width: 250px;
+    width: 340px;
     height: 300px;
     
     background-color: black;
@@ -41,21 +41,60 @@
     color: black;
 }
 
+.plan-step-turn {
+    width: 16px;
+    background-color: #1b4f48;
+    
+    border-radius: 1px;
+    
+    color: white;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
 .plan-step-action {
     color: black;
     width: 150px;
 }
 
-.plan-step-currency {
-    border-color: #40a740;
-    background-color: #79be81;
-    color: black;
+.plan-step-currency-container {
+    display: flex;
+    flex-direction: row;
     width: 100%;
 }
 
+.plan-step-currency {
+    display: flex;
+    flex-direction: row;
+    
+    border-color: #40a740;
+    
+    width: 50px;
+}
+
+.plan-step-currency-diff {
+    width: 70px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    margin: 0 5px;
+}
+
+.plan-step-currency-item {
+    color: black;
+    width: 35px;
+}
+.plan-step-currency-item-pos {
+    color: #004e00;
+    -unity-font-style: bold;
+}
+.plan-step-currency-item-neg {
+    color: red;
+    -unity-font-style: bold;
+}
+
 .plan-step-nextturn {
-    border-color: #be7c58;
-    background-color: #f1bf73;
+    border-color: #186d3c;
+    background-color: #3cb777;
 }
 
 .node-steps Label {

@@ -68,6 +68,11 @@ namespace Aspekt.Hex.Upgrades
             return Element;
         }
 
+        public override void SetupOnClickCallbacks(Action<Node> onClickCallback)
+        {
+            OnClick = onClickCallback;
+        }
+
         private void OnCostUpdated(Cost newCost)
         {
             Undo.RecordObject(cell, "Upgrade cell cost");
