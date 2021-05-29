@@ -32,7 +32,7 @@ namespace Aspekt.Hex.Upgrades
         {
             data ??= new UpgradeEditorData();
 
-            var json = JsonUtility.ToJson(data);
+            var json = JsonUtility.ToJson(data, true);
             try
             {
                 File.WriteAllText(FilePath, json);
