@@ -14,95 +14,158 @@ namespace Aspekt.Hex.Upgrades
         {
             if (from.GetHashCode() == to.GetHashCode()) return false;
 
+            switch (mode)
+            {
+                case UpgradeDependencyMode.AddAction:
+                    return AddAction(from, to, techConfig);
+                case UpgradeDependencyMode.CreateTechRequirement:
+                    return AddTechRequirement(from, to, techConfig);
+                case UpgradeDependencyMode.RemoveAction:
+                    return RemoveAction(from, to, techConfig);
+                case UpgradeDependencyMode.RemoveTechRequirement:
+                    return RemoveTechRequirement(from, to, techConfig);
+                default:
+                    Debug.LogWarning($"Unhandled dependency mode: {mode}");
+                    return false;
+            }
+        }
+
+        private static bool AddAction(Node from, Node to, TechConfig techConfig)
+        {
             switch (from)
             {
                 case CellNode fromCell:
                     switch (to)
                     {
-                        case UpgradeGroupNode toUpgrade:
-                            return HandleUpgradeDependency(fromCell.GetCell(), toUpgrade, techConfig, mode);
                         case CellNode _:
-                            return HandleCellActionModification(fromCell.GetCell(), to.GetAction(techConfig), mode);
+                            return AddActionToCell(fromCell.GetCell(), to.GetAction(techConfig));
+                        case UpgradeGroupNode _:
+                            return AddActionToCell(fromCell.GetCell(), to.GetAction(techConfig));
                         default:
-                            Debug.LogWarning($"Unhandled dependency creation: cell node to {to}");
+                            Debug.LogWarning($"Unable to add action of type {to.GetType().Name} to cell.");
                             return false;
                     }
-                case UpgradeGroupNode upgradeGroupNode:
-                    return HandleUpgradeDependencyModification(upgradeGroupNode, to.GetAction(techConfig), mode);
                 default:
-                    Debug.LogWarning($"Unhandled dependency creation: {from}");
+                    Debug.LogWarning($"Add action failed. Only cell nodes can have actions. Selected node was {from.GetType().Name}");
                     return false;
             }
         }
 
-        private static bool HandleUpgradeDependency(HexCell cell, UpgradeGroupNode toUpgrade, TechConfig techConfig, UpgradeDependencyMode mode)
+        private static bool RemoveAction(Node from, Node to, TechConfig techConfig)
         {
-            var toSubNode = toUpgrade.GetDependentSubNode();
-            if (toSubNode == null)
+            switch (from)
             {
-                return HandleCellActionModification(cell, toUpgrade.GetAction(techConfig), mode);
-            }
-
-            var upgrade = toUpgrade.GetUpgradeAction();
-            var dependentTech = toSubNode.GetTechnology();
-            var requiredTech = cell.Technology;
-            
-            switch (mode)
-            {
-                case UpgradeDependencyMode.AddAction:
-                    // Cannot add sub-upgrade as an action
-                    return false;
-                case UpgradeDependencyMode.CreateTechRequirement:
-                    return AddTechRequirementToUpgrade(upgrade, dependentTech, requiredTech);
-                case UpgradeDependencyMode.RemoveAction:
-                    // Cannot remove sub-upgrade as an action
-                    return false;
-                case UpgradeDependencyMode.RemoveTechRequirement:
-                    return RemoveTechRequirementFromUpgrade(upgrade, dependentTech, requiredTech);
+                case CellNode fromCell:
+                    switch (to)
+                    {
+                        case CellNode _:
+                            return RemoveActionFromCell(fromCell.GetCell(), to.GetAction(techConfig));
+                        case UpgradeGroupNode _:
+                            return RemoveActionFromCell(fromCell.GetCell(), to.GetAction(techConfig));
+                        default:
+                            Debug.LogWarning($"Unable to remove action of type {to.GetType().Name} from cell.");
+                            return false;
+                    }
                 default:
+                    Debug.LogWarning($"Remove action failed. Only cell nodes can have actions. Selected node was {from.GetType().Name}");
+                    return false;
+            }
+        }
+
+        private static bool AddTechRequirement(Node from, Node to, TechConfig techConfig)
+        {
+            switch (from)
+            {
+                case CellNode fromCell:
+                    switch (to)
+                    {
+                        case CellNode _:
+                            return AddRequirementToAction(to.GetAction(techConfig), fromCell.GetCell().Technology);
+                        case UpgradeGroupNode _:
+                            Debug.LogWarning("Cannot add tech requirements to upgrade groups. This is handled by the sub upgrade itself.");
+                            return false;
+                        case UpgradeSubNode upgradeSubNode:
+                            var action = (UpgradeAction) to.GetAction(techConfig);
+                            var dependentTech = upgradeSubNode.GetTechnology();
+                            var requiredTech = fromCell.GetCell().Technology;
+                            return AddTechRequirementToUpgrade(action, dependentTech, requiredTech);
+                        default:
+                            Debug.LogError($"Unable to add tech requirement to node type {to.GetType().Name}");
+                            return false;
+                    }
+                case UpgradeGroupNode _:
+                    Debug.LogWarning($"{nameof(UpgradeGroupNode)} cannot be a tech dependency. Sub upgrades can be dependencies.");
+                    return false;
+                case UpgradeSubNode fromUpgrade:
+                    switch (to)
+                    {
+                        case CellNode _:
+                            return AddRequirementToAction(to.GetAction(techConfig), fromUpgrade.GetTechnology());
+                        case UpgradeGroupNode _:
+                            Debug.LogWarning("Cannot add tech requirements to upgrade groups. This is handled by the sub upgrade itself.");
+                            return false;
+                        case UpgradeSubNode toUpgrade:
+                            var action = (UpgradeAction) to.GetAction(techConfig);
+                            var dependentTech = toUpgrade.GetTechnology();
+                            var requiredTech = fromUpgrade.GetTechnology();
+                            return AddTechRequirementToUpgrade(action, dependentTech, requiredTech);
+                        default:
+                            Debug.LogError($"Unable to add tech requirement to node type {to.GetType().Name}");
+                            return false;
+                    }
+                default:
+                    Debug.LogWarning($"Add dependency failed. From {from.GetType().Name} to {from.GetType().Name}");
                     return false;
             }
         }
         
-        private static bool HandleCellActionModification(HexCell cell, ActionDefinition action, UpgradeDependencyMode mode)
+        private static bool RemoveTechRequirement(Node from, Node to, TechConfig techConfig)
         {
-            switch (mode)
+            switch (from)
             {
-                case UpgradeDependencyMode.AddAction:
-                    return AddActionToCell(cell, action);
-                case UpgradeDependencyMode.CreateTechRequirement:
-                    return AddRequirementToAction(action, cell.Technology);
-                case UpgradeDependencyMode.RemoveAction:
-                    return RemoveActionFromCell(cell, action);
-                case UpgradeDependencyMode.RemoveTechRequirement:
-                    return RemoveRequirementFromAction(action, cell.Technology);
+                case CellNode fromCell:
+                    switch (to)
+                    {
+                        case CellNode _:
+                            return RemoveRequirementFromAction(to.GetAction(techConfig), fromCell.GetCell().Technology);
+                        case UpgradeGroupNode _:
+                            Debug.LogWarning("Cannot add tech requirements to upgrade groups. This is handled by the sub upgrade itself.");
+                            return false;
+                        case UpgradeSubNode upgradeSubNode:
+                            var action = (UpgradeAction) to.GetAction(techConfig);
+                            var dependentTech = upgradeSubNode.GetTechnology();
+                            var requiredTech = fromCell.GetCell().Technology;
+                            return RemoveTechRequirementFromUpgrade(action, dependentTech, requiredTech);
+                        default:
+                            Debug.LogError($"Unable to add tech requirement to node type {to.GetType().Name}");
+                            return false;
+                    }
+                case UpgradeGroupNode _:
+                    Debug.LogWarning($"{nameof(UpgradeGroupNode)} cannot be a tech dependency. Sub upgrades can be dependencies.");
+                    return false;
+                case UpgradeSubNode fromUpgrade:
+                    switch (to)
+                    {
+                        case CellNode _:
+                            return RemoveRequirementFromAction(to.GetAction(techConfig), fromUpgrade.GetTechnology());
+                        case UpgradeGroupNode _:
+                            Debug.LogWarning("Cannot add tech requirements to upgrade groups. This is handled by the sub upgrade itself.");
+                            return false;
+                        case UpgradeSubNode toUpgrade:
+                            var action = (UpgradeAction) to.GetAction(techConfig);
+                            var dependentTech = toUpgrade.GetTechnology();
+                            var requiredTech = fromUpgrade.GetTechnology();
+                            return RemoveTechRequirementFromUpgrade(action, dependentTech, requiredTech);
+                        default:
+                            Debug.LogError($"Unable to add tech requirement to node type {to.GetType().Name}");
+                            return false;
+                    }
                 default:
+                    Debug.LogWarning($"Add dependency failed. From {from.GetType().Name} to {from.GetType().Name}");
                     return false;
             }
         }
-
-        private static bool HandleUpgradeDependencyModification(UpgradeGroupNode group, ActionDefinition action, UpgradeDependencyMode mode)
-        {
-            var tech = group.GetSelectedTech();
-            if (tech == Technology.None) return false;
-            
-            switch (mode)
-            {
-                case UpgradeDependencyMode.CreateTechRequirement:
-                    return AddRequirementToAction(action, tech);
-                case UpgradeDependencyMode.RemoveTechRequirement:
-                    return RemoveRequirementFromAction(action, tech);
-                case UpgradeDependencyMode.AddAction:
-                    // Not applicable - upgrades don't have actions
-                    return false;
-                case UpgradeDependencyMode.RemoveAction:
-                    // Not applicable - upgrades don't have actions
-                    return false;
-                default:
-                    return false;
-            }
-        }
-
+        
         private static bool AddActionToCell(HexCell cell, ActionDefinition action)
         {
             var fieldInfo = typeof(HexCell).GetField("actions", BindingFlags.NonPublic | BindingFlags.Instance);

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: TechConfig
   m_EditorClassIdentifier: 
   upgrades:
+  - {fileID: 11400000, guid: 635e990ba212b264fa52124fe8d53688, type: 2}
   - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}
   - {fileID: 11400000, guid: 36ae8acea533cac4698f2a822efe6b9b, type: 2}
   - {fileID: 11400000, guid: 658806b098c927946a298331029bd744, type: 2}
