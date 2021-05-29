@@ -10,13 +10,7 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private ActionDefinition[] actions;
         [SerializeField] private CellHexOutline hexOutline;
-        [SerializeField] private Material blackMaterial;
-        [SerializeField] private Material whiteMaterial;
-        [SerializeField] private Material redMaterial;
-        [SerializeField] private Material blueMaterial;
-        [SerializeField] private Material greenMaterial;
-        [SerializeField] private Material yellowMaterial;
-        [SerializeField] private Material brownMaterial;
+        [SerializeField] private CellColours colourProfile;
 #pragma warning restore 649
 
         [Header("Cell Settings")]
@@ -209,14 +203,14 @@ namespace Aspekt.Hex
             switch (colour)
             {
                 case Cells.Colours.Blue:
-                    SetMaterial(blueMaterial);
+                    SetMaterial(colourProfile.blue);
                     break;
                 case Cells.Colours.Red:
-                    SetMaterial(redMaterial);
+                    SetMaterial(colourProfile.red);
                     break;
                 default:
                     Debug.LogError("Invalid colour: " + colour);
-                    SetMaterial(blackMaterial);
+                    SetMaterial(colourProfile.black);
                     break;
             }
             

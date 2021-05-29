@@ -10,6 +10,7 @@ namespace Aspekt.Hex
         [SerializeField] private ArmorSet[] armorSets;
         [SerializeField] private GameObject[] weapons;
         [SerializeField] private GameObject[] shields;
+        [SerializeField] private GameObject[] back;
 #pragma warning restore 649
 
         [Serializable]
@@ -44,6 +45,14 @@ namespace Aspekt.Hex
             for (int i = 0; i < weapons.Length; i++)
             {
                 weapons[i].SetActive(i == level);
+            }
+        }
+
+        public void SetBack(int level)
+        {
+            for (int i = 0; i < back.Length; i++)
+            {
+                back[i].SetActive(i == level);
             }
         }
 

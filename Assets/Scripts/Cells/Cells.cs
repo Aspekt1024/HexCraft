@@ -17,9 +17,17 @@ namespace Aspekt.Hex
             Blacksmith = 1400,
             Market = 1500,
             Stables = 1600,
+            Archery = 1610,
+            Granary = 1620,
+            House = 1630,
+            Library = 1640,
+            MageTower = 1650,
+            Temple = 1660,
+            Tower = 1670,
             
             MeleeUnit = 2000,
             MageUnit = 2200,
+            ArcherUnit = 2400,
         }
 
         public enum Colours

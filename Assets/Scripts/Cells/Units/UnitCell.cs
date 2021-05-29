@@ -56,6 +56,7 @@ namespace Aspekt.Hex
         
         protected static readonly int AnimAttackTrigger = Animator.StringToHash("attack");
         protected static readonly int AnimCastTrigger = Animator.StringToHash("cast");
+        protected static readonly int AnimRangedAttackTrigger = Animator.StringToHash("rangedAttack");
         
         private static readonly int AnimMoveSpeed = Animator.StringToHash("moveSpeed");
         private static readonly int AnimDamagedTrigger = Animator.StringToHash("damaged");

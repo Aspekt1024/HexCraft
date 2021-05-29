@@ -4,8 +4,6 @@ namespace Aspekt.Hex
 {
     public class MarketCell : BuildingCell, ISuppliesGenerator
     {
-        public override Technology Technology { get; } = Technology.Market;
-
         public Transform GetTransform() => transform;
 
         public override void OnTechAdded(Technology tech)

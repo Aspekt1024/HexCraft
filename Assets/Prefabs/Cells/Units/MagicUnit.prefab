@@ -2289,13 +2289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions: []
   hexOutline: {fileID: 7172987457053707177}
-  blackMaterial: {fileID: 2100000, guid: 54f19161a54e56442a8dd7f6239fc93b, type: 2}
-  whiteMaterial: {fileID: 2100000, guid: cf1fa6c73dc509448863697c25254027, type: 2}
-  redMaterial: {fileID: 2100000, guid: 98a7fdcb4ebb44344b4afe0424d44b82, type: 2}
-  blueMaterial: {fileID: 2100000, guid: 792a4bad9e08b8e41bfbd3f0b8aac1ab, type: 2}
-  greenMaterial: {fileID: 2100000, guid: f9ec407a080d408459742617c9dc6607, type: 2}
-  yellowMaterial: {fileID: 2100000, guid: 26fed0ad2288580409bf94257121cd0f, type: 2}
-  brownMaterial: {fileID: 2100000, guid: 32515cc96492c6d4ab732a997912d2e0, type: 2}
+  colourProfile: {fileID: 11400000, guid: acd8445b6d9d16541aa4161f39812ac2, type: 2}
   cellType: 2200
   DisplayName: Mage
   Cost:

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fac55236c8d4f97afdf0b8737144ac6, type: 3}
+  m_Name: UnitCellColourProfile
+  m_EditorClassIdentifier: 
+  black: {fileID: 2100000, guid: 54f19161a54e56442a8dd7f6239fc93b, type: 2}
+  white: {fileID: 2100000, guid: cf1fa6c73dc509448863697c25254027, type: 2}
+  red: {fileID: 2100000, guid: 98a7fdcb4ebb44344b4afe0424d44b82, type: 2}
+  blue: {fileID: 2100000, guid: 792a4bad9e08b8e41bfbd3f0b8aac1ab, type: 2}
+  green: {fileID: 2100000, guid: f9ec407a080d408459742617c9dc6607, type: 2}
+  yellow: {fileID: 2100000, guid: 26fed0ad2288580409bf94257121cd0f, type: 2}
+  brown: {fileID: 2100000, guid: 32515cc96492c6d4ab732a997912d2e0, type: 2}

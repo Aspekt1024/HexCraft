@@ -1,9 +1,12 @@
+using Aspekt.Hex;
 using Aspekt.Hex.Actions;
 using UnityEngine;
 
+using CellTypes = Aspekt.Hex.Cells.CellTypes;
+
 namespace Aspekt.Hex
 {
-    public abstract class BuildingCell : HexCell
+    public class BuildingCell : HexCell
     {
 #pragma warning disable 649
         [SerializeField] private Renderer[] renderers;
@@ -18,6 +21,30 @@ namespace Aspekt.Hex
         protected BuildingStats Stats;
 
         public BuildingStats GetStats() => Stats;
+
+        public override Technology Technology
+        {
+            get
+            {
+                return cellType switch
+                {
+                    CellTypes.Base => Technology.TownHall,
+                    CellTypes.Archery => Technology.Archery,
+                    CellTypes.Blacksmith => Technology.Blacksmith,
+                    CellTypes.Granary => Technology.Granary,
+                    CellTypes.House => Technology.House,
+                    CellTypes.Income => Technology.Farm,
+                    CellTypes.Library => Technology.Library,
+                    CellTypes.Market => Technology.Market,
+                    CellTypes.Stables => Technology.Stables,
+                    CellTypes.Temple => Technology.Temple,
+                    CellTypes.Tower => Technology.Tower,
+                    CellTypes.MageTower => Technology.MageTower,
+                    CellTypes.Training => Technology.Barracks,
+                    _ => Technology.None,
+                };
+            }
+        }
 
         public override void SetupTech(GameData data, int playerId)
         {

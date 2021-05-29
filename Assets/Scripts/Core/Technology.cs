@@ -7,9 +7,16 @@ namespace Aspekt.Hex
         TownHall = 100,
         Barracks = 1000,
         Blacksmith = 1100,
+        Archery = 1110,
         Farm = 2000,
+        Granary = 2010,
+        House = 2020,
         Stables = 2100,
         Market = 2200,
+        Library = 2210,
+        MageTower = 2220,
+        Temple = 2230,
+        Tower = 2240,
         
         Soldier = 2500,
         Mage = 2510,
@@ -51,6 +58,9 @@ namespace Aspekt.Hex
         
         UpgradeMageArmor = 3000,
         UpgradeMageSpell = 3100,
+        
+        UpgradeRangedDistance = 4000,
+        UpgradeRangedDamage = 4100,
         
         UpgradeTownHall = 5000,
     }
