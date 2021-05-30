@@ -15,8 +15,7 @@ namespace Aspekt.Hex
 
         [Header("Cell Settings")]
         public Cells.CellTypes cellType = Cells.CellTypes.None;
-        public string DisplayName = "Cell";
-        public Cost Cost;
+        public Currency Cost;
         public int MaxHP = 1;
         public string BasicDescription = "";
         
@@ -29,6 +28,8 @@ namespace Aspekt.Hex
         public NetworkGamePlayerHex Owner;
         public int ID;
 
+        public abstract string DisplayName { get; }
+        public abstract string GetDisplayName(Technology techLevel);
         public ActionDefinition[] Actions => actions;
         
         public int CurrentHP { get; protected set; }

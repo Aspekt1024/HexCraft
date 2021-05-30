@@ -47,8 +47,8 @@ namespace Aspekt.Hex.Upgrades
             targetCell = cell;
             targetUpgrade = upgrade;
             
-            var homeCell = (BuildingCell)cells.GetPrefab(Cells.CellTypes.Base);
-            var playerData = CreatePlayerData(homeCell as HomeCell);
+            var homeCell = (BuildingCell)cells.GetPrefab(Cells.CellTypes.Home);
+            var playerData = CreatePlayerData(homeCell);
             var buildings = new List<BuildingCell> { homeCell };
 
             if (targetCell != null)
@@ -99,7 +99,7 @@ namespace Aspekt.Hex.Upgrades
 
             if (targetCell != null)
             {
-                Debug.LogWarning("Failed to find game plan for " + targetCell.DisplayName);
+                Debug.LogWarning("Failed to find game plan for " + targetCell.GetDisplayName(Technology.None));
             }
             else
             {
@@ -206,13 +206,13 @@ namespace Aspekt.Hex.Upgrades
             return null;
         }
 
-        private static int GetTurnsUntilAffordable(TurnCalculatorNode node, Cost cost)
+        private static int GetTurnsUntilAffordable(TurnCalculatorNode node, Currency cost)
         {
             if (node.PlayerData.CurrencyData.CanAfford(cost)) return 0;
             if (node.PlayerData.CurrencyData.AvailableProduction < cost.production) return -1;
             
             var suppliers = Cells.GetSuppliers(node.Buildings.Select(b => b as HexCell).ToList());
-            var suppliesPerTurn = suppliers.Sum(c => c.GetSupplies(node.PlayerData));
+            var suppliesPerTurn = suppliers.Sum(c => c.CalculateSupplies(node.PlayerData));
             if (suppliesPerTurn <= 0) return -1;
 
             var requiredSupplies = cost.supplies - node.PlayerData.CurrencyData.Supplies;
@@ -224,15 +224,15 @@ namespace Aspekt.Hex.Upgrades
             return numTurns;
         }
 
-        private PlayerData CreatePlayerData(HomeCell homeCell)
+        private PlayerData CreatePlayerData(BuildingCell startingCell)
         {
             var playerData = new PlayerData(null);
             playerData.Init(config);
             
             playerData.TurnNumber = 1;
-            playerData.TechnologyData.AddTechnology(homeCell.Technology);
+            playerData.TechnologyData.AddTechnology(startingCell.Technology);
             playerData.CurrencyData.Supplies = config.startingSupply;
-            playerData.CurrencyData.MaxProduction = homeCell.production;
+            playerData.CurrencyData.MaxProduction = startingCell.GetCurrencyBonus().production;
 
             return playerData;
         }

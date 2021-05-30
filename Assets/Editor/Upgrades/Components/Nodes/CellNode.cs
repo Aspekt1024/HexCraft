@@ -40,6 +40,10 @@ namespace Aspekt.Hex.Upgrades
         public void Setup(HexCell cell)
         {
             this.cell = cell;
+            if (cell is BuildingCell buildingCell)
+            {
+                buildingCell.SetUpgradeLevel(Technology.None);
+            }
             hash = GenerateHash(cell);
             Element = GetElement();
         }
@@ -51,7 +55,7 @@ namespace Aspekt.Hex.Upgrades
             var element = new VisualElement();
             element.AddToClassList("node");
 
-            element.Add(new Label(cell.DisplayName));
+            element.Add(new Label(cell.GetDisplayName(Technology.None)));
             var costField = NodeUtil.CreateCostField(cell.Cost, OnCostUpdated);
             element.Add(costField);
             
@@ -73,7 +77,7 @@ namespace Aspekt.Hex.Upgrades
             OnClick = onClickCallback;
         }
 
-        private void OnCostUpdated(Cost newCost)
+        private void OnCostUpdated(Currency newCost)
         {
             Undo.RecordObject(cell, "Upgrade cell cost");
             cell.Cost = newCost;

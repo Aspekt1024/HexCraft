@@ -34,7 +34,7 @@ namespace Aspekt.Hex.UI
         public struct Details
         {
             public readonly string Title;
-            public readonly Cost Cost;
+            public readonly Currency Cost;
             public readonly int ActionCost;
             public readonly string[] Description;
             public readonly string RequirementsText;
@@ -42,13 +42,13 @@ namespace Aspekt.Hex.UI
             public Details(string title, string[] description)
             {
                 Title = title;
-                Cost = new Cost();
+                Cost = new Currency();
                 ActionCost = 0;
                 Description = description;
                 RequirementsText = "";
             }
             
-            public Details(string title, Cost cost, int actionCost, string[] description)
+            public Details(string title, Currency cost, int actionCost, string[] description)
             {
                 Title = title;
                 Cost = cost;
@@ -61,7 +61,7 @@ namespace Aspekt.Hex.UI
             {
                 
                 Title = title;
-                Cost = new Cost();
+                Cost = new Currency();
                 ActionCost = 0;
                 Description = new string[0];
                 RequirementsText = requirements;

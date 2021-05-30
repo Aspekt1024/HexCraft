@@ -49,10 +49,10 @@ MonoBehaviour:
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1640
-  DisplayName: Library
   Cost:
     production: 0
     supplies: 12
+    population: 3
   MaxHP: 5
   BasicDescription: Enables various research
   Coordinates:
@@ -61,8 +61,18 @@ MonoBehaviour:
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 2210
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 2783078857486404989}
+  upgradeDetails:
+  - tech: 0
+    displayName: Library
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 2783078857484407741}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -219,6 +229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a219455911288e84da9a9c5f55fd95c6, type: 3}
+--- !u!1 &2783078857484407741 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: a219455911288e84da9a9c5f55fd95c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2783078857484506397}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2783078857484636061 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: a219455911288e84da9a9c5f55fd95c6,

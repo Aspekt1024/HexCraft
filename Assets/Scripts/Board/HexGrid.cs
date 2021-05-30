@@ -40,7 +40,7 @@ namespace Aspekt.Hex
         public void SetStartingLocation(NetworkGamePlayerHex player)
         {
             var startLocation = GetStartLocation(player.ID);
-            TryPlace((Int16)startLocation.X, (Int16)startLocation.Z, (Int16)player.ID, Cells.CellTypes.Base);
+            TryPlace((Int16)startLocation.X, (Int16)startLocation.Z, (Int16)player.ID, Cells.CellTypes.Home);
         }
 
         public HexCoordinates GetStartLocation(int playerId)

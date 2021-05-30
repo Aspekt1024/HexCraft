@@ -31,7 +31,7 @@ namespace Aspekt.Hex.Upgrades
             Action = "Start";
         }
 
-        public TurnCalculatorNode(TurnCalculatorNode originalNode, HexCell newCell, int numTurnsToAfford, Cost targetCost)
+        public TurnCalculatorNode(TurnCalculatorNode originalNode, HexCell newCell, int numTurnsToAfford, Currency targetCost)
         {
             PlayerData = originalNode.PlayerData.Clone();
             Buildings = originalNode.Buildings.ToList();
@@ -43,11 +43,7 @@ namespace Aspekt.Hex.Upgrades
             if (newCell is BuildingCell building)
             {
                 Buildings.Add(building);
-            }
-
-            if (newCell is IProductionGenerator productionGenerator)
-            {
-                PlayerData.CurrencyData.MaxProduction += productionGenerator.GetProduction();
+                PlayerData.CurrencyData.MaxProduction += building.GetCurrencyBonus().production;
             }
 
             PreviousNode = originalNode;
@@ -56,7 +52,7 @@ namespace Aspekt.Hex.Upgrades
             CalculateNodeCosts(targetCost);
         }
 
-        public TurnCalculatorNode(TurnCalculatorNode originalNode, UpgradeAction.UpgradeDetails upgrade, int numTurnsToAfford, Cost targetCost)
+        public TurnCalculatorNode(TurnCalculatorNode originalNode, UpgradeAction.UpgradeDetails upgrade, int numTurnsToAfford, Currency targetCost)
         {
             PlayerData = originalNode.PlayerData.Clone();
             Buildings = originalNode.Buildings;
@@ -70,12 +66,12 @@ namespace Aspekt.Hex.Upgrades
             CalculateNodeCosts(targetCost);
         }
 
-        private void ApplyCurrencyModifications(int numTurnsToAfford, Cost cost)
+        private void ApplyCurrencyModifications(int numTurnsToAfford, Currency cost)
         {
             var suppliers = Cells.GetSuppliers(Buildings.Select(b => b as HexCell).ToList());
             InitialSupplies = PlayerData.CurrencyData.Supplies;
             InitialProduction = PlayerData.CurrencyData.AvailableProduction;
-            SuppliesPerTurn = suppliers.Sum(c => c.GetSupplies(PlayerData));
+            SuppliesPerTurn = suppliers.Sum(c => c.CalculateSupplies(PlayerData));
             
             PlayerData.CurrencyData.Supplies += SuppliesPerTurn * numTurnsToAfford;
             
@@ -84,12 +80,12 @@ namespace Aspekt.Hex.Upgrades
             PlayerData.CurrencyData.UtilisedProduction += cost.production;
         }
 
-        private void CalculateNodeCosts(Cost targetCost)
+        private void CalculateNodeCosts(Currency targetCost)
         {
             Cost = PlayerData.TurnNumber;
             
             var suppliers = Cells.GetSuppliers(Buildings.Select(b => b as HexCell).ToList());
-            var suppliesPerTurn = suppliers.Sum(c => c.GetSupplies(PlayerData));
+            var suppliesPerTurn = suppliers.Sum(c => c.CalculateSupplies(PlayerData));
             if (PlayerData.CurrencyData.Supplies >= targetCost.supplies)
             {
                 if (PlayerData.CurrencyData.AvailableProduction >= targetCost.production)

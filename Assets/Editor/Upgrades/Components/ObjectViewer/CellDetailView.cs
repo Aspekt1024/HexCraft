@@ -14,12 +14,16 @@ namespace Aspekt.Hex.Upgrades
 
         public void Show(VisualElement container, HexCell cell, Action updateContentsCallback)
         {
-            var header = new Label(cell.DisplayName);
+            var header = new Label(cell.GetDisplayName(Technology.None));
             header.AddToClassList("object-header");
             container.Add(header);
-            if (cell is IProductionGenerator productionGenerator)
+
+            if (cell is BuildingCell buildingCell)
             {
-                container.Add(new Label("generates " + productionGenerator.GetProduction() + " production"));
+                var currencyBonus = buildingCell.GetCurrencyBonus(Technology.None);
+                if (currencyBonus.production > 0) container.Add(new Label($"Generates {currencyBonus.production} production"));
+                if (currencyBonus.supplies > 0) container.Add(new Label($"Generates {currencyBonus.supplies} supplies"));
+                if (currencyBonus.population > 0) container.Add(new Label($"Generates {currencyBonus.population} population"));
             }
             
             gamePlan.ShowGamePlan(container);

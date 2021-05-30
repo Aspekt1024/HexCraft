@@ -14,7 +14,7 @@ namespace Aspekt.Hex.Actions
         {
             return new Tooltip.Details(
                 title, 
-                new Cost(),
+                new Currency(),
                 1,
                 new[] {description}
             );

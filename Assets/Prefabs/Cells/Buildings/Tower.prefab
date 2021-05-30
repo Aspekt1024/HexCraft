@@ -49,10 +49,10 @@ MonoBehaviour:
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1670
-  DisplayName: Tower
   Cost:
     production: 0
     supplies: 8
+    population: 0
   MaxHP: 12
   BasicDescription: Tower...
   Coordinates:
@@ -61,8 +61,18 @@ MonoBehaviour:
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 2240
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 6781907574801740758}
+  upgradeDetails:
+  - tech: 0
+    displayName: Tower
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 6781907574803672342}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -223,6 +233,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38b9a56b23e4df499eaede1c2276296, type: 3}
+--- !u!1 &6781907574803672342 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: f38b9a56b23e4df499eaede1c2276296,
+    type: 3}
+  m_PrefabInstance: {fileID: 6781907574803770294}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6781907574803640630 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: f38b9a56b23e4df499eaede1c2276296,

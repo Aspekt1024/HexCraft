@@ -42,28 +42,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 8137735167583728843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aa203622da84cb38358a4022a10a1ac, type: 3}
+  m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actions: []
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1620
-  DisplayName: Granary
   Cost:
     production: 0
-    supplies: 10
-  MaxHP: 3
-  BasicDescription: Increases production capacity
+    supplies: 15
+    population: 0
+  MaxHP: 1
+  BasicDescription: Generates more production by improving produce storage.
   Coordinates:
     x: 0
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 2010
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 3346057067019717778}
-  production: 6
+  upgradeDetails:
+  - tech: 0
+    displayName: Granary
+    currencyBonus:
+      production: 3
+      supplies: 0
+      population: 0
+    model: {fileID: 3346057067017785938}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -220,6 +229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aec20226064bbcc4d850e8da90e49a4b, type: 3}
+--- !u!1 &3346057067017785938 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: aec20226064bbcc4d850e8da90e49a4b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3346057067017688306}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3346057067017293426 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: aec20226064bbcc4d850e8da90e49a4b,

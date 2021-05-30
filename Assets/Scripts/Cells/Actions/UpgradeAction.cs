@@ -17,7 +17,7 @@ namespace Aspekt.Hex.Actions
             public Technology tech;
             public Sprite icon;
             public string title;
-            public Cost cost;
+            public Currency cost;
             public string description;
             public List<Technology> requiredTech;
         }

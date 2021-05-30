@@ -17,6 +17,7 @@ namespace Aspekt.Hex
         MageTower = 2220,
         Temple = 2230,
         Tower = 2240,
+        Workshop = 2250,
         
         Soldier = 2500,
         Mage = 2510,

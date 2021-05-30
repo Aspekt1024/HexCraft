@@ -60,6 +60,10 @@ namespace Aspekt.Hex.Upgrades
             if (node == null)
             {
                 node = new CellNode(cell);
+                if (cell is BuildingCell buildingCell)
+                {
+                    buildingCell.SetUpgradeLevel(Technology.None);
+                }
                 cellNodes.Add(node);
             }
             else

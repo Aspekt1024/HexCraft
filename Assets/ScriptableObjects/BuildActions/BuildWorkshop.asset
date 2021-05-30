@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
-  m_Name: BuildTower
+  m_Name: BuildWorkshop
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 9e95c96935782fe4b923243a27f2db04, type: 3}
-  prefab: {fileID: 9134122601264202362, guid: 0e9fef96502b310449f0244b01159c6f, type: 3}
-  placementRadius: 3
-  techRequirements: 4c040000
+  icon: {fileID: 21300000, guid: 8e1f416c7d68f5f4494ad45eee82af26, type: 3}
+  prefab: {fileID: 9134122601264202362, guid: 622bda991de3b654fbe867fdd8fa239f, type: 3}
+  placementRadius: 4
+  techRequirements: 00000000

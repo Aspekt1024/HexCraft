@@ -49,10 +49,10 @@ MonoBehaviour:
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1660
-  DisplayName: Temple
   Cost:
     production: 0
     supplies: 15
+    population: 0
   MaxHP: 7
   BasicDescription: Temple?
   Coordinates:
@@ -61,8 +61,18 @@ MonoBehaviour:
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 2230
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 8906837338970929156}
+  upgradeDetails:
+  - tech: 0
+    displayName: Temple
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 8906837338973185732}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -219,6 +229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bf280570cf5dce45a29b84470a52c7e, type: 3}
+--- !u!1 &8906837338973185732 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 9bf280570cf5dce45a29b84470a52c7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8906837338973216868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8906837338972830436 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 9bf280570cf5dce45a29b84470a52c7e,

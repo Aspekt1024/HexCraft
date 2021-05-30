@@ -6,7 +6,7 @@ namespace Aspekt.Hex.Upgrades
 {
     public static class NodeUtil
     {
-        public static VisualElement CreateCostField(Cost cost, Action<Cost> costUpdateAction, bool isResearched = true, bool canAfford = true)
+        public static VisualElement CreateCostField(Currency cost, Action<Currency> costUpdateAction, bool isResearched = true, bool canAfford = true)
         {
             var costDisplay = new VisualElement();
             costDisplay.AddToClassList("action-cost");

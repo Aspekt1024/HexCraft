@@ -53,9 +53,9 @@ namespace Aspekt.Hex.UI
             }
             else if (cell is BuildingCell building)
             {
-                var productionStats = building.GetStats();
-                supplies.SetStat(productionStats.Supplies);
-                production.SetStat(productionStats.Production);
+                var currencyBonus = building.GetCurrencyBonus();
+                supplies.SetStat(currencyBonus.supplies);
+                production.SetStat(currencyBonus.production);
                 
                 HideObjects(attack, defense, shield, speed);
             }

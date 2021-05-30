@@ -112,9 +112,19 @@ namespace Aspekt.Hex
             RpcSetMaxProduction((Int16)player.ID, (Int16)newProduction);
         }
 
+        public void OnMaxPopulationChanged(NetworkGamePlayerHex player, int newPopulation)
+        {
+            RpcSetMaxPopulation((Int16)player.ID, (Int16)newPopulation);
+        }
+
         public void OnProductionUtilisationChanged(NetworkGamePlayerHex player, int newUtilisation)
         {
             RpcSetProductionUtilisation((Int16)player.ID, (Int16)newUtilisation);
+        }
+
+        public void OnPopulationUtilisationChanged(NetworkGamePlayerHex player, int newUtilisation)
+        {
+            RpcSetPopulationUtilisation((Int16)player.ID, (Int16)newUtilisation);
         }
 
         public void OnSuppliesChanged(NetworkGamePlayerHex player, int newSupplies)
@@ -146,7 +156,7 @@ namespace Aspekt.Hex
             return player.TechnologyData.HasTechnologies(tech);
         }
 
-        public bool CanAfford(int playerId, Cost cost)
+        public bool CanAfford(int playerId, Currency cost)
         {
             var player = GetPlayerFromId(playerId);
             return player.CurrencyData.CanAfford(cost);
@@ -195,7 +205,7 @@ namespace Aspekt.Hex
         {
             var suppliers = game.Cells.GetSuppliers(data.Player.ID);
             var supplies = data.CurrencyData.Supplies;
-            var generatedSupplies = suppliers.Sum(c => c.GetSupplies(data));
+            var generatedSupplies = suppliers.Sum(c => c.CalculateSupplies(data));
             supplies += generatedSupplies;
     
             RpcSetSupplies((Int16)data.Player.ID, (Int16)supplies);
@@ -242,10 +252,32 @@ namespace Aspekt.Hex
         }
 
         [ClientRpc]
+        private void RpcSetPopulationUtilisation(Int16 playerId, int newUtilisation)
+        {
+            var player = GetPlayerFromId(playerId);
+            player.CurrencyData.UtilisedPopulation = newUtilisation;
+            if (player.Player.hasAuthority)
+            {
+                game.UI.UpdateCurrency(player.CurrencyData);
+            }
+        }
+
+        [ClientRpc]
         private void RpcSetMaxProduction(Int16 playerId, Int16 newProduction)
         {
             var player = GetPlayerFromId(playerId);
             player.CurrencyData.MaxProduction = newProduction;
+            if (player.Player.hasAuthority)
+            {
+                game.UI.UpdateCurrency(player.CurrencyData);
+            }
+        }
+
+        [ClientRpc]
+        private void RpcSetMaxPopulation(Int16 playerId, Int16 newPopulation)
+        {
+            var player = GetPlayerFromId(playerId);
+            player.CurrencyData.MaxPopulation = newPopulation;
             if (player.Player.hasAuthority)
             {
                 game.UI.UpdateCurrency(player.CurrencyData);
@@ -306,11 +338,14 @@ namespace Aspekt.Hex
             if (isServer)
             {
                 RpcAddTech((Int16)cell.Technology, (Int16)cell.PlayerId);
-                
-                if (cell is IProductionGenerator producer)
+
+                if (cell is BuildingCell buildingCell)
                 {
-                    var prod = producer.GetProduction();
+                    var prod = buildingCell.CalculateProduction(data);
                     data.CurrencyData.ModifyMaxProduction(prod);
+
+                    var pop = buildingCell.CalculateProduction(data);
+                    data.CurrencyData.ModifyMaxPopulation(pop);
                 }
             }
         }
@@ -322,10 +357,13 @@ namespace Aspekt.Hex
 
             if (isServer)
             {
-                if (cell is IProductionGenerator producer)
+                if (cell is BuildingCell buildingCell)
                 {
-                    var prod = producer.GetProduction();
+                    var prod = buildingCell.CalculateProduction(data);
                     data.CurrencyData.ModifyMaxProduction(-prod);
+                    
+                    var pop = buildingCell.CalculateProduction(data);
+                    data.CurrencyData.ModifyMaxPopulation(-pop);
                 }
             }
         }

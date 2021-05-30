@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4043407480330917075}
   - component: {fileID: 2798176205286681153}
   m_Layer: 0
-  m_Name: IncomeCell
+  m_Name: Farm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,29 +42,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 8137735167583728843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aa203622da84cb38358a4022a10a1ac, type: 3}
+  m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actions: []
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1300
-  DisplayName: Farm
   Cost:
     production: 0
-    supplies: 7
-  MaxHP: 2
-  BasicDescription: Generates 1 food per round, at the start of your turn.
+    supplies: 10
+    population: 4
+  MaxHP: 7
+  BasicDescription: Generates Production
   Coordinates:
     x: 0
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 2000
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 4694660904767215729}
-  production: 7
-  suppliesPerRound: 0
+  upgradeDetails:
+  - tech: 0
+    displayName: Farm
+    currencyBonus:
+      production: 8
+      supplies: 0
+      population: 0
+    model: {fileID: 4694660904769472177}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -221,6 +229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 520e20395d1150a4c94174228bde0499, type: 3}
+--- !u!1 &4694660904769472177 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 520e20395d1150a4c94174228bde0499,
+    type: 3}
+  m_PrefabInstance: {fileID: 4694660904769503249}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4694660904769641105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 520e20395d1150a4c94174228bde0499,

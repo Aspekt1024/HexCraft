@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7047174512472527717}
   - component: {fileID: 1312393799163408318}
   m_Layer: 0
-  m_Name: TrainingCell
+  m_Name: Barracks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,31 +42,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 2971968159140852605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25a1bf4c22d140b182d95270dfdc09b8, type: 3}
+  m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions:
-  - {fileID: 11400000, guid: 13de6652590a7964fa4c07ec1211cb28, type: 2}
-  - {fileID: 11400000, guid: 45c0aa3d5256b9e4ea688ad1b9f10d6f, type: 2}
-  - {fileID: 11400000, guid: 6a5478aca78008f47a500f191c073249, type: 2}
-  - {fileID: 11400000, guid: 5f7645336755b4c4491a1fedea6f473b, type: 2}
+  actions: []
   hexOutline: {fileID: 6301690519140048039}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1200
-  DisplayName: Barracks
   Cost:
     production: 0
-    supplies: 5
+    supplies: 10
+    population: 0
   MaxHP: 10
-  BasicDescription: Trains ground units.
+  BasicDescription: Trains units for combat
   Coordinates:
     x: 0
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 1000
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 715057725961301179}
+  upgradeDetails:
+  - tech: 0
+    displayName: Barracks
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 715057725963301499}
 --- !u!1001 &715057725963334875
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -136,6 +142,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2f28d7d7478cb64597ebb9077abfe6e, type: 3}
+--- !u!1 &715057725963301499 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: e2f28d7d7478cb64597ebb9077abfe6e,
+    type: 3}
+  m_PrefabInstance: {fileID: 715057725963334875}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &715057725963726427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: e2f28d7d7478cb64597ebb9077abfe6e,

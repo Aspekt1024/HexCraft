@@ -11,9 +11,9 @@ namespace Aspekt.Hex
         {
             None = 0,
             
-            Base = 1000,
-            Training = 1200,
-            Income = 1300,
+            Home = 1000,
+            Barracks = 1200,
+            Farm = 1300,
             Blacksmith = 1400,
             Market = 1500,
             Stables = 1600,
@@ -24,6 +24,7 @@ namespace Aspekt.Hex
             MageTower = 1650,
             Temple = 1660,
             Tower = 1670,
+            Workshop = 1680,
             
             MeleeUnit = 2000,
             MageUnit = 2200,
@@ -171,7 +172,7 @@ namespace Aspekt.Hex
         {
             if (!grid.IsWithinGridBoundary(cellCoords) || IsPieceInCell(cellCoords)) return false;
 
-            if (type == CellTypes.Base) return true;
+            if (type == CellTypes.Home) return true;
             
             foreach (var cell in AllCells)
             {
@@ -208,7 +209,7 @@ namespace Aspekt.Hex
             return pathfinder.FindPath(unit.Coordinates, targetCoords, unit.GetStats().Speed);
         }
         
-        public Cost GetCost(CellTypes type)
+        public Currency GetCost(CellTypes type)
         {
             return GetPrefab(type).Cost;
         }
@@ -290,7 +291,7 @@ namespace Aspekt.Hex
             if (playerData.Player.hasAuthority && playerData.TurnNumber > 1)
             {
                 var suppliers = GetSuppliers(playerData.Player.ID);
-                suppliers.ForEach(s => game.UI.ShowFloatingUI(s.GetTransform(), $"+{s.GetSupplies(playerData)}", FloatingUI.Style.Supplies));
+                suppliers.ForEach(s => game.UI.ShowFloatingUI(s.GetTransform(), $"+{s.CalculateSupplies(playerData)}", FloatingUI.Style.Supplies));
             }
                 
             foreach (var cell in AllCells)
@@ -302,30 +303,30 @@ namespace Aspekt.Hex
             }
         }
 
-        public List<ISuppliesGenerator> GetSuppliers(int playerID)
+        public List<BuildingCell> GetSuppliers(int playerID)
         {
             var playerCells = game.Cells.AllCells.Where(c => c.Owner.ID == playerID).ToList();
             return GetSuppliers(playerCells);
         }
 
-        public static List<ISuppliesGenerator> GetSuppliers(List<HexCell> playerCells)
+        public static List<BuildingCell> GetSuppliers(List<HexCell> playerCells)
         {
-            var suppliers = new List<ISuppliesGenerator>();
+            var suppliers = new List<BuildingCell>();
             var hasMarket = false;
             foreach (var cell in playerCells)
             {
-                if (!(cell is ISuppliesGenerator supplier)) continue;
-                if (cell is MarketCell)
+                if (!(cell is BuildingCell buildingCell) || buildingCell.GetCurrencyBonus().supplies <= 0) continue;
+                if (buildingCell.cellType == CellTypes.Market)
                 {
                     if (!hasMarket)
                     {
                         hasMarket = true;
-                        suppliers.Add(supplier);
+                        suppliers.Add(buildingCell);
                     }
                 }
                 else
                 {
-                    suppliers.Add(supplier);
+                    suppliers.Add(buildingCell);
                 }
             }
 

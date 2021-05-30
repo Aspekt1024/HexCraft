@@ -20,7 +20,8 @@ namespace Aspekt.Hex
         private int armorLevel;
         private int rangeLevel;
         private int damageLevel;
-        
+
+        public override string DisplayName => "Archer";
         public override Technology Technology { get; } = Technology.Archer;
         
         private void Awake()

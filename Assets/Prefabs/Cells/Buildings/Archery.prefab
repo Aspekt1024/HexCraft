@@ -49,10 +49,10 @@ MonoBehaviour:
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1610
-  DisplayName: Archery
   Cost:
     production: 0
     supplies: 7
+    population: 0
   MaxHP: 4
   BasicDescription: Trains Archers
   Coordinates:
@@ -61,8 +61,18 @@ MonoBehaviour:
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 1110
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 1423667595213279891}
+  upgradeDetails:
+  - tech: 0
+    displayName: Archery
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 1423667595211344979}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -219,6 +229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7036859d28e2cb84c9948a1fcf49fe95, type: 3}
+--- !u!1 &1423667595211344979 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 7036859d28e2cb84c9948a1fcf49fe95,
+    type: 3}
+  m_PrefabInstance: {fileID: 1423667595211377395}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1423667595210985587 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 7036859d28e2cb84c9948a1fcf49fe95,

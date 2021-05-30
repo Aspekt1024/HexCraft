@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 9e95c96935782fe4b923243a27f2db04, type: 3}
   prefab: {fileID: 9134122601264202362, guid: 53e44be7e27978b4d9e2010c0264096c, type: 3}
-  placementRadius: 1
+  placementRadius: 4
   techRequirements: 

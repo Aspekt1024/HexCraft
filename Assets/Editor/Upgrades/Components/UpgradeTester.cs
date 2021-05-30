@@ -71,7 +71,7 @@ namespace Aspekt.Hex.Upgrades
             turnLabel.text = $"Turn {playerData.TurnNumber}";
             
             var suppliers = Cells.GetSuppliers(buildings.Select(b => b as HexCell).ToList());
-            var generatedSupplies = suppliers.Sum(c => c.GetSupplies(playerData));
+            var generatedSupplies = suppliers.Sum(c => c.CalculateSupplies(playerData));
             playerData.CurrencyData.Supplies += generatedSupplies;
             
             DisplayCurrency();
@@ -179,7 +179,7 @@ namespace Aspekt.Hex.Upgrades
             }
         }
 
-        private void UpdateActionCost(BuildAction action, Cost cost)
+        private void UpdateActionCost(BuildAction action, Currency cost)
         {
             editor.RecordUndo(action.prefab, "Update build action cost");
             action.prefab.Cost = cost;
@@ -187,7 +187,7 @@ namespace Aspekt.Hex.Upgrades
             UpdateActions();
         }
 
-        private void UpdateActionCost(UpgradeAction action, UpgradeAction.UpgradeDetails upgrade, Cost cost)
+        private void UpdateActionCost(UpgradeAction action, UpgradeAction.UpgradeDetails upgrade, Currency cost)
         {
             for (int i = 0; i < action.upgradeDetails.Length; i++)
             {
@@ -231,7 +231,7 @@ namespace Aspekt.Hex.Upgrades
             );
         }
 
-        private Button CreateButton(string label, Cost cost, Action onClick, Action<Cost> costUpdateAction, bool isResearched)
+        private Button CreateButton(string label, Currency cost, Action onClick, Action<Currency> costUpdateAction, bool isResearched)
         {
             var btn = new Button();
             btn.AddToClassList("action-button");
@@ -252,10 +252,8 @@ namespace Aspekt.Hex.Upgrades
             if (action.prefab is BuildingCell building)
             {
                 buildings.Add(building);
-                if (building is IncomeCell incomeCell)
-                {
-                    playerData.CurrencyData.MaxProduction += incomeCell.production;
-                }
+                var bonusProduction = building.GetCurrencyBonus().population;
+                playerData.CurrencyData.MaxProduction += bonusProduction;
             }
             playerData.TechnologyData.AddTechnology(action.prefab.Technology);
             ProcessCost(action.prefab.Cost);
@@ -269,7 +267,7 @@ namespace Aspekt.Hex.Upgrades
             UpdateActions();
         }
 
-        private void ProcessCost(Cost cost)
+        private void ProcessCost(Currency cost)
         {
             playerData.CurrencyData.Supplies -= cost.supplies;
             playerData.CurrencyData.UtilisedProduction += cost.production;
@@ -294,13 +292,13 @@ namespace Aspekt.Hex.Upgrades
             
             playerData.Init(config);
             
-            var homeCell = (BuildingCell)cells.GetPrefab(Cells.CellTypes.Base);
+            var homeCell = (BuildingCell)cells.GetPrefab(Cells.CellTypes.Home);
             buildings.Add(homeCell);
             
             playerData.TurnNumber = 1;
             playerData.TechnologyData.AddTechnology(homeCell.Technology);
             playerData.CurrencyData.Supplies = config.startingSupply;
-            playerData.CurrencyData.MaxProduction = ((HomeCell) homeCell).production;
+            playerData.CurrencyData.MaxProduction = homeCell.GetCurrencyBonus().production;
 
             DisplayCurrency();
             turnLabel.text = $"Turn {playerData.TurnNumber}";

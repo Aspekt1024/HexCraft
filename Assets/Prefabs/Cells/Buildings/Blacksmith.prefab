@@ -42,30 +42,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 2971968159140852605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36c7119984804898aeaf31ede8d43416, type: 3}
+  m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions:
-  - {fileID: 11400000, guid: 36ae8acea533cac4698f2a822efe6b9b, type: 2}
-  - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}
-  - {fileID: 11400000, guid: 7e3d351021ccc484d8f476e1470fd220, type: 2}
+  actions: []
   hexOutline: {fileID: 6301690519140048039}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1400
-  DisplayName: Blacksmith
   Cost:
     production: 0
-    supplies: 10
-  MaxHP: 12
-  BasicDescription: Provides armor and weapon upgrades.
+    supplies: 9
+    population: 0
+  MaxHP: 10
+  BasicDescription: Upgrades weapons and armor
   Coordinates:
     x: 0
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 1100
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 5980657882210530542}
+  upgradeDetails:
+  - tech: 0
+    displayName: Blacksmith
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 5980657882212788782}
 --- !u!1001 &2787335108103463594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,6 +229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a43f0d6131f84de40b182eb70bb23b87, type: 3}
+--- !u!1 &5980657882212788782 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: a43f0d6131f84de40b182eb70bb23b87,
+    type: 3}
+  m_PrefabInstance: {fileID: 5980657882212822158}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5980657882212431374 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: a43f0d6131f84de40b182eb70bb23b87,

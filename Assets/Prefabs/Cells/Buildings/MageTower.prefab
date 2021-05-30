@@ -49,10 +49,10 @@ MonoBehaviour:
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1650
-  DisplayName: Mage Tower
   Cost:
     production: 0
     supplies: 12
+    population: 2
   MaxHP: 8
   BasicDescription: Trains Mages
   Coordinates:
@@ -61,8 +61,18 @@ MonoBehaviour:
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 2220
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 8411814421213373686}
+  upgradeDetails:
+  - tech: 0
+    displayName: Mage Tower
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 8411814421211183670}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -203,6 +213,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc4ed9ef41f9dc944af60388921a8746, type: 3}
+--- !u!1 &8411814421211183670 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: fc4ed9ef41f9dc944af60388921a8746,
+    type: 3}
+  m_PrefabInstance: {fileID: 8411814421211217046}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8411814421211080214 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: fc4ed9ef41f9dc944af60388921a8746,

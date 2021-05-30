@@ -42,28 +42,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 8137735167583728843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3157f0c1632448beafaa72c1db86586c, type: 3}
+  m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions:
-  - {fileID: 11400000, guid: 23a5950c911e37c42a1052d366232dc5, type: 2}
+  actions: []
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1500
-  DisplayName: Market
   Cost:
     production: 0
-    supplies: 5
-  MaxHP: 8
-  BasicDescription: Trades leftover production for supplies.
+    supplies: 12
+    population: 5
+  MaxHP: 6
+  BasicDescription: Generating supply income by selling excess production.
   Coordinates:
     x: 0
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 2200
+  behaviour: {fileID: 11400000, guid: 8aadc80b06db2a549b057470c4affd28, type: 2}
   renderers:
   - {fileID: 4526282615810136307}
+  upgradeDetails:
+  - tech: 0
+    displayName: Market
+    currencyBonus:
+      production: 0
+      supplies: 0
+      population: 0
+    model: {fileID: 0}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -192,19 +201,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 0.27059805
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.27059805
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0.6532815
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.7071068
+      value: 0.6532815
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -212,7 +221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 135
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

@@ -44,37 +44,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 237189408241611042}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2f1d730fc704b109cb5a3cbf8317822, type: 3}
+  m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions:
-  - {fileID: 11400000, guid: bb7a225fa371f29429738957bae9fb65, type: 2}
-  - {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}
-  - {fileID: 11400000, guid: 635e990ba212b264fa52124fe8d53688, type: 2}
+  actions: []
   hexOutline: {fileID: 1105101854328856294}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1000
-  DisplayName: Town Hall
   Cost:
-    production: 0
-    supplies: 250
-  MaxHP: 25
-  BasicDescription: Protect this building, or you lose!
+    production: 500
+    supplies: 0
+    population: 0
+  MaxHP: 17
+  BasicDescription: Home base
   Coordinates:
     x: 0
     z: 0
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
+  technology: 100
+  behaviour: {fileID: 11400000, guid: 9e4d666b1539dd3419d27fc9b2ebba76, type: 2}
   renderers:
   - {fileID: 4374471947233552968}
   - {fileID: 8061839451840137656}
   - {fileID: 2838614319456924814}
-  townHall: {fileID: 4374471947235816584}
-  keep: {fileID: 8061839451838207864}
-  castle: {fileID: 2838614319459183182}
-  production: 1
-  suppliesPerRound: 2
+  upgradeDetails:
+  - tech: 0
+    displayName: Town Hall
+    currencyBonus:
+      production: 2
+      supplies: 3
+      population: 6
+    model: {fileID: 4374471947235816584}
+  - tech: 5000
+    displayName: Keep
+    currencyBonus:
+      production: 4
+      supplies: 7
+      population: 10
+    model: {fileID: 8061839451838207864}
+  - tech: 5010
+    displayName: Castle
+    currencyBonus:
+      production: 7
+      supplies: 10
+      population: 18
+    model: {fileID: 2838614319459183182}
 --- !u!1001 &2838614319459085550
 PrefabInstance:
   m_ObjectHideFlags: 0
