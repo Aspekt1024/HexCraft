@@ -45,7 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: []
+  actions:
+  - {fileID: 11400000, guid: 9e1e607616eeb394b9382180da94734c, type: 2}
+  - {fileID: 11400000, guid: 7e3d351021ccc484d8f476e1470fd220, type: 2}
+  - {fileID: 11400000, guid: 36ae8acea533cac4698f2a822efe6b9b, type: 2}
+  - {fileID: 11400000, guid: c778773453327e946b2b500f8f97a697, type: 2}
   hexOutline: {fileID: 6301690519140048039}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1400

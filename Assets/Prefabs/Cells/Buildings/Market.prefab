@@ -72,7 +72,7 @@ MonoBehaviour:
       production: 0
       supplies: 0
       population: 0
-    model: {fileID: 0}
+    model: {fileID: 4526282615807870515}
 --- !u!1001 &274758857434529185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,6 +229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e80371d003bd70d439af07f3facb22ea, type: 3}
+--- !u!1 &4526282615807870515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: e80371d003bd70d439af07f3facb22ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 4526282615807836307}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4526282615808236051 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: e80371d003bd70d439af07f3facb22ea,

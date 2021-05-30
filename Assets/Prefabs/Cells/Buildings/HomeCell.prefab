@@ -47,13 +47,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b70e351baaeb409893a42a46272ffa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: []
+  actions:
+  - {fileID: 11400000, guid: 5569082c4535fcb42863a1d7c5869bab, type: 2}
+  - {fileID: 11400000, guid: c037db5eae2c8654e8b0b06414f8813f, type: 2}
+  - {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}
+  - {fileID: 11400000, guid: 635e990ba212b264fa52124fe8d53688, type: 2}
   hexOutline: {fileID: 1105101854328856294}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1000
   Cost:
-    production: 500
-    supplies: 0
+    production: 0
+    supplies: 500
     population: 0
   MaxHP: 17
   BasicDescription: Home base
