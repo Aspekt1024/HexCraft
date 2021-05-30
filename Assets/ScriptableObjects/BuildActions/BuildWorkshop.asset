@@ -15,4 +15,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 8e1f416c7d68f5f4494ad45eee82af26, type: 3}
   prefab: {fileID: 9134122601264202362, guid: 622bda991de3b654fbe867fdd8fa239f, type: 3}
   placementRadius: 4
-  techRequirements: 00000000
+  techRequirements: 88130000
