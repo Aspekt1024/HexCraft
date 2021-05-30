@@ -99,7 +99,7 @@ namespace Aspekt.Hex.Upgrades
 
             if (targetCell != null)
             {
-                Debug.LogWarning("Failed to find game plan for " + targetCell.GetDisplayName(Technology.None));
+                Debug.LogWarning("Failed to find game plan for " + targetCell.DisplayName);
             }
             else
             {

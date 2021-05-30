@@ -55,7 +55,7 @@ namespace Aspekt.Hex.Upgrades
             var element = new VisualElement();
             element.AddToClassList("node");
 
-            element.Add(new Label(cell.GetDisplayName(Technology.None)));
+            element.Add(new Label(cell.DisplayName));
             var costField = NodeUtil.CreateCostField(cell.Cost, OnCostUpdated);
             element.Add(costField);
             

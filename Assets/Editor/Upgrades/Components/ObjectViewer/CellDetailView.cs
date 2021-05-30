@@ -14,7 +14,7 @@ namespace Aspekt.Hex.Upgrades
 
         public void Show(VisualElement container, HexCell cell, Action updateContentsCallback)
         {
-            var header = new Label(cell.GetDisplayName(Technology.None));
+            var header = new Label(cell.DisplayName);
             header.AddToClassList("object-header");
             container.Add(header);
 

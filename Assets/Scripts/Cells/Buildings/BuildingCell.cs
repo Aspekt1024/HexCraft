@@ -25,16 +25,10 @@ namespace Aspekt.Hex
             public GameObject model;
         }
         
-        public override string DisplayName => currentUpgrade.displayName;
-
-        public override string GetDisplayName(Technology techLevel)
-        {
-            var details = upgradeDetails.FirstOrDefault(d => d.tech == techLevel);
-            return details.displayName;
-        }
-
         private UpgradeDetail currentUpgrade;
-
+        
+        public override string DisplayName => currentUpgrade.displayName;
+        
         public Transform GetTransform() => transform;
         public Currency GetCurrencyBonus() => currentUpgrade.currencyBonus;
 
@@ -46,6 +40,11 @@ namespace Aspekt.Hex
         public int CalculateSupplies(PlayerData data) => behaviour.CalculateSupplies(this, data);
         public int CalculateProduction(PlayerData data) => behaviour.CalculateProduction(this, data);
         public int CalculatePopulation(PlayerData data) => behaviour.CalculatePopulation(this, data);
+
+        protected override void OnInit()
+        {
+            SetupTech(GameData, PlayerId);
+        }
 
         public override void SetupTech(GameData data, int playerId)
         {
@@ -89,7 +88,6 @@ namespace Aspekt.Hex
             var upgradeIndex = upgradeDetails.FindIndex(d => d.tech == tech);
             if (upgradeIndex < 0) return;
             
-            if (upgradeDetails[upgradeIndex].tech == currentUpgrade.tech) return;
             currentUpgrade = upgradeDetails[upgradeIndex];
             foreach (var detail in upgradeDetails)
             {

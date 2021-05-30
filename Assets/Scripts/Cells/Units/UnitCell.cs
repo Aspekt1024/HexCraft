@@ -65,8 +65,6 @@ namespace Aspekt.Hex
 
         private readonly List<IUnitActionObserver> unitActionObservers = new List<IUnitActionObserver>();
 
-        public override string GetDisplayName(Technology techLevel) => DisplayName;
-
         private void Start()
         {
             Model.LookAt(transform.position + Vector3.back);

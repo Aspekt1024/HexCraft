@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Aspekt.Hex.Actions;
 using UnityEngine;
@@ -29,7 +28,6 @@ namespace Aspekt.Hex
         public int ID;
 
         public abstract string DisplayName { get; }
-        public abstract string GetDisplayName(Technology techLevel);
         public ActionDefinition[] Actions => actions;
         
         public int CurrentHP { get; protected set; }
