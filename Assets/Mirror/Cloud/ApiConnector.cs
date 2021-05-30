@@ -16,7 +16,7 @@ namespace Mirror.Cloud
     /// </summary>
     [DisallowMultipleComponent]
     [AddComponentMenu("Network/CloudServices/ApiConnector")]
-    [HelpURL("https://mirror-networking.com/docs/CloudServices/ApiConnector.html")]
+    [HelpURL("https://mirror-networking.com/docs/api/Mirror.Cloud.ApiConnector.html")]
     public class ApiConnector : MonoBehaviour, IApiConnector, ICoroutineRunner
     {
         #region Inspector
@@ -54,8 +54,8 @@ namespace Mirror.Cloud
 
         public void OnDestroy()
         {
-            ListServer.ServerApi.Shutdown();
-            ListServer.ClientApi.Shutdown();
+            ListServer?.ServerApi.Shutdown();
+            ListServer?.ClientApi.Shutdown();
         }
     }
 }

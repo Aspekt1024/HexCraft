@@ -11,15 +11,13 @@ namespace Mirror
     /// <para>The animation of game objects can be networked by this component. There are two models of authority for networked movement:</para>
     /// <para>If the object has authority on the client, then it should be animated locally on the owning client. The animation state information will be sent from the owning client to the server, then broadcast to all of the other clients. This is common for player objects.</para>
     /// <para>If the object has authority on the server, then it should be animated on the server and state information will be sent to all clients. This is common for objects not related to a specific client, such as an enemy unit.</para>
-    /// <para>The NetworkAnimator synchronizes all animation parameters of the selected Animator. It does not automatically sychronize triggers. The function SetTrigger can by used by an object with authority to fire an animation trigger on other clients.</para>
+    /// <para>The NetworkAnimator synchronizes all animation parameters of the selected Animator. It does not automatically synchronize triggers. The function SetTrigger can by used by an object with authority to fire an animation trigger on other clients.</para>
     /// </remarks>
     [AddComponentMenu("Network/NetworkAnimator")]
     [RequireComponent(typeof(NetworkIdentity))]
-    [HelpURL("https://mirror-networking.com/docs/Components/NetworkAnimator.html")]
+    [HelpURL("https://mirror-networking.com/docs/Articles/Components/NetworkAnimator.html")]
     public class NetworkAnimator : NetworkBehaviour
     {
-        static readonly ILogger logger = LogFactory.GetLogger(typeof(NetworkAnimator));
-
         [Header("Authority")]
         [Tooltip("Set to true if animations come from owner client,  set to false if animations always come from server")]
         public bool clientAuthority;
@@ -31,6 +29,14 @@ namespace Mirror
         [Header("Animator")]
         [Tooltip("Animator that will have parameters synchronized")]
         public Animator animator;
+
+
+        /// <summary>
+        /// Syncs animator.speed
+        /// </summary>
+        [SyncVar(hook = nameof(OnAnimatorSpeedChanged))]
+        float animatorSpeed;
+        float previousSpeed;
 
         // Note: not an object[] array because otherwise initialization is real annoying
         int[] lastIntParameters;
@@ -107,6 +113,42 @@ namespace Mirror
                     SendAnimationMessage(stateHash, normalizedTime, i, layerWeight[i], writer.ToArray());
                 }
             }
+
+            CheckSpeed();
+        }
+
+        void CheckSpeed()
+        {
+            float newSpeed = animator.speed;
+            if (Mathf.Abs(previousSpeed - newSpeed) > 0.001f)
+            {
+                previousSpeed = newSpeed;
+                if (isServer)
+                {
+                    animatorSpeed = newSpeed;
+                }
+                else if (isClient)
+                {
+                    CmdSetAnimatorSpeed(newSpeed);
+                }
+            }
+        }
+
+        void CmdSetAnimatorSpeed(float newSpeed)
+        {
+            // set animator
+            animator.speed = newSpeed;
+            animatorSpeed = newSpeed;
+        }
+
+        void OnAnimatorSpeedChanged(float _, float value)
+        {
+            // skip if host or client with authority
+            // they will have already set the speed so don't set again
+            if (isServer || (hasAuthority && clientAuthority))
+                return;
+
+            animator.speed = value;
         }
 
         bool CheckAnimStateChanged(out int stateHash, out float normalizedTime, int layerId)
@@ -173,7 +215,7 @@ namespace Mirror
             {
                 RpcOnAnimationClientMessage(stateHash, normalizedTime, layerId, weight, parameters);
             }
-            else if (ClientScene.readyConnection != null)
+            else if (isClient)
             {
                 CmdOnAnimationServerMessage(stateHash, normalizedTime, layerId, weight, parameters);
             }
@@ -185,7 +227,7 @@ namespace Mirror
             {
                 RpcOnAnimationParametersClientMessage(parameters);
             }
-            else if (ClientScene.readyConnection != null)
+            else if (isClient)
             {
                 CmdOnAnimationParametersServerMessage(parameters);
             }
@@ -269,7 +311,7 @@ namespace Mirror
         bool WriteParameters(NetworkWriter writer, bool forceAll = false)
         {
             ulong dirtyBits = forceAll ? (~0ul) : NextDirtyBits();
-            writer.WritePackedUInt64(dirtyBits);
+            writer.WriteUInt64(dirtyBits);
             for (int i = 0; i < parameters.Length; i++)
             {
                 if ((dirtyBits & (1ul << i)) == 0)
@@ -279,7 +321,7 @@ namespace Mirror
                 if (par.type == AnimatorControllerParameterType.Int)
                 {
                     int newIntValue = animator.GetInteger(par.nameHash);
-                    writer.WritePackedInt32(newIntValue);
+                    writer.WriteInt32(newIntValue);
                 }
                 else if (par.type == AnimatorControllerParameterType.Float)
                 {
@@ -300,7 +342,7 @@ namespace Mirror
             bool animatorEnabled = animator.enabled;
             // need to read values from NetworkReader even if animator is disabled
 
-            ulong dirtyBits = reader.ReadPackedUInt64();
+            ulong dirtyBits = reader.ReadUInt64();
             for (int i = 0; i < parameters.Length; i++)
             {
                 if ((dirtyBits & (1ul << i)) == 0)
@@ -309,7 +351,7 @@ namespace Mirror
                 AnimatorControllerParameter par = parameters[i];
                 if (par.type == AnimatorControllerParameterType.Int)
                 {
-                    int newIntValue = reader.ReadPackedInt32();
+                    int newIntValue = reader.ReadInt32();
                     if (animatorEnabled)
                         animator.SetInteger(par.nameHash, newIntValue);
                 }
@@ -336,6 +378,7 @@ namespace Mirror
         /// <returns></returns>
         public override bool OnSerialize(NetworkWriter writer, bool initialState)
         {
+            bool changed = base.OnSerialize(writer, initialState);
             if (initialState)
             {
                 for (int i = 0; i < animator.layerCount; i++)
@@ -357,7 +400,7 @@ namespace Mirror
                 WriteParameters(writer, initialState);
                 return true;
             }
-            return false;
+            return changed;
         }
 
         /// <summary>
@@ -367,6 +410,7 @@ namespace Mirror
         /// <param name="initialState"></param>
         public override void OnDeserialize(NetworkReader reader, bool initialState)
         {
+            base.OnDeserialize(reader, initialState);
             if (initialState)
             {
                 for (int i = 0; i < animator.layerCount; i++)
@@ -401,17 +445,17 @@ namespace Mirror
             {
                 if (!isClient)
                 {
-                    logger.LogWarning("Tried to set animation in the server for a client-controlled animator");
+                    Debug.LogWarning("Tried to set animation in the server for a client-controlled animator");
                     return;
                 }
 
                 if (!hasAuthority)
                 {
-                    logger.LogWarning("Only the client with authority can set animations");
+                    Debug.LogWarning("Only the client with authority can set animations");
                     return;
                 }
 
-                if (ClientScene.readyConnection != null)
+                if (isClient)
                     CmdOnAnimationTriggerServerMessage(hash);
 
                 // call on client right away
@@ -421,7 +465,7 @@ namespace Mirror
             {
                 if (!isServer)
                 {
-                    logger.LogWarning("Tried to set animation in the client for a server-controlled animator");
+                    Debug.LogWarning("Tried to set animation in the client for a server-controlled animator");
                     return;
                 }
 
@@ -450,17 +494,17 @@ namespace Mirror
             {
                 if (!isClient)
                 {
-                    logger.LogWarning("Tried to reset animation in the server for a client-controlled animator");
+                    Debug.LogWarning("Tried to reset animation in the server for a client-controlled animator");
                     return;
                 }
 
                 if (!hasAuthority)
                 {
-                    logger.LogWarning("Only the client with authority can reset animations");
+                    Debug.LogWarning("Only the client with authority can reset animations");
                     return;
                 }
 
-                if (ClientScene.readyConnection != null)
+                if (isClient)
                     CmdOnAnimationResetTriggerServerMessage(hash);
 
                 // call on client right away
@@ -470,7 +514,7 @@ namespace Mirror
             {
                 if (!isServer)
                 {
-                    logger.LogWarning("Tried to reset animation in the client for a server-controlled animator");
+                    Debug.LogWarning("Tried to reset animation in the client for a server-controlled animator");
                     return;
                 }
 
@@ -488,7 +532,7 @@ namespace Mirror
             if (!clientAuthority)
                 return;
 
-            if (logger.LogEnabled()) logger.Log("OnAnimationMessage for netId=" + netId);
+            // Debug.Log("OnAnimationMessage for netId=" + netId);
 
             // handle and broadcast
             using (PooledNetworkReader networkReader = NetworkReaderPool.GetReader(parameters))
@@ -522,8 +566,12 @@ namespace Mirror
 
             // handle and broadcast
             // host should have already the trigger
-            if (!isClient)
+            bool isHostOwner = isClient && hasAuthority;
+            if (!isHostOwner)
+            {
                 HandleAnimTriggerMsg(hash);
+            }
+
             RpcOnAnimationTriggerClientMessage(hash);
         }
 
@@ -536,8 +584,12 @@ namespace Mirror
 
             // handle and broadcast
             // host should have already the trigger
-            if (!isClient)
+            bool isHostOwner = isClient && hasAuthority;
+            if (!isHostOwner)
+            {
                 HandleAnimResetTriggerMsg(hash);
+            }
+
             RpcOnAnimationResetTriggerClientMessage(hash);
         }
 
