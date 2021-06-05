@@ -22,6 +22,7 @@ namespace Aspekt.Hex.UI
         [Header("Production")]
         [SerializeField] private CellStat supplies;
         [SerializeField] private CellStat production;
+        [SerializeField] private CellStat population;
 #pragma warning restore 649
 
         public void Init(Tooltip tooltip)
@@ -49,13 +50,14 @@ namespace Aspekt.Hex.UI
                 shield.SetStat(unitStats.Shield);
                 speed.SetStat(unitStats.Speed);
                 
-                HideObjects(supplies, production);
+                HideObjects(supplies, production, population);
             }
             else if (cell is BuildingCell building)
             {
                 var currencyBonus = building.GetCurrencyBonus();
                 supplies.SetStat(currencyBonus.supplies);
                 production.SetStat(currencyBonus.production);
+                population.SetStat(currencyBonus.population);
                 
                 HideObjects(attack, defense, shield, speed);
             }
@@ -103,6 +105,7 @@ namespace Aspekt.Hex.UI
                 shield,
                 speed,
                 production,
+                population,
                 supplies);
         }
     }
