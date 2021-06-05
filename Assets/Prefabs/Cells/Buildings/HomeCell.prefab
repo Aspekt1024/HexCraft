@@ -57,7 +57,7 @@ MonoBehaviour:
   cellType: 1000
   Cost:
     production: 0
-    supplies: 500
+    supplies: 99
     population: 0
   MaxHP: 17
   BasicDescription: Home base

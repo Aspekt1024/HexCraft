@@ -7,7 +7,7 @@ namespace Aspekt.Hex.Behaviours
     {
         public override int CalculateSupplies(BuildingCell cell, PlayerData data)
         {
-            return data.CurrencyData.MaxProduction - data.CurrencyData.UtilisedProduction;
+            return data.CurrencyData.Production.Available;
         }
 
         public override int CalculateProduction(BuildingCell cell, PlayerData data)

@@ -209,7 +209,7 @@ namespace Aspekt.Hex.Upgrades
         private static int GetTurnsUntilAffordable(TurnCalculatorNode node, Currency cost)
         {
             if (node.PlayerData.CurrencyData.CanAfford(cost)) return 0;
-            if (node.PlayerData.CurrencyData.AvailableProduction < cost.production) return -1;
+            if (!node.PlayerData.CurrencyData.HasUtilisableCurrencies(cost)) return -1;
             
             var suppliers = Cells.GetSuppliers(node.Buildings.Select(b => b as HexCell).ToList());
             var suppliesPerTurn = suppliers.Sum(c => c.CalculateSupplies(node.PlayerData));
@@ -231,8 +231,10 @@ namespace Aspekt.Hex.Upgrades
             
             playerData.TurnNumber = 1;
             playerData.TechnologyData.AddTechnology(startingCell.Technology);
-            playerData.CurrencyData.Supplies = config.startingSupply;
-            playerData.CurrencyData.MaxProduction = startingCell.GetCurrencyBonus().production;
+            
+            var startingCurrency = startingCell.GetCurrencyBonus();
+            startingCurrency.supplies = config.startingSupply;
+            playerData.CurrencyData.SetCurrency(startingCurrency);
 
             return playerData;
         }

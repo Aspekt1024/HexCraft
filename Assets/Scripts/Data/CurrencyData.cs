@@ -10,18 +10,22 @@ namespace Aspekt.Hex
         public int supplies;
         public int population;
     }
+
+    [Serializable]
+    public struct UtilisableCurrency
+    {
+        public int maximum;
+        public int utilised;
+
+        public int Available => maximum - utilised;
+    }
     
     public class CurrencyData
     {
-        public int MaxProduction;
-        public int UtilisedProduction;
+        public UtilisableCurrency Production;
+        public UtilisableCurrency Population;
         public int Supplies;
 
-        public int MaxPopulation;
-        public int UtilisedPopulation;
-
-        public int AvailableProduction => MaxProduction - UtilisedProduction;
-        
         private readonly PlayerData playerData;
         
         public interface IObserver
@@ -39,25 +43,38 @@ namespace Aspekt.Hex
         {
             this.playerData = playerData;
         }
+
+        public void SetCurrency(Currency currency)
+        {
+            Supplies = currency.supplies;
+            Production.maximum = currency.production;
+            Population.maximum = currency.population;
+        }
         
         public void RegisterObserver(IObserver observer) => observers.Add(observer);
         public void UnregisterObserver(IObserver observer) => observers.Remove(observer);
         
         public bool CanAfford(Currency cost)
         {
-            return cost.production <= MaxProduction - UtilisedProduction
+            return cost.production <= Production.Available
                    && cost.supplies <= Supplies
-                   && (cost.population == 0 || cost.population <= MaxPopulation - UtilisedPopulation);
+                   && cost.population <= Population.Available;
+        }
+
+        public bool HasUtilisableCurrencies(Currency cost)
+        {
+            return cost.population <= Population.Available
+                   && cost.production <= Production.Available;
         }
 
         public void ModifyMaxProduction(int productionDelta)
         {
-            observers.ForEach(o => o.OnMaxProductionChanged(playerData.Player, MaxProduction + productionDelta));
+            observers.ForEach(o => o.OnMaxProductionChanged(playerData.Player, Production.maximum + productionDelta));
         }
 
         public void ModifyMaxPopulation(int populationDelta)
         {
-            observers.ForEach(o => o.OnMaxPopulationChanged(playerData.Player, MaxPopulation + populationDelta));
+            observers.ForEach(o => o.OnMaxPopulationChanged(playerData.Player, Population.maximum + populationDelta));
         }
 
         public void Purchase(Currency cost)
@@ -66,7 +83,7 @@ namespace Aspekt.Hex
             // currency values are not changed directly here.
             if (cost.production > 0)
             {
-                var newProdUtilisation = UtilisedProduction + cost.production;
+                var newProdUtilisation = Production.utilised + cost.production;
                 observers.ForEach(o => o.OnProductionUtilisationChanged(playerData.Player, newProdUtilisation));
             }
 
@@ -78,7 +95,7 @@ namespace Aspekt.Hex
 
             if (cost.population > 0)
             {
-                var newPopUtilisation = UtilisedPopulation + cost.population;
+                var newPopUtilisation = Production.utilised + cost.population;
                 observers.ForEach(o => o.OnPopulationUtilisationChanged(playerData.Player, newPopUtilisation));
             }
         }
@@ -87,9 +104,9 @@ namespace Aspekt.Hex
         {
             if (cost.production > 0)
             {
-                var newProdUtilisation = UtilisedProduction - cost.production;
+                var newProdUtilisation = Production.utilised - cost.production;
                 observers.ForEach(o => o.OnProductionUtilisationChanged(playerData.Player, newProdUtilisation));
-                var newPopUtilisation = UtilisedPopulation - cost.population;
+                var newPopUtilisation = Population.utilised - cost.population;
                 observers.ForEach(o => o.OnPopulationUtilisationChanged(playerData.Player, newPopUtilisation));
             }
         }

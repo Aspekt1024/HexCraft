@@ -23,7 +23,7 @@
     background-color: #809194;
     
     height: 40px;
-    width: 120px;
+    width: 160px;
     
     -unity-text-align: middle-center;
 }

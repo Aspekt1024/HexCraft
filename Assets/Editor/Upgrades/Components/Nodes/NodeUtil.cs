@@ -28,10 +28,21 @@ namespace Aspekt.Hex.Upgrades
                 });
             productionCost.AddToClassList("cost-field");
             
+            var populationCost = new LongField(3) {value = cost.population};
+            populationCost.RegisterValueChangedCallback(
+                newPopulation =>
+                {
+                    cost.population = (int) newPopulation.newValue;
+                    costUpdateAction.Invoke(cost);
+                });
+            populationCost.AddToClassList("cost-field");
+            
             costDisplay.Add(suppliesCost);
             costDisplay.Add(new Label("s "));
             costDisplay.Add(productionCost);
-            costDisplay.Add(new Label("p"));
+            costDisplay.Add(new Label("pd"));
+            costDisplay.Add(populationCost);
+            costDisplay.Add(new Label("pp"));
             
             if (isResearched)
             {

@@ -56,17 +56,20 @@ Label {
 }
 
 /* Cost field styles */
-.action-cost
-{
+.action-cost {
     display: flex;
     flex-direction: row;
     height: 23px;
-    width: 100px;
+    width: 150px;
     margin: auto;
 }
 
+.action-cost Label {
+    color: red;
+}
+
 .cost-field {
-    width: 30px;
+    width: 25px;
     height: 17px;
     color: white;
 }

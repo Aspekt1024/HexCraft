@@ -17,8 +17,10 @@ namespace Aspekt.Hex.Upgrades
             public string StyleClass;
             public int InitialSupplies;
             public int InitialProduction;
+            public int InitialPopulation;
             public int SupplyDifference;
             public int ProductionDifference;
+            public int PopulationDifference;
         }
         
         public GamePlan()
@@ -60,8 +62,10 @@ namespace Aspekt.Hex.Upgrades
                     Label = node.Action,
                     InitialSupplies = suppliesAtStartOfTurn,
                     InitialProduction = node.InitialProduction,
+                    InitialPopulation = node.InitialPopulation,
                     SupplyDifference = node.PlayerData.CurrencyData.Supplies - suppliesAtStartOfTurn,
-                    ProductionDifference = node.PlayerData.CurrencyData.AvailableProduction - node.InitialProduction,
+                    ProductionDifference = node.PlayerData.CurrencyData.Production.Available - node.InitialProduction,
+                    PopulationDifference = node.PlayerData.CurrencyData.Population.Available - node.InitialPopulation,
                 };
                 var step = CreateStepRow(details);
                 stepContainer.Add(step);
@@ -86,6 +90,7 @@ namespace Aspekt.Hex.Upgrades
                     InitialProduction = node.InitialProduction,
                     SupplyDifference = node.SuppliesPerTurn,
                     ProductionDifference = 0,
+                    PopulationDifference = 0,
                 };
                 var step = CreateStepRow(details);
                 
@@ -120,24 +125,26 @@ namespace Aspekt.Hex.Upgrades
             var currencyContainer = new VisualElement();
             currencyContainer.AddToClassList("plan-step-currency-container");
 
-            currencyContainer.Add(CreateCurrencyDiffElement(details.SupplyDifference, details.ProductionDifference));
+            currencyContainer.Add(CreateCurrencyDiffElement(details.SupplyDifference, details.ProductionDifference, details.PopulationDifference));
             
             var currencyRunningLabel = new VisualElement();
             currencyRunningLabel.AddToClassList("plan-step-currency");
             currencyRunningLabel.Add(CreateCurrencyLabel(details.InitialSupplies + details.SupplyDifference, "s"));
-            currencyRunningLabel.Add(CreateCurrencyLabel(details.InitialProduction + details.ProductionDifference, "p"));
+            currencyRunningLabel.Add(CreateCurrencyLabel(details.InitialProduction + details.ProductionDifference, "pd"));
+            currencyRunningLabel.Add(CreateCurrencyLabel(details.InitialPopulation + details.PopulationDifference, "pp"));
             
             currencyContainer.Add(currencyRunningLabel);
             return currencyContainer;
         }
 
-        private static VisualElement CreateCurrencyDiffElement(int supplyDiff, int prodDiff)
+        private static VisualElement CreateCurrencyDiffElement(int supplyDiff, int prodDiff, int popDiff)
         {
             var diffElement = new VisualElement();
             diffElement.AddToClassList("plan-step-currency");
             diffElement.AddToClassList("plan-step-currency-diff");
             diffElement.Add(CreateCurrencyDiffLabel(supplyDiff, "s"));
-            diffElement.Add(CreateCurrencyDiffLabel(prodDiff, "p"));
+            diffElement.Add(CreateCurrencyDiffLabel(prodDiff, "pd"));
+            diffElement.Add(CreateCurrencyDiffLabel(popDiff, "pp"));
             return diffElement;
         }
 

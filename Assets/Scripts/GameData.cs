@@ -244,7 +244,7 @@ namespace Aspekt.Hex
         private void RpcSetProductionUtilisation(Int16 playerId, int newUtilisation)
         {
             var player = GetPlayerFromId(playerId);
-            player.CurrencyData.UtilisedProduction = newUtilisation;
+            player.CurrencyData.Production.utilised = newUtilisation;
             if (player.Player.hasAuthority)
             {
                 game.UI.UpdateCurrency(player.CurrencyData);
@@ -255,7 +255,7 @@ namespace Aspekt.Hex
         private void RpcSetPopulationUtilisation(Int16 playerId, int newUtilisation)
         {
             var player = GetPlayerFromId(playerId);
-            player.CurrencyData.UtilisedPopulation = newUtilisation;
+            player.CurrencyData.Population.utilised = newUtilisation;
             if (player.Player.hasAuthority)
             {
                 game.UI.UpdateCurrency(player.CurrencyData);
@@ -266,7 +266,7 @@ namespace Aspekt.Hex
         private void RpcSetMaxProduction(Int16 playerId, Int16 newProduction)
         {
             var player = GetPlayerFromId(playerId);
-            player.CurrencyData.MaxProduction = newProduction;
+            player.CurrencyData.Production.maximum = newProduction;
             if (player.Player.hasAuthority)
             {
                 game.UI.UpdateCurrency(player.CurrencyData);
@@ -277,7 +277,7 @@ namespace Aspekt.Hex
         private void RpcSetMaxPopulation(Int16 playerId, Int16 newPopulation)
         {
             var player = GetPlayerFromId(playerId);
-            player.CurrencyData.MaxPopulation = newPopulation;
+            player.CurrencyData.Population.maximum = newPopulation;
             if (player.Player.hasAuthority)
             {
                 game.UI.UpdateCurrency(player.CurrencyData);

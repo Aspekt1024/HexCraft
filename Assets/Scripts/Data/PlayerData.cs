@@ -49,8 +49,8 @@ namespace Aspekt.Hex
             playerDataCopy.CurrencyData = new CurrencyData(playerDataCopy)
             {
                 Supplies = CurrencyData.Supplies,
-                MaxProduction = CurrencyData.MaxProduction,
-                UtilisedProduction = CurrencyData.UtilisedProduction,
+                Production = CurrencyData.Production,
+                Population = CurrencyData.Population,
             };
 
             return playerDataCopy;
@@ -59,7 +59,8 @@ namespace Aspekt.Hex
         public bool HasSameData(PlayerData data)
         {
             return data.CurrencyData.Supplies == CurrencyData.Supplies
-                   && data.CurrencyData.MaxProduction == CurrencyData.MaxProduction
+                   && data.CurrencyData.Production.maximum == CurrencyData.Production.maximum
+                   && data.CurrencyData.Population.maximum == CurrencyData.Population.maximum
                    && data.TechnologyData.IsEqual(TechnologyData);
         }
     }

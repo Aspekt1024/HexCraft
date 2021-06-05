@@ -18,6 +18,7 @@ namespace Aspekt.Hex.Upgrades
 
         public int InitialSupplies { get; private set; }
         public int InitialProduction { get; private set; }
+        public int InitialPopulation { get; private set; }
         public int SuppliesPerTurn { get; private set; }
 
         public string Action { get; private set; }
@@ -43,7 +44,9 @@ namespace Aspekt.Hex.Upgrades
             if (newCell is BuildingCell building)
             {
                 Buildings.Add(building);
-                PlayerData.CurrencyData.MaxProduction += building.GetCurrencyBonus().production;
+                var currencyBonus = building.GetCurrencyBonus();
+                PlayerData.CurrencyData.Production.maximum += currencyBonus.production;
+                PlayerData.CurrencyData.Population.maximum += currencyBonus.population;
             }
 
             PreviousNode = originalNode;
@@ -70,14 +73,16 @@ namespace Aspekt.Hex.Upgrades
         {
             var suppliers = Cells.GetSuppliers(Buildings.Select(b => b as HexCell).ToList());
             InitialSupplies = PlayerData.CurrencyData.Supplies;
-            InitialProduction = PlayerData.CurrencyData.AvailableProduction;
+            InitialProduction = PlayerData.CurrencyData.Production.Available;
+            InitialPopulation = PlayerData.CurrencyData.Population.Available;
             SuppliesPerTurn = suppliers.Sum(c => c.CalculateSupplies(PlayerData));
             
             PlayerData.CurrencyData.Supplies += SuppliesPerTurn * numTurnsToAfford;
             
             PlayerData.TurnNumber += numTurnsToAfford;
             PlayerData.CurrencyData.Supplies -= cost.supplies;
-            PlayerData.CurrencyData.UtilisedProduction += cost.production;
+            PlayerData.CurrencyData.Production.utilised += cost.production;
+            PlayerData.CurrencyData.Population.utilised += cost.population;
         }
 
         private void CalculateNodeCosts(Currency targetCost)
@@ -86,24 +91,16 @@ namespace Aspekt.Hex.Upgrades
             
             var suppliers = Cells.GetSuppliers(Buildings.Select(b => b as HexCell).ToList());
             var suppliesPerTurn = suppliers.Sum(c => c.CalculateSupplies(PlayerData));
-            if (PlayerData.CurrencyData.Supplies >= targetCost.supplies)
+
+            if (PlayerData.CurrencyData.HasUtilisableCurrencies(targetCost))
             {
-                if (PlayerData.CurrencyData.AvailableProduction >= targetCost.production)
-                {
-                    h = 0;
-                }
-                else
-                {
-                    h = 1f / suppliesPerTurn;
-                }
-            }
-            else if (suppliesPerTurn <= 0)
-            {
-                h = 50;
+                h = PlayerData.CurrencyData.CanAfford(targetCost)
+                    ? 0
+                    : Mathf.CeilToInt((float)(targetCost.supplies - PlayerData.CurrencyData.Supplies) / suppliesPerTurn);
             }
             else
             {
-                h = Mathf.CeilToInt((float)(targetCost.supplies - PlayerData.CurrencyData.Supplies) / suppliesPerTurn);
+                h = 50;
             }
         }
         

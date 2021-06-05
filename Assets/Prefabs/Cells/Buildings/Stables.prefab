@@ -51,9 +51,9 @@ MonoBehaviour:
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1600
   Cost:
-    production: 1
+    production: 2
     supplies: 10
-    population: 3
+    population: 1
   MaxHP: 1
   BasicDescription: Trains horses for combat units
   Coordinates:

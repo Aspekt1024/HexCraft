@@ -252,8 +252,9 @@ namespace Aspekt.Hex.Upgrades
             if (action.prefab is BuildingCell building)
             {
                 buildings.Add(building);
-                var bonusProduction = building.GetCurrencyBonus().population;
-                playerData.CurrencyData.MaxProduction += bonusProduction;
+                var currencyBonus = building.GetCurrencyBonus();
+                playerData.CurrencyData.Production.maximum += currencyBonus.production;
+                playerData.CurrencyData.Population.maximum += currencyBonus.population;
             }
             playerData.TechnologyData.AddTechnology(action.prefab.Technology);
             ProcessCost(action.prefab.Cost);
@@ -270,15 +271,17 @@ namespace Aspekt.Hex.Upgrades
         private void ProcessCost(Currency cost)
         {
             playerData.CurrencyData.Supplies -= cost.supplies;
-            playerData.CurrencyData.UtilisedProduction += cost.production;
+            playerData.CurrencyData.Production.utilised += cost.production;
+            playerData.CurrencyData.Population.utilised += cost.population;
             DisplayCurrency();
         }
 
         private void DisplayCurrency()
         {
             var supplies = playerData.CurrencyData.Supplies;
-            var production = playerData.CurrencyData.MaxProduction - playerData.CurrencyData.UtilisedProduction;
-            currencyLabel.text = $"{supplies}s | {production}p";
+            var production = playerData.CurrencyData.Production.Available;
+            var population = playerData.CurrencyData.Population.Available;
+            currencyLabel.text = $"{supplies}s | {production}pd | {population}pp";
         }
         
         private void SetupData()
@@ -298,7 +301,8 @@ namespace Aspekt.Hex.Upgrades
             playerData.TurnNumber = 1;
             playerData.TechnologyData.AddTechnology(homeCell.Technology);
             playerData.CurrencyData.Supplies = config.startingSupply;
-            playerData.CurrencyData.MaxProduction = homeCell.GetCurrencyBonus().production;
+            playerData.CurrencyData.Production.maximum = homeCell.GetCurrencyBonus().production;
+            playerData.CurrencyData.Population.maximum = homeCell.GetCurrencyBonus().population;
 
             DisplayCurrency();
             turnLabel.text = $"Turn {playerData.TurnNumber}";

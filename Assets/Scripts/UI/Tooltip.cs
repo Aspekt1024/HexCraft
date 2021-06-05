@@ -14,6 +14,8 @@ namespace Aspekt.Hex.UI
         [SerializeField] private TextMeshProUGUI suppliesText;
         [SerializeField] private GameObject produceObject;
         [SerializeField] private TextMeshProUGUI produceText;
+        [SerializeField] private GameObject populationObject;
+        [SerializeField] private TextMeshProUGUI populationText;
         [SerializeField] private GameObject actionsObject;
         [SerializeField] private TextMeshProUGUI actionText;
         [SerializeField] private TextMeshProUGUI description;
@@ -182,8 +184,10 @@ namespace Aspekt.Hex.UI
 
         private void SetCost(Details details)
         {
-            SetCostObject(suppliesObject, suppliesText, details.Cost.supplies, player.PlayerData.CurrencyData.Supplies);
-            SetCostObject(produceObject, produceText, details.Cost.production, player.PlayerData.CurrencyData.AvailableProduction);
+            var currencyData = player.PlayerData.CurrencyData;
+            SetCostObject(suppliesObject, suppliesText, details.Cost.supplies, currencyData.Supplies);
+            SetCostObject(produceObject, produceText, details.Cost.production, currencyData.Production.Available);
+            SetCostObject(populationObject, populationText, details.Cost.population, currencyData.Population.Available);
         }
 
         private static void SetCostObject(GameObject obj, TextMeshProUGUI textObj, int cost, int budget)
