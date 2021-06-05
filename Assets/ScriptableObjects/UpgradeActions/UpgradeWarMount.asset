@@ -21,6 +21,7 @@ MonoBehaviour:
     cost:
       production: 1
       supplies: 10
+      population: 0
     description: Gives units horses to move faster
     requiredTech: 
   - tech: 3211
@@ -29,6 +30,7 @@ MonoBehaviour:
     cost:
       production: 2
       supplies: 15
+      population: 0
     description: Train horses to move faster
     requiredTech: 
   - tech: 3212
@@ -37,5 +39,6 @@ MonoBehaviour:
     cost:
       production: 2
       supplies: 25
+      population: 0
     description: Horses are ready for battle and move faster
-    requiredTech: 
+    requiredTech: 92130000

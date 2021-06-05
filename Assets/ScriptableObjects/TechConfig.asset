@@ -18,6 +18,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 36ae8acea533cac4698f2a822efe6b9b, type: 2}
   - {fileID: 11400000, guid: 658806b098c927946a298331029bd744, type: 2}
   - {fileID: 11400000, guid: 7e3d351021ccc484d8f476e1470fd220, type: 2}
+  - {fileID: 11400000, guid: 71f5b06a91761fb4ea1f7cf1dbf5f3fe, type: 2}
+  - {fileID: 11400000, guid: a8b36cba6ea90e3409d80c3c767abf63, type: 2}
   buildActions:
   - {fileID: 11400000, guid: c037db5eae2c8654e8b0b06414f8813f, type: 2}
   - {fileID: 11400000, guid: a66a1a6564be4604e870345541ae650d, type: 2}

@@ -139,7 +139,7 @@ namespace Aspekt.Hex
             var frostbolt = Instantiate(projectile);
             var startPos = castParticles.transform.position;
             var endPos = target.transform.position;
-            endPos.y = startPos.y;
+            endPos.y = 0.4f;
             frostbolt.Cast(startPos, endPos, 4f, attackHitCallback);
             
             yield return new WaitForSeconds(0.5f);

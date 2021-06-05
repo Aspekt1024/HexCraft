@@ -43,6 +43,10 @@ namespace Aspekt.Hex
         UpgradeMageSpell2 = 4111,
         UpgradeMageSpell3 = 4112,
         
+        UpgradeRangedDamage1 = 4500,
+        UpgradeRangedDistance1 = 4600,
+        UpgradeRangedDistance2 = 4601,
+        
         UpgradeTownHall1 = 5000,
         UpgradeTownHall2 = 5010,
     }

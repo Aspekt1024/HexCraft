@@ -11,8 +11,7 @@ namespace Aspekt.Hex
 #pragma warning disable 649
         [SerializeField] private GroundUnitModel groundUnitModel;
         [SerializeField] private MountedUnitModel mountedUnitModel;
-        //[SerializeField] private FrostSpell projectile;
-        // TODO arrow start pos
+        [SerializeField] private Arrow projectile;
 #pragma warning restore 649
         
         private UnitModel currentModel;
@@ -195,6 +194,7 @@ namespace Aspekt.Hex
             currentModel.SetWeapon(rangeLevel);
             currentModel.SetBack(damageLevel);
         }
+        
         private IEnumerator AttackRoutine(HexCell target, Action attackHitCallback)
         {
             Model.LookAt(target.transform);
@@ -202,18 +202,14 @@ namespace Aspekt.Hex
             yield return new WaitForSeconds(0.3f);
             
             Anim.SetTrigger(AnimRangedAttackTrigger);
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.15f);
 
-            //var frostbolt = Instantiate(projectile); // TODO instantiate projectile
-            var startPos = transform.position; // TODO arrow start pos
+            var arrow = Instantiate(projectile);
+            var startPos = transform.position;
             var endPos = target.transform.position;
-            endPos.y = startPos.y;
+            endPos.y = 0.4f;
             
-            yield return new WaitForSeconds(0.5f);
-            
-            // TODO destroy projectile
-            //castParticles.gameObject.SetActive(false);
-            // attackHitCallback?.Invoke();
+            arrow.Shoot(startPos, endPos, 4f, attackHitCallback);
         }
     }
 }

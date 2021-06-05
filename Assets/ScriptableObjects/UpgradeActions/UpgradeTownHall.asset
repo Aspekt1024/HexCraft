@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db83faea0694f4e88eddb046f796505, type: 3}
   m_Name: UpgradeTownHall
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: be80d862bdd230b43875ce0294732cbd, type: 3}
+  icon: {fileID: 21300038, guid: 34ecf51bcd3f4424eafda7dafd885bd0, type: 3}
   group: 5000
   upgradeDetails:
   - tech: 5000
@@ -21,13 +21,15 @@ MonoBehaviour:
     cost:
       production: 3
       supplies: 20
+      population: 0
     description: Upgrade Town hall to Keep
-    requiredTech: 4c040000
+    requiredTech: c0080000
   - tech: 5010
-    icon: {fileID: 21300000, guid: 28a02df1369b7fd4eab040459b0cc450, type: 3}
+    icon: {fileID: 21300000, guid: b61e94509c40e6b4d96696657730e52d, type: 3}
     title: Castle
     cost:
       production: 5
       supplies: 50
+      population: 0
     description: Upgrade Keep to Castle
-    requiredTech: 
+    requiredTech: b6080000

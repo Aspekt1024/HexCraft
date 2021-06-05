@@ -11,6 +11,7 @@ namespace Aspekt.Hex
         [SerializeField] private GameObject[] weapons;
         [SerializeField] private GameObject[] shields;
         [SerializeField] private GameObject[] back;
+        [SerializeField] private Transform projectilePos;
 #pragma warning restore 649
 
         [Serializable]
@@ -81,6 +82,11 @@ namespace Aspekt.Hex
                 material.color = color;
                 r.material = material;
             }
+        }
+
+        public Vector3 GetProjectileStartPos()
+        {
+            return projectilePos.position;
         }
     }
 }

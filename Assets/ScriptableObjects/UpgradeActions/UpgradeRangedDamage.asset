@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db83faea0694f4e88eddb046f796505, type: 3}
+  m_Name: UpgradeRangedDamage
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300212, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  group: 4100
+  upgradeDetails:
+  - tech: 4500
+    icon: {fileID: 21300000, guid: ea97180bae5acd74eadc533c4a31ba79, type: 3}
+    title: Chaos arrows
+    cost:
+      production: 2
+      supplies: 35
+      population: 0
+    description: Arrows instantly kill enemies
+    requiredTech: 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildWorkshop
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 8e1f416c7d68f5f4494ad45eee82af26, type: 3}
+  icon: {fileID: 21300000, guid: e6b241e893089a444ada2b7be8ed5f7b, type: 3}
   prefab: {fileID: 9134122601264202362, guid: 622bda991de3b654fbe867fdd8fa239f, type: 3}
   placementRadius: 4
   techRequirements: 88130000

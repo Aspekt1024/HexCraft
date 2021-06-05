@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildMageTower
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 9e95c96935782fe4b923243a27f2db04, type: 3}
+  icon: {fileID: 21300000, guid: 50a820d3228a2bf4da98a6e769e90f12, type: 3}
   prefab: {fileID: 9134122601264202362, guid: 279d60817f406e846b60a82dcee7fd0c, type: 3}
   placementRadius: 1
   techRequirements: 

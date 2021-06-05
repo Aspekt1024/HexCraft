@@ -95,7 +95,7 @@ namespace Aspekt.Hex
 
             if (cost.population > 0)
             {
-                var newPopUtilisation = Production.utilised + cost.population;
+                var newPopUtilisation = Population.utilised + cost.population;
                 observers.ForEach(o => o.OnPopulationUtilisationChanged(playerData.Player, newPopUtilisation));
             }
         }

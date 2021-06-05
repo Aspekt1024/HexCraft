@@ -50,10 +50,10 @@ MonoBehaviour:
   hexOutline: {fileID: 7172987457053707177}
   colourProfile: {fileID: 11400000, guid: acd8445b6d9d16541aa4161f39812ac2, type: 2}
   cellType: 2400
-  DisplayName: Archer
   Cost:
     production: 2
     supplies: 8
+    population: 0
   MaxHP: 4
   BasicDescription: A ranged unit
   Coordinates:
@@ -62,9 +62,58 @@ MonoBehaviour:
   PlayerId: 0
   Owner: {fileID: 0}
   ID: 0
-  upgradeStats: []
+  upgradeStats:
+  - techGroup: 2100
+    upgrades:
+    - tech: 0
+      level: 0
+      value: 0
+    - tech: 3110
+      level: 1
+      value: 1
+    - tech: 3111
+      level: 2
+      value: 3
+    - tech: 3112
+      level: 3
+      value: 6
+  - techGroup: 4000
+    upgrades:
+    - tech: 0
+      level: 0
+      value: 2
+    - tech: 4600
+      level: 1
+      value: 3
+    - tech: 4601
+      level: 2
+      value: 5
+  - techGroup: 4100
+    upgrades:
+    - tech: 0
+      level: 0
+      value: 4
+    - tech: 4500
+      level: 1
+      value: 999
+  - techGroup: 2200
+    upgrades:
+    - tech: 0
+      level: 0
+      value: 1
+    - tech: 3210
+      level: 1
+      value: 2
+    - tech: 3211
+      level: 2
+      value: 3
+    - tech: 3212
+      level: 3
+      value: 4
   groundUnitModel: {fileID: 8873047717442397911}
   mountedUnitModel: {fileID: 847837801528974460}
+  projectile: {fileID: 1102683225092773120, guid: e76c7bccd9179ee4eaecb4d8570406e1,
+    type: 3}
 --- !u!1 &5003139112828666833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2664,7 +2713,7 @@ Animator:
   m_GameObject: {fileID: 5003139112828870887}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 714fac36dcf2d5f49b8baca0fe9dea9b, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7cf7ee236b651cd488d46efacfcfa393, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2716,6 +2765,7 @@ MonoBehaviour:
   back:
   - {fileID: 5003139112828899115}
   - {fileID: 5003139112828696445}
+  projectilePos: {fileID: 3170325283328279116}
 --- !u!1 &5003139112828875289
 GameObject:
   m_ObjectHideFlags: 0
@@ -5397,6 +5447,7 @@ Transform:
   - {fileID: 5003139112828658731}
   - {fileID: 5003139112828535245}
   - {fileID: 5003139112828609613}
+  - {fileID: 3170325283328279116}
   m_Father: {fileID: 5003139112828536501}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10356,7 +10407,7 @@ Animator:
   m_GameObject: {fileID: 5422104133211204039}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 7d2ee18e23ef99c4dbe6c40764865159, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7cf7ee236b651cd488d46efacfcfa393, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -10412,6 +10463,7 @@ MonoBehaviour:
   back:
   - {fileID: 5422104133211204621}
   - {fileID: 5422104133211205573}
+  projectilePos: {fileID: 3574053617515759625}
   mounts:
   - {fileID: 5422104133211206579}
   - {fileID: 5422104133211042429}
@@ -12554,6 +12606,7 @@ Transform:
   - {fileID: 5422104133211448005}
   - {fileID: 5422104133211475573}
   - {fileID: 5422104133211451159}
+  - {fileID: 3574053617515759625}
   m_Father: {fileID: 5422104133211490755}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15205,6 +15258,66 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6816463745798592494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3574053617515759625}
+  m_Layer: 0
+  m_Name: ArrowStartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3574053617515759625
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6816463745798592494}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5422104133211494601}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9200224607995456568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3170325283328279116}
+  m_Layer: 0
+  m_Name: ArrowStartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3170325283328279116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9200224607995456568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5003139112828632853}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1319856740530238884
 PrefabInstance:
   m_ObjectHideFlags: 0

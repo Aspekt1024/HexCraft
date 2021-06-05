@@ -82,11 +82,8 @@ namespace Aspekt.Hex.Actions
             for (int i = 0; i < upgradeDetails.Length; i++)
             {
                 if (Data.IsTechAvailable(upgradeDetails[i].tech, playerId)) continue;
-                if (Data.IsTechAvailable(upgradeDetails[i].requiredTech, playerId))
-                {
-                    currentLevelTech = upgradeDetails[i];
-                    return;
-                }
+                currentLevelTech = upgradeDetails[i];
+                return;
             }
         }
     }
