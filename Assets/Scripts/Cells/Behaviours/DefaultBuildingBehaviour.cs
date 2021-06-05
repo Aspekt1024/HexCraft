@@ -17,7 +17,7 @@ namespace Aspekt.Hex.Behaviours
 
         public override int CalculatePopulation(BuildingCell cell, PlayerData data)
         {
-            return cell.GetCurrencyBonus().production;
+            return cell.GetCurrencyBonus().population;
         }
     }
 }

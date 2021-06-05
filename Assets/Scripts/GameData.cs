@@ -344,7 +344,7 @@ namespace Aspekt.Hex
                     var prod = buildingCell.CalculateProduction(data);
                     data.CurrencyData.ModifyMaxProduction(prod);
 
-                    var pop = buildingCell.CalculateProduction(data);
+                    var pop = buildingCell.CalculatePopulation(data);
                     data.CurrencyData.ModifyMaxPopulation(pop);
                 }
             }
@@ -362,7 +362,7 @@ namespace Aspekt.Hex
                     var prod = buildingCell.CalculateProduction(data);
                     data.CurrencyData.ModifyMaxProduction(-prod);
                     
-                    var pop = buildingCell.CalculateProduction(data);
+                    var pop = buildingCell.CalculatePopulation(data);
                     data.CurrencyData.ModifyMaxPopulation(-pop);
                 }
             }
