@@ -77,6 +77,12 @@ namespace Aspekt.Hex.Actions
                 GenerateRequirementsText(currentLevelTech.requiredTech));
         }
 
+        protected override string GetHumanReadableTechName(Technology tech)
+        {
+            var upgrade = upgradeDetails.FirstOrDefault(d => d.tech == tech);
+            return upgrade.title;
+        }
+
         private void GetCurrentLevelTechDetails(int playerId)
         {
             for (int i = 0; i < upgradeDetails.Length; i++)

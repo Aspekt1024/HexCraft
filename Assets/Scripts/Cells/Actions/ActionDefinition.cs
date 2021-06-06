@@ -61,7 +61,7 @@ namespace Aspekt.Hex.Actions
             return "<color=red> Requires " + requirementsText + ".</color>";
         }
 
-        private string GetHumanReadableTechName(Technology tech)
+        protected virtual string GetHumanReadableTechName(Technology tech)
         {
             return tech.ToString();
         }
