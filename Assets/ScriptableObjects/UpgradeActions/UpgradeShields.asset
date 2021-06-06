@@ -21,6 +21,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 7
+      population: 0
     description: Reduces unit damage taken by 20%
     requiredTech: 
   - tech: 3311
@@ -29,6 +30,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 9
+      population: 0
     description: Reduces unit damage taken by a further 20% (additive)
     requiredTech: 88130000
   - tech: 3312
@@ -37,5 +39,6 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 15
+      population: 0
     description: Reduces unit damage taken by a further 20% (additive)
-    requiredTech: 92130000
+    requiredTech: b6080000

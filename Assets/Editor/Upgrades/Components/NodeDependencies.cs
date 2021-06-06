@@ -240,6 +240,7 @@ namespace Aspekt.Hex.Upgrades
                     Undo.RecordObject(action, "Add tech requirement");
                     details.requiredTech.Add(requiredTech);
                     action.upgradeDetails[i] = details;
+                    EditorUtility.SetDirty(action);
                     
                     return true;
                 }
@@ -259,6 +260,7 @@ namespace Aspekt.Hex.Upgrades
                     Undo.RecordObject(action, "Remove tech requirement");
                     details.requiredTech.Remove(requiredTech);
                     action.upgradeDetails[i] = details;
+                    EditorUtility.SetDirty(action);
                     
                     return true;
                 }

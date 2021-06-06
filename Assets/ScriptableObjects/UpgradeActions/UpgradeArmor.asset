@@ -21,6 +21,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 5
+      population: 0
     description: +3 hp to all units
     requiredTech: 
   - tech: 3111
@@ -29,6 +30,7 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 7
+      population: 0
     description: +3 hp to all units
     requiredTech: 88130000
   - tech: 3112
@@ -37,5 +39,6 @@ MonoBehaviour:
     cost:
       production: 0
       supplies: 10
+      population: 0
     description: +4 hp to all units
-    requiredTech: 92130000
+    requiredTech: ca080000

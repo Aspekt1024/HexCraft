@@ -32,4 +32,4 @@ MonoBehaviour:
       supplies: 20
       population: 0
     description: Increase archer range
-    requiredTech: 
+    requiredTech: ca080000

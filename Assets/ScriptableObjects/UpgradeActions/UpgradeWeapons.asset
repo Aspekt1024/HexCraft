@@ -41,4 +41,4 @@ MonoBehaviour:
       supplies: 15
       population: 0
     description: +3 attack to all units
-    requiredTech: 92130000
+    requiredTech: b6080000

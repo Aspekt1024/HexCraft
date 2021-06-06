@@ -32,4 +32,4 @@ MonoBehaviour:
       supplies: 50
       population: 0
     description: Upgrade Keep to Castle
-    requiredTech: b6080000
+    requiredTech: b6080000ca080000
