@@ -54,7 +54,7 @@ MonoBehaviour:
   cellType: 2000
   Cost:
     production: 1
-    supplies: 5
+    supplies: 7
     population: 1
   MaxHP: 2
   BasicDescription: Melee unit suitable for attacking and defending

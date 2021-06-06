@@ -52,7 +52,7 @@ MonoBehaviour:
   cellType: 2400
   Cost:
     production: 1
-    supplies: 8
+    supplies: 9
     population: 1
   MaxHP: 4
   BasicDescription: A ranged unit
