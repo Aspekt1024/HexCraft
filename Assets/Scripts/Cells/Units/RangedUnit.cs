@@ -144,7 +144,7 @@ namespace Aspekt.Hex
         private void SetRange(UpgradeStats.Upgrade upgrade)
         {
             rangeLevel = upgrade.level;
-            Stats.Attack = upgrade.value;
+            Stats.Range = upgrade.value;
             currentModel.SetWeapon(upgrade.level);
         }
 
@@ -205,7 +205,7 @@ namespace Aspekt.Hex
             yield return new WaitForSeconds(0.15f);
 
             var arrow = Instantiate(projectile);
-            var startPos = transform.position;
+            var startPos = currentModel.GetProjectileStartPos();
             var endPos = target.transform.position;
             endPos.y = 0.4f;
             

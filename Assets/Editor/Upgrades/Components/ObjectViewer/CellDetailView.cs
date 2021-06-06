@@ -70,7 +70,8 @@ namespace Aspekt.Hex.Upgrades
             Undo.RecordObject(cell, "Update upgrade bonus");
             detail.currencyBonus = currency;
             details[upgradeIndex] = detail;
-            
+            EditorUtility.SetDirty(cell);
+
             upgradeDetailsField.SetValue(cell, details);
         }
     }

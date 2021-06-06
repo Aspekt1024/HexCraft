@@ -54,7 +54,7 @@ MonoBehaviour:
   Cost:
     production: 0
     supplies: 10
-    population: 4
+    population: 3
   MaxHP: 7
   BasicDescription: Generates Production
   Coordinates:

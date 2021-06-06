@@ -77,7 +77,7 @@ MonoBehaviour:
   - tech: 0
     displayName: Town Hall
     currencyBonus:
-      production: 2
+      production: 3
       supplies: 6
       population: 6
     model: {fileID: 4374471947235816584}
