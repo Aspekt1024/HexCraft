@@ -7,7 +7,7 @@ namespace Aspekt.Hex
     public abstract class HexCell : MonoBehaviour
     {
 #pragma warning disable 649
-        [SerializeField] private ActionDefinition[] actions;
+        [SerializeField] private List<ActionDefinition> actions;
         [SerializeField] private CellHexOutline hexOutline;
         [SerializeField] private CellColours colourProfile;
 #pragma warning restore 649
@@ -28,7 +28,7 @@ namespace Aspekt.Hex
         public int ID;
 
         public abstract string DisplayName { get; }
-        public ActionDefinition[] Actions => actions;
+        public List<ActionDefinition> Actions => actions;
         
         public int CurrentHP { get; protected set; }
 

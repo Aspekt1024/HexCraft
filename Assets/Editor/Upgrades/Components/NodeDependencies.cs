@@ -203,6 +203,7 @@ namespace Aspekt.Hex.Upgrades
                 if (buildAction.techRequirements.Contains(tech)) return false;
                 Undo.RecordObject(buildAction, "Add tech requirement");
                 buildAction.techRequirements.Add(tech);
+                EditorUtility.SetDirty(action);
                 return true;
             }
             
@@ -219,6 +220,7 @@ namespace Aspekt.Hex.Upgrades
                 if (!buildAction.techRequirements.Contains(tech)) return false;
                 Undo.RecordObject(buildAction, "Remove tech requirement");
                 buildAction.techRequirements.Remove(tech);
+                EditorUtility.SetDirty(action);
                 return true;
             }
 
