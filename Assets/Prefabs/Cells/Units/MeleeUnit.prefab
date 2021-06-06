@@ -52,10 +52,10 @@ MonoBehaviour:
   hexOutline: {fileID: 7172987457053707177}
   colourProfile: {fileID: 11400000, guid: acd8445b6d9d16541aa4161f39812ac2, type: 2}
   cellType: 2000
-  DisplayName: Soldier
   Cost:
     production: 1
     supplies: 5
+    population: 1
   MaxHP: 2
   BasicDescription: Melee unit suitable for attacking and defending
   Coordinates:
@@ -1448,6 +1448,8 @@ MonoBehaviour:
   - {fileID: 5490442777878567524}
   - {fileID: 5490442777878593002}
   - {fileID: 5490442777878332436}
+  back: []
+  projectilePos: {fileID: 0}
   mounts:
   - {fileID: 5490442777878568220}
   - {fileID: 5490442777878339378}
@@ -8675,6 +8677,8 @@ MonoBehaviour:
   - {fileID: 7516333669381936702}
   - {fileID: 7516333669381997302}
   - {fileID: 7516333669381909726}
+  back: []
+  projectilePos: {fileID: 0}
 --- !u!1 &7516333669381925716
 GameObject:
   m_ObjectHideFlags: 0

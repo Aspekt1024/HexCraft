@@ -1813,6 +1813,8 @@ MonoBehaviour:
   - {fileID: 3274951069228359987}
   - {fileID: 3274951069228577733}
   shields: []
+  back: []
+  projectilePos: {fileID: 0}
 --- !u!1 &3274951069228576261
 GameObject:
   m_ObjectHideFlags: 0
@@ -2291,10 +2293,10 @@ MonoBehaviour:
   hexOutline: {fileID: 7172987457053707177}
   colourProfile: {fileID: 11400000, guid: acd8445b6d9d16541aa4161f39812ac2, type: 2}
   cellType: 2200
-  DisplayName: Mage
   Cost:
     production: 1
     supplies: 20
+    population: 1
   MaxHP: 5
   BasicDescription: A ranged magic unit with high damage and low defense
   Coordinates:
