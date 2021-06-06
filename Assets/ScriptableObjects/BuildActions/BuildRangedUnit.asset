@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildRangedUnit
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: e30eb9c3272550d49acfb818d86bd67b, type: 3}
+  icon: {fileID: 21300000, guid: 8fb1838852f6ec542a3332658004163f, type: 3}
   prefab: {fileID: 5363958207492492621, guid: 1dec7f7f061b3c14982418bf8e0cb29e, type: 3}
   placementRadius: 1
   techRequirements: 

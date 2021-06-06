@@ -16,7 +16,7 @@ MonoBehaviour:
   group: 5000
   upgradeDetails:
   - tech: 5000
-    icon: {fileID: 21300000, guid: b61e94509c40e6b4d96696657730e52d, type: 3}
+    icon: {fileID: 21300000, guid: 168a4c639c027744a9530f8ad21198fa, type: 3}
     title: Keep
     cost:
       production: 3
@@ -25,7 +25,7 @@ MonoBehaviour:
     description: Upgrade Town hall to Keep
     requiredTech: c0080000
   - tech: 5010
-    icon: {fileID: 21300000, guid: b61e94509c40e6b4d96696657730e52d, type: 3}
+    icon: {fileID: 21300000, guid: 62f64e158af1857478221baca221f6ac, type: 3}
     title: Castle
     cost:
       production: 5

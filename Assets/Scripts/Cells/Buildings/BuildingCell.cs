@@ -27,8 +27,15 @@ namespace Aspekt.Hex
         
         private UpgradeDetail currentUpgrade;
         
-        public override string DisplayName => currentUpgrade.displayName;
-        
+        public override string DisplayName
+        {
+            get
+            {
+                if (currentUpgrade.displayName == "") currentUpgrade = upgradeDetails[0];
+                return currentUpgrade.displayName;
+            }
+        }
+
         public Transform GetTransform() => transform;
         public Currency GetCurrencyBonus() => currentUpgrade.currencyBonus;
 

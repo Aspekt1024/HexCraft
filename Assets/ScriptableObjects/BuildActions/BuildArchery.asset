@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildArchery
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: e30eb9c3272550d49acfb818d86bd67b, type: 3}
+  icon: {fileID: 21300000, guid: f1e58909e4c1c4f40ab3709bd1e3101e, type: 3}
   prefab: {fileID: 9134122601264202362, guid: 53e44be7e27978b4d9e2010c0264096c, type: 3}
   placementRadius: 4
   techRequirements: 

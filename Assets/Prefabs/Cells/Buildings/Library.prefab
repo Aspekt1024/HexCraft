@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 11400000, guid: 6a5478aca78008f47a500f191c073249, type: 2}
   - {fileID: 11400000, guid: 49c4225505b5a7548b012ab2f63143a7, type: 2}
   - {fileID: 11400000, guid: 001999b34095b604fb6b59587a8e2817, type: 2}
   hexOutline: {fileID: 8217559798967141292}

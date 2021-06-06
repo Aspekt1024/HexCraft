@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildBarracks
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 408f17f65d804a2479d0d1b97bf2147e, type: 3}
+  icon: {fileID: 21300000, guid: e1a941d6f27294b4d8fea00b5f5f3abd, type: 3}
   prefab: {fileID: 1312393799163408318, guid: 1e8f7e0b158b67f4db0523ec6c6c8535, type: 3}
   placementRadius: 4
   techRequirements: 

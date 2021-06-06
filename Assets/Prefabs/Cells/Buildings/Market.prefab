@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions:
   - {fileID: 11400000, guid: 13de6652590a7964fa4c07ec1211cb28, type: 2}
+  - {fileID: 11400000, guid: e157e42941fb5c943989d840c267c565, type: 2}
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
   cellType: 1500

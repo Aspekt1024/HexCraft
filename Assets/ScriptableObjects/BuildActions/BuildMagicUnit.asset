@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildMagicUnit
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 5c5b1ef7598e3a041b3a9d1fe8c9e159, type: 3}
+  icon: {fileID: 21300000, guid: 45eb8af7a4770774ebb06e425919fd88, type: 3}
   prefab: {fileID: 7132414103651887016, guid: 0d5376899dea16f4884d31632ab65d61, type: 3}
   placementRadius: 1
   techRequirements: 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildTemple
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 21c4a8515a327db4a89489131daee51d, type: 3}
+  icon: {fileID: 21300000, guid: fa1da612d4c690540bbcfffddb448de8, type: 3}
   prefab: {fileID: 9134122601264202362, guid: 01bc7da796ac3aa41ae740337a527c4f, type: 3}
   placementRadius: 4
   techRequirements: 

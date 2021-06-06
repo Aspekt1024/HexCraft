@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 11400000, guid: bb7a225fa371f29429738957bae9fb65, type: 2}
   - {fileID: 11400000, guid: 23a5950c911e37c42a1052d366232dc5, type: 2}
   hexOutline: {fileID: 8217559798967141292}
   colourProfile: {fileID: 11400000, guid: 4c09965130e073648bc25fdc8b4bdf60, type: 2}
@@ -72,7 +71,7 @@ MonoBehaviour:
     displayName: Home
     currencyBonus:
       production: 0
-      supplies: 8
+      supplies: 4
       population: 4
     model: {fileID: 6029163605640293527}
 --- !u!1001 &274758857434529185

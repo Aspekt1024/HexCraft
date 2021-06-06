@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75dbb1c3f834f889b8d2993e74ab6bf, type: 3}
   m_Name: BuildHouse
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: be80d862bdd230b43875ce0294732cbd, type: 3}
+  icon: {fileID: 21300000, guid: 98537e9fb4c5812408b7fc93c902f268, type: 3}
   prefab: {fileID: 1401186757624357372, guid: e45cf629fe5ee4c409fc511fd79e5b5f, type: 3}
   placementRadius: 4
   techRequirements: 
