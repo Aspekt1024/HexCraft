@@ -30,8 +30,10 @@ namespace Aspekt.Hex
 
         public override void SetupTech(GameData data, int playerId)
         {
-            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeMageArmor, playerId));
-            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeMageSpell, playerId));
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeRangedDamage, playerId));
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeRangedDistance, playerId));
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeArmor, playerId));
+            OnTechAdded(data.GetCurrentLevelTech(TechGroups.UpgradeWarMount, playerId));
         }
 
         [ContextMenu("setup")]
