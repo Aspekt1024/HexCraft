@@ -37,14 +37,14 @@ namespace Aspekt.Hex
         [ContextMenu("setup")]
         public void Setup()
         {
+            Stats.Range = 1;
+            Stats.Speed = 1;
+            
             SetModel(groundUnitModel);
             SetMount(GetUpgradeForLevel(TechGroups.UpgradeWarMount, 0));
             SetArmor(GetUpgradeForLevel(TechGroups.UpgradeArmor, 0));
             SetDamage(GetUpgradeForLevel(TechGroups.UpgradeRangedDamage, 0));
             SetRange(GetUpgradeForLevel(TechGroups.UpgradeRangedDistance, 0));
-
-            Stats.Range = 3;
-            Stats.Speed = 1;
         }
         
 #region Debug and Test

@@ -51,9 +51,9 @@ MonoBehaviour:
   colourProfile: {fileID: 11400000, guid: acd8445b6d9d16541aa4161f39812ac2, type: 2}
   cellType: 2400
   Cost:
-    production: 2
+    production: 1
     supplies: 8
-    population: 0
+    population: 1
   MaxHP: 4
   BasicDescription: A ranged unit
   Coordinates:
@@ -95,7 +95,7 @@ MonoBehaviour:
       value: 4
     - tech: 4500
       level: 1
-      value: 999
+      value: 99
   - techGroup: 2200
     upgrades:
     - tech: 0
