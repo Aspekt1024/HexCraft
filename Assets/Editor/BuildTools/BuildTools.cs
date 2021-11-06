@@ -28,7 +28,7 @@ namespace Aspekt.Build
                 switch (cla[i])
                 {
                     case "-buildpath":
-                        path = cla[i];
+                        path = cla[i + 1];
                         break;
                     case "-run":
                         runAfterBuild = true;
